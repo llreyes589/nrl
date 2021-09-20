@@ -71,3 +71,13 @@
     </div>
 </div>
 @endsection
+
+@section('javascript')
+<script>
+    window.onload = function(){
+
+        $('#email').val('clarenista@gmail.com')
+        $('#password').val('lesterlou14')
+    }
+</script>
+@endsection
