@@ -72,6 +72,14 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
+                    <i class="fas fa-fw fa-building"></i>
+                    <span>Facilities</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
 
         </ul>
         <!-- End of Sidebar -->

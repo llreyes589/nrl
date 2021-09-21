@@ -20,6 +20,12 @@ class Facility extends Model
         'lab_email', 
         'or_no', 
         'validity', 
-        'deleted_at'
+        'deleted_at',
+        'verified_by',
+        'verified_at',
+        'endorsed_by',
+        'endorsed_at',
+        'approved_by',
+        'approved_at',
     ];
 }

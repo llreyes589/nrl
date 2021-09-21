@@ -97,16 +97,11 @@ NRL - Facilities
                             <td>{{$facility->name}}</td>
                             <td>{{$facility->created_at}}</td>
                             <td>
-                                <button class="btn btn-primary" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
-                                <a class="btn btn-danger" href="{{ route('facilities.destroy', $facility->id) }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('delete-form').submit();">
-                                        DELETE
-                                </a>
-
-                                <form id="delete-form" action="{{ route('facilities.destroy', $facility->id) }}" method="POST" class="d-none">
+                                <form action="{{ route('facilities.destroy', $facility) }}" method="POST">
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
                                     @csrf
                                     @method('delete')
+                                    <button class="btn btn-sm btn-danger">DEL</button>
                                 </form>
                             </td>
                         </tr>
