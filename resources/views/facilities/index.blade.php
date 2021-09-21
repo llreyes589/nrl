@@ -6,62 +6,64 @@ NRL - Facilities
 
 @section('content')
 
-
-<div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="my-modal-title">New Facility</h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <!-- MODAL -->
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="my-modal-title">New Facility</h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('facilities.createOrUpdate')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id">
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">Accreditation Number:</label>
+                            <input class="form-control" type="text" name="accreditation_no" placeholder="Enter accreditation number">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">Name:</label>
+                            <input class="form-control" type="text" name="name" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">Address:</label>
+                            <input class="form-control" type="text" name="address" placeholder="Enter address">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">City:</label>
+                            <input class="form-control" type="text" name="city" placeholder="Enter city">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">contact number:</label>
+                            <input class="form-control" type="text" name="contact_no" placeholder="Enter contact number">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">email address:</label>
+                            <input class="form-control" type="email" name="email" placeholder="Enter email address">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">lab email address:</label>
+                            <input class="form-control" type="email" name="lab_email" placeholder="Enter lab email address">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">or number:</label>
+                            <input class="form-control" type="text" name="or_no" placeholder="Enter OR number">
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="text-uppercase">validity:</label>
+                            <input class="form-control" type="date" name="validity" placeholder="Enter OR validity">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+                
             </div>
-            <div class="modal-body">
-                <form action="{{route('facilities.store')}}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">Accreditation Number:</label>
-                        <input class="form-control" type="text" name="accreditation_no" placeholder="Enter accreditation number">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">Name:</label>
-                        <input class="form-control" type="text" name="name" placeholder="Enter name">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">Address:</label>
-                        <input class="form-control" type="text" name="address" placeholder="Enter address">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">City:</label>
-                        <input class="form-control" type="text" name="city" placeholder="Enter city">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">contact number:</label>
-                        <input class="form-control" type="text" name="contact_no" placeholder="Enter contact number">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">email address:</label>
-                        <input class="form-control" type="email" name="email" placeholder="Enter email address">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">lab email address:</label>
-                        <input class="form-control" type="email" name="lab_email" placeholder="Enter lab email address">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">or number:</label>
-                        <input class="form-control" type="text" name="or_no" placeholder="Enter OR number">
-                    </div>
-                    <div class="form-group">
-                        <label for="" class="text-uppercase">validity:</label>
-                        <input class="form-control" type="date" name="validity" placeholder="Enter OR validity">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </form>
-            </div>
-            
         </div>
     </div>
-</div>
+    <!-- END MODAL -->
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -70,7 +72,7 @@ NRL - Facilities
     </div>
 
     @if(Session::has('message'))
-    <div class="alert alert-className">
+    <div class="alert {{session('classname')}}">
         {{session('message')}}
     </div>
     @endif
@@ -94,7 +96,19 @@ NRL - Facilities
                             <td>{{$facility->accreditation_no}}</td>
                             <td>{{$facility->name}}</td>
                             <td>{{$facility->created_at}}</td>
-                            <td>Edit/Delete</td>
+                            <td>
+                                <button class="btn btn-primary" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
+                                <a class="btn btn-danger" href="{{ route('facilities.destroy', $facility->id) }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('delete-form').submit();">
+                                        DELETE
+                                </a>
+
+                                <form id="delete-form" action="{{ route('facilities.destroy', $facility->id) }}" method="POST" class="d-none">
+                                    @csrf
+                                    @method('delete')
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                     
@@ -108,6 +122,12 @@ NRL - Facilities
 
 @section('javascript')
 <script>
+    function selectFacility(facility){
+        for (let [key, value] of Object.entries(facility)) {
+            $('input[name="'+key+'"]').val(value);
+        }
+        $('#form-modal').modal('show')
+    }
     $(document).ready( function () {
         $('#facility_table').DataTable();
     } );

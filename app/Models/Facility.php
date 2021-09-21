@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Facility extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'accreditation_no', 
@@ -19,5 +20,6 @@ class Facility extends Model
         'lab_email', 
         'or_no', 
         'validity', 
+        'deleted_at'
     ];
 }
