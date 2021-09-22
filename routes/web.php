@@ -32,5 +32,6 @@ Route::prefix('verifier')->group(function(){
         Route::put('/facilities/{id}/updateVerified', [App\Http\Controllers\Verifier\FacilityController::class, 'updateVerified'])->name('updateVerified');
         Route::put('/facilities/{id}/updateEndorse', [App\Http\Controllers\Verifier\FacilityController::class, 'updateEndorse'])->name('updateEndorse');
         Route::put('/facilities/{id}/updateApproved', [App\Http\Controllers\Verifier\FacilityController::class, 'updateApproved'])->name('updateApproved');
+        Route::get('/facilities/{id}/certificate', [App\Http\Controllers\Verifier\FacilityController::class, 'certificate'])->name('certificate');
     });
 });

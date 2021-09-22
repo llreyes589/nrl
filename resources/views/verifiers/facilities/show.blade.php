@@ -12,6 +12,28 @@ NFL - Facility
     </div>
 @endif
 
+<!-- Modal -->
+
+<div id="certificate_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="certificate_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="certificate_modal_title">Certificate</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" id="certificate_container" src="" allowfullscreen></iframe>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <a href="{{route('verifiers.facilities.index')}}" class="btn btn-danger float-right" type="button">Back</a>
@@ -82,6 +104,9 @@ NFL - Facility
                 <p class=""><strong>{{$facility->validity}}</strong></p>
             </div>
         </div>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+        <h6>Status:</h6>
         <div class="row">
             <div class="col">
                 @if(isset($facility->verified_by))
@@ -143,6 +168,32 @@ NFL - Facility
                 @endif
             </div>
         </div>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-secondary" type="button" id="generate_certificate_btn">Generate Certificate</button>
+            </div>
+        </div>
     </div>
 </div>
+@endsection
+
+@section('javascript')
+<script>
+    window.onload = function(){
+        $('#generate_certificate_btn').click(function(){
+            $('#certificate_modal').modal('show')
+        })
+
+        $('#certificate_modal').on('hide.bs.modal', function(){
+            $('#certificate_container').attr('src', '')
+        })
+
+        $('#certificate_modal').on('show.bs.modal', function(){
+            $('#certificate_container').attr('src', '{{route("verifiers.facilities.certificate", $facility->id)}}')
+        })
+    }
+</script>
 @endsection
