@@ -27,5 +27,10 @@ class Facility extends Model
         'endorsed_at',
         'approved_by',
         'approved_at',
+        'qrcode'
     ];
+
+    function certificate(){
+        return $this->hasOne(Certificate::class)->orderBy('created_at', 'desc');
+    }
 }
