@@ -48,14 +48,6 @@ NRL - Facilities
                             <label for="" class="text-uppercase">lab email address:</label>
                             <input class="form-control" type="email" name="lab_email" placeholder="Enter lab email address">
                         </div>
-                        <div class="form-group">
-                            <label for="" class="text-uppercase">or number:</label>
-                            <input class="form-control" type="text" name="or_no" placeholder="Enter OR number">
-                        </div>
-                        <div class="form-group">
-                            <label for="" class="text-uppercase">validity:</label>
-                            <input class="form-control" type="date" name="validity" placeholder="Enter OR validity">
-                        </div>
                         <button type="submit" class="btn btn-primary">Add</button>
                     </form>
                 </div>

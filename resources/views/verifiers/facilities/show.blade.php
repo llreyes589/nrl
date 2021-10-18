@@ -80,184 +80,243 @@ NFL - Facility
 <!-- /Encoder Modal -->
 <!-- End Modal -->
 
-<div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <a href="{{route('verifiers.facilities.index')}}" class="btn btn-danger float-right" type="button">Back</a>
-        <h3 class="m-0 font-weight-bold text-primary">{{$facility->name}}</h3>
+<div class="row">
+    <div class="col-md-8 col-sm-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <a href="{{route('verifiers.facilities.index')}}" class="btn btn-danger float-right" type="button">Back</a>
+                <h3 class="m-0 font-weight-bold text-primary">{{$facility->name}}</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Accreditation No.:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->accreditation_no}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Name:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->name}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Address:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->address}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Contact No.:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->contact_no}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Email:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->email}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Lab Email:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->lab_email}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>OR No.:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->or_no : 'N/A'}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Validity:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->validity : 'N/A'}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Performance:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->performance : 'N/A'}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Action:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        @role('encoder')
+                            @if($facility->certificate != null)
+                
+                                @if(\Carbon\Carbon::parse($facility->certificate->validity) <= \Carbon\Carbon::now())
+                
+                                <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-certificate"></i>
+                                    </span>
+                                    <span class="text">Add Certificate</span>
+                                </button>
+                                @endif
+                
+                                @if(!isset($facility->certificate->verified_by))
+                                    <form method="POST" action="{{route('verifiers.facilities.updateVerified',$facility->certificate->id)}}">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-primary btn-icon-split btn-sm">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-flag"></i>
+                                            </span>
+                                            <span class="text">Flag as Verified</span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-certificate"></i>
+                                    </span>
+                                    <span class="text">Add Certificate</span>
+                                </button>
+                            @endif
+                
+                        @endrole
+                
+                        @role('supervisor')
+                            @if($facility->certificate != null)
+                                @if(!isset($facility->certificate->endorsed_by))
+                                    <form method="POST" action="{{route('verifiers.facilities.updateEndorse', $facility->certificate->id)}}">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-primary btn-icon-split btn-sm">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-flag"></i>
+                                            </span>
+                                            <span class="text">Flag as Endorse Approved</span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
+                        @endrole
+                
+                        @role('head')
+                            @if($facility->certificate != null)
+                                @if(!isset($facility->certificate->approved_by))
+                                    <form method="POST" action="{{route('verifiers.facilities.updateApproved', $facility->certificate->id)}}">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-primary btn-icon-split btn-sm">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-flag"></i>
+                                            </span>
+                                            <span class="text">Flag as Approved</span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
+                        @endrole
+                    </div>
+                </div>
+                
+            </div>
+        </div>        
     </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Accreditation No.:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->accreditation_no}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Name:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->name}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Address:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->address}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Contact No.:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->contact_no}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Email:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->email}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Lab Email:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->lab_email}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>OR No.:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->or_no : 'N/A'}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Validity:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->validity : 'N/A'}}</strong></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                <p>Performance:</p>
-            </div>
-            <div class="col-md col-sm-12">
-                <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->performance : 'N/A'}}</strong></p>
-            </div>
-        </div>
-        @if($facility->certificate != null)
-
-            @if(\Carbon\Carbon::parse($facility->certificate->validity) <= \Carbon\Carbon::now())
-
-            <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
-                <span class="icon text-white-50">
-                    <i class="fas fa-certificate"></i>
-                </span>
-                <span class="text">Add Certificate</span>
-            </button>
-            @endif
-        @else
-            <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
-                <span class="icon text-white-50">
-                    <i class="fas fa-certificate"></i>
-                </span>
-                <span class="text">Add Certificate</span>
-            </button>
-        @endif
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
-        <h6>Certificate Status:</h6>
-        <div class="row">
-            <div class="col">
-                @if($facility->certificate != null)
-                    @if(isset($facility->certificate->verified_by))
-                        <div class="btn btn-success btn-icon-split btn-sm">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span class="text">Verified</span>
+    <div class="col-md-4 col-sm-12">
+        <div class="card shadow mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Certificate Status</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <div class="row mb-1">
+                                    <div class="col">
+                                        @if($facility->certificate != null)
+                                            @if(isset($facility->certificate->verified_by))
+                                                <div class="btn btn-success btn-icon-split btn-sm">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-check"></i>
+                                                    </span>
+                                                    <span class="text">Verified</span>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col">
+                                        @if(isset($facility->certificate))
+                                            @if(isset($facility->certificate->endorsed_by))
+                                                <div class="btn btn-success btn-icon-split btn-sm">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-check"></i>
+                                                    </span>
+                                                    <span class="text">Endorse Approved</span>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col">
+                                        @if(isset($facility->certificate))
+                                            @if(isset($facility->certificate->approved_by))
+                                                <div class="btn btn-success btn-icon-split btn-sm">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-check"></i>
+                                                    </span>
+                                                    <span class="text">Approved</span>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>                                
+                            </div>
                         </div>
-                    @else
-                        <form method="POST" action="{{route('verifiers.facilities.updateVerified',$facility->certificate->id)}}">
-                        @csrf
-                        @method('PUT')
-                        <button class="btn btn-primary btn-icon-split btn-sm">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-flag"></i>
-                            </span>
-                            <span class="text">Flag as Verified</span>
-                        </button>
-                    </form>
-                    @endif
-                @endif
-                @if(isset($facility->certificate))
-                    @if(isset($facility->certificate->endorsed_by))
-                        <div class="btn btn-success btn-icon-split btn-sm">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span class="text">Endorse Approved</span>
-                        </div>
-                            
-                    @else
-                    <form method="POST" action="{{route('verifiers.facilities.updateEndorse', $facility->certificate->id)}}">
-                        @csrf
-                        @method('PUT')
-                        <button class="btn btn-primary btn-icon-split btn-sm">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-flag"></i>
-                            </span>
-                            <span class="text">Flag as Endorse Approved</span>
-                        </button>
-                    </form>
-                    @endif
-                @endif
-                @if(isset($facility->certificate))
-                    @if(isset($facility->certificate->approved_by))
-                        <div class="btn btn-success btn-icon-split btn-sm">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span class="text">Approved</span>
-                        </div>
-                    @else
-                    <form method="POST" action="{{route('verifiers.facilities.updateApproved', $facility->certificate->id)}}">
-                        @csrf
-                        @method('PUT')
-                        <button class="btn btn-primary btn-icon-split btn-sm">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-flag"></i>
-                            </span>
-                            <span class="text">Flag as Approved</span>
-                        </button>
-                    </form>
-                    @endif
-                @endif
+                        
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-secondary" type="button" id="generate_certificate_btn">Generate Certificate</button>
+        </div>  
+        <div class="card shadow mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <!-- <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                View Certificate</div> -->
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <button class="btn btn-info btn-sm" type="button" id="generate_certificate_btn"><i class="fa fa-certificate"></i> View Certificate</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
-        </div>
+        </div> 
     </div>
 </div>
+
 @endsection
 
 @section('javascript')

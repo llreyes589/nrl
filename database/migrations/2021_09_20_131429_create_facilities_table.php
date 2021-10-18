@@ -22,8 +22,6 @@ class CreateFacilitiesTable extends Migration
             $table->string('contact_no');
             $table->string('email');
             $table->string('lab_email');
-            $table->string('or_no')->unique();
-            $table->string('validity');
             $table->timestamps();
         });
     }

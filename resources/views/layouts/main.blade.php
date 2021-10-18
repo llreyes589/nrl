@@ -47,37 +47,38 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
+            
             <!-- Heading 
-                <div class="sidebar-heading">
-                    Interface
-                </div>
-            -->
-
+            <div class="sidebar-heading">
+                Interface
+            </div>
+        -->
+        
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-            <a class="nav-link" href="{{route('users.index')}}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Users</span></a>
-            </li>
+            @role('Super-Admin')
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+                <li class="nav-item">
+                <a class="nav-link" href="{{route('users.index')}}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Users</span></a>
+                </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('facilities.index')}}">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>Facilities</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('facilities.index')}}">
+                        <i class="fas fa-fw fa-building"></i>
+                        <span>Facilities</span></a>
+                </li>
+            @else   
+                <!-- Divider -->
+                <hr class="sidebar-divider d-none d-md-block">
             <li class="nav-item">
                 <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
                     <i class="fas fa-fw fa-building"></i>
                     <span>Facilities</span></a>
-            </li>
-
+                </li>
+                
+            @endrole
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
