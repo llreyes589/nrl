@@ -65,7 +65,7 @@ class FacilityController extends Controller
     }
     
     
-    function certificate(Request $request, $id, $key){
+    function certificate(Request $request, $key){
         $certificate = Certificate::where('key',$key)->first();
         $name = $certificate->facility->name;
         

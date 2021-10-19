@@ -1,6 +1,8 @@
 @extends('layouts.auth')
 
 @section('content')
+<h3 class="text-center">National Reference Laboratory <br>East Avenue Medical Center (NRL-EAMC)</h3>
+<hr>
 <form class="user" method="POST" action="{{ route('login') }}">
     @csrf
     <div class="form-group">

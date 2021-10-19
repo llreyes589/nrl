@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Auth::routes(['register' => false]);
@@ -65,4 +65,4 @@ Route::prefix('verifier')->group(function(){
     });
 });
 // certificate
-Route::get('/facilities/{id}/certificate/{key}', [App\Http\Controllers\Verifier\FacilityController::class, 'certificate'])->name('certificate');
+Route::get('/certificate/{key}', [App\Http\Controllers\Verifier\FacilityController::class, 'certificate'])->name('certificate');
