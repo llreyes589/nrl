@@ -43,7 +43,7 @@ NFL - Facility
     <div class="modal-dialog modal-dialog-centered modal" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="certificate_modal_title">Add Certificate</h5>
+                <h5 class="modal-title" id="certificate_modal_title">Prepare Certificate</h5>
                 <button class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -193,7 +193,7 @@ NFL - Facility
                                     <span class="icon text-white-50">
                                         <i class="fas fa-certificate"></i>
                                     </span>
-                                    <span class="text">Add Certificate</span>
+                                    <span class="text">Prepare Certificate</span>
                                 </button>
                                 @endif
                 
@@ -214,7 +214,7 @@ NFL - Facility
                                     <span class="icon text-white-50">
                                         <i class="fas fa-certificate"></i>
                                     </span>
-                                    <span class="text">Add Certificate</span>
+                                    <span class="text">Prepare Certificate</span>
                                 </button>
                             @endif
                 
@@ -231,7 +231,7 @@ NFL - Facility
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-flag"></i>
                                                 </span>
-                                                <span class="text">Flag as Endorse Approved</span>
+                                                <span class="text">Flag as Endorsed for Approval</span>
                                             </button>
                                         </form>
                                     @endif
@@ -294,7 +294,7 @@ NFL - Facility
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-check"></i>
                                                     </span>
-                                                    <span class="text">Endorse Approved</span>
+                                                    <span class="text">Endorsed for Approval</span>
                                                 </div>
                                             @endif
                                         @endif
@@ -357,7 +357,7 @@ NFL - Facility
 
         @if(isset($facility->certificate))
         $('#certificate_modal').on('show.bs.modal', function(){
-            $('#certificate_container').attr('src', '{{route("certificate", ["id" => $facility->id, "key" => $facility->certificate->key])}}')
+            $('#certificate_container').attr('src', '{{route("certificate", ["key" => $facility->certificate->key])}}')
         })
         @endif
 

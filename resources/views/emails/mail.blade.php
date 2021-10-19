@@ -35,18 +35,9 @@
                   <td style="padding:0 0 36px 0;color:#153643;">
                     <h1 style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">Hello <strong>{{ $name }}</strong>,</h1>
                     <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
-                        Your certificate is ready, please verify immediately.    
+                      Your certificate is ready, you may download it by clicking the link below.
                     </p>
-                    <p style="margin:0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
-                        How verify you certificate?
-                    </p>    
-                    <ol>
-                        <ul>&#10003; Download the certificate by clicking the link below.</ul>
-                        <ul>&#10003; Scan the QR Code.</ul>
-                        <ul>&#10003; Indicate your name and click verify.</ul>
-                        <ul>&#10003; Done.</ul>
-                    </ol>
-                    <p>Certificate: {{$pdf}}</p>
+                    <p><a href="{{$pdf}}">{{$pdf}}</a></p>
                     <hr>
                     <p>-NRL</p>
                   </td>

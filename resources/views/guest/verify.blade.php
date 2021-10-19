@@ -13,71 +13,16 @@ NRL - Verify my certificate
 
 <div class="card ">
     <div class="card-header">
+        @if(!isset($cert_details->facility_verified_by))
         <h5>Verify Certificate</h5>
+        @else
+        <h5>This certificate was issued to: {{$cert_details->facility_verified_by}} on {{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->facility_verified_at))->toDayDateTimeString()}}</h5>
+        @endif
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                OR No.:
-            </div>
-            <div class="col-md col-sm-12">
-                <strong>{{$cert_details->or_no}}</strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                Validity:
-            </div>
-            <div class="col-md col-sm-12">
-                <strong>{{$cert_details->validity}}</strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                Performance:
-            </div>
-            <div class="col-md col-sm-12">
-                <?php
-                    $performance = '';
-                    switch ($cert_details->performance) {
-                        case 'E':
-                            $performance = 'Excellent';
-                            break;
-                        case 'HS':
-                            $performance = 'Highly Satisfactory';
-                            break;
-                        case 'VS':
-                            $performance = 'Very Satisfactory';
-                            break;
-                        default:
-                            $performance = 'Satisfactory';
-                            break;
-                    }
-                ?>
-                <strong>{{$performance}}</strong>
-            </div>
-        </div>
-        @if(isset($cert_details->facility_verified_by))
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                Verified by:
-            </div>
-            <div class="col-md col-sm-12">
-                <strong>{{$cert_details->facility_verified_by}}</strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 col-sm-12">
-                Verified date:
-            </div>
-            <div class="col-md col-sm-12">
-                <strong>{{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->facility_verified_at))->toDayDateTimeString()}}</strong>
-            </div>
-        </div>
-        @endif
 
         @if(!isset($cert_details->facility_verified_by))
-        <p class="card-text mt-3">Click the button below to verify certificate.</p>
+        <p class="card-text mt-3">Click the indicate your name and click verify button below to verify certificate.</p>
         <hr>
         <form method="POST" action="{{route('verifyMyCertificate', $cert_details->key)}}">
             @csrf
@@ -94,6 +39,9 @@ NRL - Verify my certificate
             </button>
         </form>
         @endif
+    </div>
+    <div class="card-footer">
+        <p class="lead">Note: If the details on the certificate do not match, please call East Ave NRL.</p>
     </div>
 </div>
 @endsection

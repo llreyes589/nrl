@@ -28,6 +28,7 @@ NRL - Facilities
                     <tr>
                         <th>Accreditation Number</th>
                         <th>Name</th>
+                        <th>Cert Status</th>
                         <th>Date Added</th>
                         <th>Action</th>
                     </tr>
@@ -37,6 +38,50 @@ NRL - Facilities
                         <tr>
                             <td>{{$facility->accreditation_no}}</td>
                             <td>{{$facility->name}}</td>
+                            <td>
+                                <p>
+                                    @if(isset($facility->certificate))
+                                        @role('encoder')
+                                            @if(isset($facility->certificate->verified_by))
+                                                <span class="text-success">Verified</span>
+                                            @else
+                                                <span class="text-info">For Verification</span>
+                                            @endif
+                                        @endrole
+                                        @role('supervisor')
+                                            @if(isset($facility->certificate->verified_by))
+                                                @if(isset($facility->certificate->endorsed_by))
+                                                    <span class="text-success">Endorsed for approval</span>
+                                                @else
+                                                    <span class="text-info">Endorse for approval</span>
+                                                @endif
+                                            @else
+                                                <span class="text-success">For Verification</span>
+                                            @endif
+                                        @endrole
+                                        @role('head')
+                                            @if(!isset($facility->certificate->verified_by))
+                                                <span class="text-success">For Verification</span>
+                                            @else
+                                                
+                                                @if(isset($facility->certificate->endorsed_by))
+                                                    
+                                                    @if(isset($facility->certificate->approved_by))
+                                                        <span class="text-success">Approved</span>
+                                                    @else
+                                                        <span class="text-success">For Approval</span>
+                                                    @endif
+                                                @else
+                                                    <span class="text-success">Endorse for approval</span>
+                                                @endif
+                                            @endif
+                                            
+                                        @endrole
+                                    @else
+                                        <span class="text-info">Cert preparation</span>
+                                    @endif
+                                </p>
+                            </td>
                             <td>{{$facility->created_at}}</td>
                             <td>
                                 <a class="btn btn-success btn-sm" href="{{route('verifiers.facilities.show', $facility->id)}}"><i class="fa fa-search"></i> View</a>

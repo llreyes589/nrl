@@ -20,36 +20,38 @@ NRL - Users
     <!-- Content Row -->
     <div class="row">
         <div class="col">
-            
-            <table class="table table-light" id="users_table">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Date Added</th>
-                        <th>Manage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($users as $user)
-                    <tr >
-                            
-                            <td>{{$user->name}}</td>
-                            <td>{{$user->email}}</td>
-                            <td>{{$user->created_at}}</td>
-                            <td>
-                                <form action="{{ route('users.destroy', $user) }}" method="POST">
-                                    <a class="btn btn-sm btn-primary" type="button" href="{{route('users.edit', $user)}}">EDIT</a>
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger">DEL</button>
-                                </form>
-                            </td>
+            <div class="table-responsive">
+
+                <table class="table table-light" id="users_table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Date Added</th>
+                            <th>Manage</th>
                         </tr>
-                    @endforeach
-                    
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $user)
+                        <tr >
+                                
+                                <td>{{$user->name}}</td>
+                                <td>{{$user->email}}</td>
+                                <td>{{$user->created_at}}</td>
+                                <td>
+                                    <form action="{{ route('users.destroy', $user) }}" method="POST">
+                                        <a class="btn btn-sm btn-primary" type="button" href="{{route('users.edit', $user)}}">EDIT</a>
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-danger">DEL</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        
+                    </tbody>
+                </table>
+            </div>
         </div>
         
     </div>
