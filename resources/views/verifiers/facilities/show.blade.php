@@ -63,7 +63,7 @@ NFL - Facility
                         <label for="performance">Performance</label>
                         <select id="performance" class="custom-select" name="performance" required>
                             <option value="">--Please select performance here--</option>
-                            <option value="E">Excelent</option>
+                            <option value="E">Excellent</option>
                             <option value="HS">Highly Satisfactory</option>
                             <option value="VS">Very Satisfactory</option>
                             <option value="S">Satisfactory</option>
@@ -152,14 +152,33 @@ NFL - Facility
                         <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->validity : 'N/A'}}</strong></p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-4 col-sm-12">
-                        <p>Performance:</p>
+                @if(isset($facility->certificate->performance))
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <p>Performance:</p>
+                        </div>
+                        <?php
+                            $performance = '';
+                            switch ($facility->certificate->performance) {
+                                case 'E':
+                                    $performance = 'Excellent';
+                                    break;
+                                case 'HS':
+                                    $performance = 'Highly Satisfactory';
+                                    break;
+                                case 'VS':
+                                    $performance = 'Very Satisfactory';
+                                    break;
+                                default:
+                                    $performance = 'Satisfactory';
+                                    break;
+                            }
+                        ?>
+                        <div class="col-md col-sm-12">
+                            <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $performance : 'N/A'}}</strong></p>
+                        </div>
                     </div>
-                    <div class="col-md col-sm-12">
-                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->performance : 'N/A'}}</strong></p>
-                    </div>
-                </div>
+                @endif
                 <div class="row">
                     <div class="col-md-4 col-sm-12">
                         <p>Action:</p>
@@ -179,7 +198,7 @@ NFL - Facility
                                 @endif
                 
                                 @if(!isset($facility->certificate->verified_by))
-                                    <form method="POST" action="{{route('verifiers.facilities.updateVerified',$facility->certificate->id)}}">
+                                    <form method="POST" action="{{route('verifiers.facilities.updateVerified', ['id'=>$facility->id, 'cert_id' => $facility->certificate->id])}}">
                                         @csrf
                                         @method('PUT')
                                         <button class="btn btn-primary btn-icon-split btn-sm">
@@ -203,34 +222,38 @@ NFL - Facility
                 
                         @role('supervisor')
                             @if($facility->certificate != null)
-                                @if(!isset($facility->certificate->endorsed_by))
-                                    <form method="POST" action="{{route('verifiers.facilities.updateEndorse', $facility->certificate->id)}}">
-                                        @csrf
-                                        @method('PUT')
-                                        <button class="btn btn-primary btn-icon-split btn-sm">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-flag"></i>
-                                            </span>
-                                            <span class="text">Flag as Endorse Approved</span>
-                                        </button>
-                                    </form>
+                                @if(isset($facility->certificate->verified_by))
+                                    @if(!isset($facility->certificate->endorsed_by))
+                                        <form method="POST" action="{{route('verifiers.facilities.updateEndorse', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
+                                            @csrf
+                                            @method('PUT')
+                                            <button class="btn btn-primary btn-icon-split btn-sm">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-flag"></i>
+                                                </span>
+                                                <span class="text">Flag as Endorse Approved</span>
+                                            </button>
+                                        </form>
+                                    @endif
                                 @endif
                             @endif
                         @endrole
                 
                         @role('head')
                             @if($facility->certificate != null)
-                                @if(!isset($facility->certificate->approved_by))
-                                    <form method="POST" action="{{route('verifiers.facilities.updateApproved', $facility->certificate->id)}}">
-                                        @csrf
-                                        @method('PUT')
-                                        <button class="btn btn-primary btn-icon-split btn-sm">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-flag"></i>
-                                            </span>
-                                            <span class="text">Flag as Approved</span>
-                                        </button>
-                                    </form>
+                                @if(isset($facility->certificate->endorsed_by))
+                                    @if(!isset($facility->certificate->approved_by))
+                                        <form method="POST" action="{{route('verifiers.facilities.updateApproved', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
+                                            @csrf
+                                            @method('PUT')
+                                            <button class="btn btn-primary btn-icon-split btn-sm">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-flag"></i>
+                                                </span>
+                                                <span class="text">Flag as Approved</span>
+                                            </button>
+                                        </form>
+                                    @endif
                                 @endif
                             @endif
                         @endrole
@@ -298,6 +321,7 @@ NFL - Facility
                 </div>
             </div>
         </div>  
+        @if(isset($facility->certificate))
         <div class="card shadow mb-4">
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
@@ -314,6 +338,7 @@ NFL - Facility
                 </div>
             </div>
         </div> 
+        @endif
     </div>
 </div>
 
@@ -330,9 +355,11 @@ NFL - Facility
             $('#certificate_container').attr('src', '')
         })
 
+        @if(isset($facility->certificate))
         $('#certificate_modal').on('show.bs.modal', function(){
-            $('#certificate_container').attr('src', '{{route("verifiers.facilities.certificate", $facility->id)}}')
+            $('#certificate_container').attr('src', '{{route("certificate", ["id" => $facility->id, "key" => $facility->certificate->key])}}')
         })
+        @endif
 
         $('#add_certificate_btn').click(function(){
             $('#encoder_modal').modal('show')

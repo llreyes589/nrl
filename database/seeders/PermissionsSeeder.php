@@ -56,8 +56,8 @@ class PermissionsSeeder extends Seeder
 
         $admin_user = \App\Models\User::create([
             'name' => 'Lester Lou Reyes',
-            'email' => 'clarenista@gmail.com',
-            'password' => bcrypt('lesterlou14'),
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('123'),
         ]);
 
         $encoder_user = \App\Models\User::create([

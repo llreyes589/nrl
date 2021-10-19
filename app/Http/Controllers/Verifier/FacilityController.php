@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use \setasign\Fpdi\Fpdi;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PDF;
+use Illuminate\Support\Facades\Mail;
 
 
 class FacilityController extends Controller
@@ -27,8 +28,8 @@ class FacilityController extends Controller
         return view('verifiers.facilities.show', compact('facility'));
     }
     
-    function updateVerified($id){
-        $certificate = Certificate::find($id);
+    function updateVerified($id, $cert_id){
+        $certificate = Certificate::find($cert_id);
         $certificate->update([
             'verified_by' => auth()->id(),
             'verified_at' => Carbon::now(),
@@ -36,8 +37,11 @@ class FacilityController extends Controller
         return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Facility verified successfully.')->with('classname', 'alert-success');
 
     }
-    function updateEndorse($id){
-        $certificate = Certificate::find($id);
+    function updateEndorse($id, $cert_id){
+        $certificate = Certificate::find($cert_id);
+        if(!isset($certificate->verified_by)){
+            return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Invalid action.')->with('classname', 'alert-danger');
+        }
         $certificate->update([
             'endorsed_by' => auth()->id(),
             'endorsed_at' => Carbon::now(),
@@ -46,8 +50,11 @@ class FacilityController extends Controller
 
     }
 
-    function updateApproved($id){
-        $certificate = Certificate::find($id);
+    function updateApproved($id, $cert_id){
+        $certificate = Certificate::find($cert_id);
+        if(!isset($certificate->endorsed_by)){
+            return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Invalid action.')->with('classname', 'alert-danger');
+        }
         $certificate->update([
             'approved_by' => auth()->id(),
             'approved_at' => Carbon::now(),
@@ -58,13 +65,12 @@ class FacilityController extends Controller
     }
     
     
-    function certificate($id){
-        $facility = Facility::find($id);
-        $name = $facility->name;
+    function certificate(Request $request, $id, $key){
+        $certificate = Certificate::where('key',$key)->first();
+        $name = $certificate->facility->name;
         
-        $qr = QrCode::format('png')->size(400)->generate(\route('verifiers.facilities.updateVerified', $id));
-        // dd(base64_encode($qr));
-        PDF::SetTitle('Hello World');
+        $qr = QrCode::format('png')->size(400)->generate(\route('verifyCertificate', ['key' => $key]));
+        PDF::SetTitle($name.' Certificate');
         PDF::AddPage();
         
         // Example of Image from data stream ('PHP rules')
@@ -73,101 +79,60 @@ class FacilityController extends Controller
         // The '@' character is used to indicate that follows an image data stream and not an image file name
         PDF::Image('@'.$imgdata, 150, 180, 50, 50);
 
-        // PDF::SetFont('Helvetica', 'B', 30);
-        // // $pdf->SetTextColor(0,0,0);
-        // PDF::SetXY(20, 315); // set the position of the box
-        // PDF::Cell(0, 10, utf8_decode($name), 0, 0, 'C'); // add the text, align to Center of cell
-        // set some text for example
-        // set font
         PDF::SetFont('Helvetica', '', 20);
-        
-        
-        // set cell padding
-        // PDF::setCellPaddings(1, 1, 1, 1);
-        
-        // set cell margins
-        // PDF::setCellMargins(1, 1, 1, 1);
-
-        // set color for background
-        // PDF::SetFillColor(255, 255, 127);
-        
-        // MultiCell($w, $h, $txt, $border=0, $align='J', $fill=0, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0)
         
         // set some text for example
         $txt = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-        
-        // Multicell test
-        // PDF::MultiCell(55, 5, '[LEFT] '.$txt, 1, 'L', 1, 0, '', '', true);
-        // PDF::MultiCell(55, 5, $facility->name, 1, 'C', 1, 0, '20', '235', true);
-        // Vertical alignment
-        // PDF::Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
-        PDF::MultiCell(100, 40, $facility->name, 0, 'C', 0, 0, '55', '120', true, 0, false, true, 40, 'M');
+
+        PDF::MultiCell(100, 40, $certificate->facility->name, 0, 'C', 0, 0, '55', '120', true, 0, false, true, 40, 'M');
         PDF::SetFont('Helvetica', '', 12);
-        PDF::MultiCell(100, 40, $facility->address, 0, 'C', 0, 0, '55', '150', true, 0, false, true, 40, 'M');
+        PDF::MultiCell(100, 40, $certificate->facility->address, 0, 'C', 0, 0, '55', '150', true, 0, false, true, 40, 'M');
         
-        // Cert no
-        // PDF::SetXY(20, 365);
-        PDF::MultiCell(100, 40, $facility->accreditation_no, 0, 'C', 0, 0, '55', '135', true, 0, false, true, 40, 'M');
-        // PDF::MultiCell(0, 20, 'Certificate Number: '.$facility->accreditation_no, 0, "C");
-
-        // Accreditation no
-        // PDF::SetXY(20, 380);
-        // PDF::MultiCell(0, 20, 'Accreditation Number: '.$facility->accreditation_no, 0, "C");
-        PDF::Output('hello_world.pdf');
         
-        // return base64_encode($qr);
-        // echo `<img src="{$qr}">`;
-        // return $qr;
-        // dd();
-        // Create new Landscape PDF
-        $pdf = new FPDI('p'  ,'pt', 'Letter');
+        PDF::MultiCell(100, 40, $certificate->facility->accreditation_no, 0, 'C', 0, 0, '55', '135', true, 0, false, true, 40, 'M');
         
-        // Reference the PDF you want to use (use relative path)
-        $pagecount = $pdf->setSourceFile( 'docs/test.pdf');
-
-        // Import the first page from the PDF and add to dynamic PDF
-        $tpl = $pdf->importPage(1);
-        $pdf->AddPage();
-        $pdf->SetAutoPageBreak(true,0);
-
-        // Use the imported page as the template
-        $pdf->useTemplate($tpl);
-
-        // adding a Cell using:
-        // $pdf->Cell( $width, $height, $text, $border, $fill, $align);
+        PDF::Output($certificate->or_no.'.pdf', $request->pub ? $request->pub : "I");
         
-        // Name
-        $pdf->SetFont('Helvetica', 'B', 30);
-        // $pdf->SetTextColor(0,0,0);
-        $pdf->SetXY(20, 315); // set the position of the box
-        $pdf->Cell(0, 10, utf8_decode($name), 0, 0, 'C'); // add the text, align to Center of cell
-        
-        // Address
-        $pdf->SetFont('Helvetica', '', 12);
-        // $pdf->SetTextColor(255,255,255);
-        $pdf->SetXY(20, 335);
-        $pdf->MultiCell(0, 20, $facility->address, 0, "C");
-
-        // Cert no
-        $pdf->SetXY(20, 365);
-        $pdf->MultiCell(0, 20, 'Certificate Number: '.$facility->accreditation_no, 0, "C");
-
-        // Accreditation no
-        $pdf->SetXY(20, 380);
-        $pdf->MultiCell(0, 20, 'Accreditation Number: '.$facility->accreditation_no, 0, "C");
-        // dd(request()->root().$facility->qrcode);
-        // $pdf->Image('http://assets-global.website-files.com/5e78ee1f2f0ca263f9b67c56/5f04a4babe7bb91e10639f9a_ssat-at-home01%402x.png',60,30,90,0, "PNG");
-        // $pdf->Image('@'.base64_decode($qr));
-        // render PDF to browser
-        // $pdf->Output();
     }
 
     function create_certificate(Request $request, $id){
         $facility = Facility::find($id);
-        $request->merge(['facility_id' => $id, 'created_at' => \Carbon\Carbon::now(), 'updated_at' => \Carbon\Carbon::now()]);
+        $request->merge([
+            'facility_id' => $id,
+            'created_at' => \Carbon\Carbon::now(), 
+            'updated_at' => \Carbon\Carbon::now(),
+            'key' => md5(microtime())
+            ]);
         $facility->certificate()->insert($request->except('_token'));
         return redirect()->route('verifiers.facilities.show', $id)->with('message', 'Facility certificate successfully created.')->with('classname', 'alert-success');
     }
+
+    function emailFacility(Request $request, $id, $cert_id){
+        $certificate = Certificate::find($cert_id);
+        $to_name = $certificate->facility->name;
+        $to_email = $certificate->facility->email ? $certificate->facility->email : $certificate->facility->lab_email;
+        $pdf = \route("certificate", ["id" => $id, "key" => $certificate->key, 'pub' => 'D']);
+        // dd(\route("verifiers.facilities.certificate", ["id" => $id, "cert_id" => $cert_id]));
+        $data = array('name'=> $to_name , 'pdf' => $pdf);
+        Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email) {
+            $message->to($to_email, $to_name)
+            ->subject('Certificate Issuance');
+            // ->attach(\route("certificate", ["id" => $id, "cert_id" => $cert_id]));
+        $message->from('mail.nrldoh@gmail.com','Certificate Issuance');
+        });
+        $request->merge(['issued_by' => auth()->id(), 'issued_at' =>\Carbon\Carbon::now()]);
+        $certificate->update($request->all());
+        return redirect()->route('verifiers.facilities.index')->with('message', 'Certificate successfully issued.')->with('classname', 'alert-success');
+
+    }
+
+    function emailPrev(){
+        $name = 'test';
+        $pdf = 'lorem';
+        return view('emails.mail', compact('name', 'pdf'));
+    }
+
+
     
 
     

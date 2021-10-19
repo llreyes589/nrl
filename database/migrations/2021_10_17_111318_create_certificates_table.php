@@ -25,6 +25,11 @@ class CreateCertificatesTable extends Migration
             $table->timestamp('endorsed_at')->nullable();
             $table->string('approved_by')->nullable();
             $table->timestamp('approved_at')->nullable();
+            $table->string('facility_verified_by')->nullable();
+            $table->timestamp('facility_verified_at')->nullable();
+            $table->text('key')->nullable();
+            $table->string('issued_by')->nullable();
+            $table->timestamp('issued_at')->nullable();
             $table->timestamps();
         });
     }

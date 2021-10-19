@@ -49,8 +49,8 @@
 <script>
     window.onload = function(){
 
-        $('#email').val('clarenista@gmail.com')
-        $('#password').val('lesterlou14')
+        $('#email').val('admin@gmail.com')
+        $('#password').val('123')
     }
 </script>
 @endsection
