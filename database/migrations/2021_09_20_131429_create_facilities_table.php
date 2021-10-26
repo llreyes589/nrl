@@ -19,6 +19,8 @@ class CreateFacilitiesTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('city');
+            $table->string('region_id');
+            $table->string('head_of_lab');
             $table->string('contact_no');
             $table->string('email');
             $table->string('lab_email');

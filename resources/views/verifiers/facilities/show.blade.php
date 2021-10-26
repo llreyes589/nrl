@@ -56,6 +56,10 @@ NFL - Facility
                         <input id="or_no" class="form-control" type="text" name="or_no" placeholder="OR Number" required>
                     </div>
                     <div class="form-group">
+                        <label for="or_no">Certificate Number:</label>
+                        <input id="or_no" class="form-control" type="text" name="certificate_no" placeholder="Certificate Number" required>
+                    </div>
+                    <div class="form-group">
                         <label for="validity">Validity</label>
                         <input id="validity" class="form-control" type="date" name="validity" required>
                     </div>
@@ -146,6 +150,14 @@ NFL - Facility
                 </div>
                 <div class="row">
                     <div class="col-md-4 col-sm-12">
+                        <p>Certificate No.:</p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->certificate_no : 'N/A'}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
                         <p>Validity:</p>
                     </div>
                     <div class="col-md col-sm-12">
@@ -197,15 +209,15 @@ NFL - Facility
                                 </button>
                                 @endif
                 
-                                @if(!isset($facility->certificate->verified_by))
-                                    <form method="POST" action="{{route('verifiers.facilities.updateVerified', ['id'=>$facility->id, 'cert_id' => $facility->certificate->id])}}">
+                                @if(!isset($facility->certificate->prepared_by))
+                                    <form method="POST" action="{{route('verifiers.facilities.updatePrepared', ['id'=>$facility->id, 'cert_id' => $facility->certificate->id])}}">
                                         @csrf
                                         @method('PUT')
                                         <button class="btn btn-primary btn-icon-split btn-sm">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-flag"></i>
                                             </span>
-                                            <span class="text">Flag as Verified</span>
+                                            <span class="text">Flag as Prepared</span>
                                         </button>
                                     </form>
                                 @endif
@@ -220,18 +232,18 @@ NFL - Facility
                 
                         @endrole
                 
-                        @role('supervisor')
+                        @role('verifier')
                             @if($facility->certificate != null)
-                                @if(isset($facility->certificate->verified_by))
-                                    @if(!isset($facility->certificate->endorsed_by))
-                                        <form method="POST" action="{{route('verifiers.facilities.updateEndorse', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
+                                @if(isset($facility->certificate->prepared_by))
+                                    @if(!isset($facility->certificate->verified_by))
+                                        <form method="POST" action="{{route('verifiers.facilities.updateVerified', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
                                             @csrf
                                             @method('PUT')
                                             <button class="btn btn-primary btn-icon-split btn-sm">
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-flag"></i>
                                                 </span>
-                                                <span class="text">Flag as Endorsed for Approval</span>
+                                                <span class="text">Flag as Verified</span>
                                             </button>
                                         </form>
                                     @endif
@@ -241,7 +253,7 @@ NFL - Facility
                 
                         @role('head')
                             @if($facility->certificate != null)
-                                @if(isset($facility->certificate->endorsed_by))
+                                @if(isset($facility->certificate->verified_by))
                                     @if(!isset($facility->certificate->approved_by))
                                         <form method="POST" action="{{route('verifiers.facilities.updateApproved', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
                                             @csrf
@@ -275,12 +287,12 @@ NFL - Facility
                                 <div class="row mb-1">
                                     <div class="col">
                                         @if($facility->certificate != null)
-                                            @if(isset($facility->certificate->verified_by))
+                                            @if(isset($facility->certificate->prepared_by))
                                                 <div class="btn btn-success btn-icon-split btn-sm">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-check"></i>
                                                     </span>
-                                                    <span class="text">Verified</span>
+                                                    <span class="text">Certificate Prepared</span>
                                                 </div>
                                             @endif
                                         @endif
@@ -289,7 +301,7 @@ NFL - Facility
                                 <div class="row mb-1">
                                     <div class="col">
                                         @if(isset($facility->certificate))
-                                            @if(isset($facility->certificate->endorsed_by))
+                                            @if(isset($facility->certificate->verified_by))
                                                 <div class="btn btn-success btn-icon-split btn-sm">
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-check"></i>

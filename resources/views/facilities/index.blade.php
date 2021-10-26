@@ -37,6 +37,18 @@ NRL - Facilities
                             <input class="form-control" type="text" name="city" placeholder="Enter city">
                         </div>
                         <div class="form-group">
+                            <label for="region" class="text-uppercase">Region</label>
+                            <select id="region" class="custom-select" name="region_id">
+                                @foreach($regions as $region)
+                                    <option value="{{$region->id}}">{{$region->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>         
+                        <div class="form-group">
+                            <label for="region" class="text-uppercase">Head of Laboratory</label>
+                            <input class="form-control" type="text" name="head_of_lab" placeholder="Enter Head of Laboratory">
+                        </div>                                       
+                        <div class="form-group">
                             <label for="" class="text-uppercase">contact number:</label>
                             <input class="form-control" type="text" name="contact_no" placeholder="Enter contact number">
                         </div>
@@ -110,8 +122,10 @@ NRL - Facilities
 @section('javascript')
 <script>
     function selectFacility(facility){
+        console.log(facility)
         for (let [key, value] of Object.entries(facility)) {
             $('input[name="'+key+'"]').val(value);
+            $('select[name="'+key+'"]').val(value);
         }
         $('#form-modal').modal('show')
     }

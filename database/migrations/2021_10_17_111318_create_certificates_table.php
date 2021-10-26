@@ -17,12 +17,13 @@ class CreateCertificatesTable extends Migration
             $table->id();
             $table->integer('facility_id');
             $table->string('or_no')->unique();
+            $table->string('certificate_no')->unique();
             $table->string('validity');
             $table->string('performance');
+            $table->string('prepared_by')->nullable();
+            $table->timestamp('prepared_at')->nullable();
             $table->string('verified_by')->nullable();
             $table->timestamp('verified_at')->nullable();
-            $table->string('endorsed_by')->nullable();
-            $table->timestamp('endorsed_at')->nullable();
             $table->string('approved_by')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->string('facility_verified_by')->nullable();

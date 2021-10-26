@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\PermissionsSeeder;
+use Database\Seeders\RegionsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::create([
-        //     'name' => 'Lester Lou Reyes',
-        //     'email' => 'clarenista@gmail.com',
-        //     'password' => bcrypt('lesterlou14'),
-        // ]);
+        $this->call([
+            PermissionsSeeder::class,
+            RegionsSeeder::class
+        ]);
 
     }
 }

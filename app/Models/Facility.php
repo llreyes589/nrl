@@ -15,6 +15,8 @@ class Facility extends Model
         'name', 
         'address', 
         'city', 
+        'region_id', 
+        'head_of_lab', 
         'contact_no', 
         'email', 
         'lab_email', 
@@ -32,5 +34,9 @@ class Facility extends Model
 
     function certificate(){
         return $this->hasOne(Certificate::class)->orderBy('created_at', 'desc');
+    }
+
+    function region_details(){
+        return $this->hasOne('App\Models\Region', 'id', 'region_id');
     }
 }

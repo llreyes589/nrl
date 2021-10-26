@@ -29,8 +29,8 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'create facility']);
 
         Permission::create(['name' => 'add certificate']);
+        Permission::create(['name' => 'prepare']);
         Permission::create(['name' => 'verify']);
-        Permission::create(['name' => 'endorse']);
         Permission::create(['name' => 'approve']);
         Permission::create(['name' => 'issue certificate']);
 
@@ -45,17 +45,17 @@ class PermissionsSeeder extends Seeder
 
         $encoder = Role::create(['name' => 'encoder']);
         $encoder->givePermissionTo('add certificate');
-        $encoder->givePermissionTo('verify');
+        $encoder->givePermissionTo('prepare');
         
-        $supervisor = Role::create(['name' => 'supervisor']);
-        $supervisor->givePermissionTo('endorse');
+        $verifier = Role::create(['name' => 'verifier']);
+        $verifier->givePermissionTo('verify');
         
         $head = Role::create(['name' => 'head']);
         $head->givePermissionTo('approve');
         $head->givePermissionTo('issue certificate');
 
         $admin_user = \App\Models\User::create([
-            'name' => 'Lester Lou Reyes',
+            'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('123'),
         ]);
@@ -66,9 +66,9 @@ class PermissionsSeeder extends Seeder
             'password' => bcrypt('123'),
         ]);
 
-        $supervisor_user = \App\Models\User::create([
-            'name' => 'Supervisor',
-            'email' => 'supervisor@gmail.com',
+        $verifier_user = \App\Models\User::create([
+            'name' => 'Verifier',
+            'email' => 'verifier@gmail.com',
             'password' => bcrypt('123'),
         ]);
 
@@ -80,7 +80,7 @@ class PermissionsSeeder extends Seeder
 
         $admin_user->assignRole($superadmin);
         $encoder_user->assignRole($encoder);
-        $supervisor_user->assignRole($supervisor);
+        $verifier_user->assignRole($verifier);
         $head_user->assignRole($head);
 
 

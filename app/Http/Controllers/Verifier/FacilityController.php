@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 class FacilityController extends Controller
 {
     function index(){
-        $facilities = Facility::all();
+        $facilities = Facility::with('region_details')->get();
         return view('verifiers.facilities.index', compact('facilities'));
     }
 
@@ -28,8 +28,20 @@ class FacilityController extends Controller
         return view('verifiers.facilities.show', compact('facility'));
     }
     
+    function updatePrepared($id, $cert_id){
+        $certificate = Certificate::find($cert_id);
+        $certificate->update([
+            'prepared_by' => auth()->id(),
+            'prepared_at' => Carbon::now(),
+        ]);
+        return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Facility certificate prepared successfully.')->with('classname', 'alert-success');
+
+    }
     function updateVerified($id, $cert_id){
         $certificate = Certificate::find($cert_id);
+        if(!isset($certificate->prepared_by)){
+            return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Invalid action.')->with('classname', 'alert-danger');
+        }
         $certificate->update([
             'verified_by' => auth()->id(),
             'verified_at' => Carbon::now(),
@@ -37,22 +49,10 @@ class FacilityController extends Controller
         return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Facility verified successfully.')->with('classname', 'alert-success');
 
     }
-    function updateEndorse($id, $cert_id){
-        $certificate = Certificate::find($cert_id);
-        if(!isset($certificate->verified_by)){
-            return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Invalid action.')->with('classname', 'alert-danger');
-        }
-        $certificate->update([
-            'endorsed_by' => auth()->id(),
-            'endorsed_at' => Carbon::now(),
-        ]);
-        return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Facility endorsed successfully.')->with('classname', 'alert-success');
-
-    }
 
     function updateApproved($id, $cert_id){
         $certificate = Certificate::find($cert_id);
-        if(!isset($certificate->endorsed_by)){
+        if(!isset($certificate->prepared_by)){
             return redirect()->route('verifiers.facilities.show', $certificate->facility_id)->with('message', 'Invalid action.')->with('classname', 'alert-danger');
         }
         $certificate->update([

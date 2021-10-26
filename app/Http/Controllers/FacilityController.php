@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Facility;
+use App\Models\Region;
 
 class FacilityController extends Controller
 {
     function index(){
-        $facilities = Facility::all();
-        return view('facilities.index', compact('facilities'));
+        $facilities = Facility::with('region_details')->get();
+        $regions = Region::all();
+        return view('facilities.index', compact('facilities','regions'));
     }
 
     function create(){

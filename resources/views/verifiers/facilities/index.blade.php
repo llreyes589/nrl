@@ -42,29 +42,29 @@ NRL - Facilities
                                 <p>
                                     @if(isset($facility->certificate))
                                         @role('encoder')
-                                            @if(isset($facility->certificate->verified_by))
-                                                <span class="text-success">Verified</span>
+                                            @if(isset($facility->certificate->prepared_by))
+                                                <span class="text-success">Prepared Certificate</span>
                                             @else
-                                                <span class="text-info">For Verification</span>
+                                                <span class="text-info">For Preparation</span>
                                             @endif
                                         @endrole
-                                        @role('supervisor')
-                                            @if(isset($facility->certificate->verified_by))
-                                                @if(isset($facility->certificate->endorsed_by))
-                                                    <span class="text-success">Endorsed for approval</span>
+                                        @role('verifier')
+                                            @if(isset($facility->certificate->prepared_by))
+                                                @if(isset($facility->certificate->verified_by))
+                                                    <span class="text-success">Verified</span>
                                                 @else
-                                                    <span class="text-info">Endorse for approval</span>
+                                                    <span class="text-info">For Verification</span>
                                                 @endif
                                             @else
-                                                <span class="text-success">For Verification</span>
+                                                <span class="text-success">Prepared Certificate</span>
                                             @endif
                                         @endrole
                                         @role('head')
-                                            @if(!isset($facility->certificate->verified_by))
+                                            @if(!isset($facility->certificate->prepared_by))
                                                 <span class="text-success">For Verification</span>
                                             @else
                                                 
-                                                @if(isset($facility->certificate->endorsed_by))
+                                                @if(isset($facility->certificate->verified_by))
                                                     
                                                     @if(isset($facility->certificate->approved_by))
                                                         <span class="text-success">Approved</span>
@@ -72,7 +72,7 @@ NRL - Facilities
                                                         <span class="text-success">For Approval</span>
                                                     @endif
                                                 @else
-                                                    <span class="text-success">Endorse for approval</span>
+                                                    <span class="text-success">For Verification</span>
                                                 @endif
                                             @endif
                                             
