@@ -55,7 +55,7 @@
         -->
         
             <!-- Nav Item - Pages Collapse Menu -->
-            @role('Super-Admin')
+            @role('admin')
                 <!-- Divider -->
                 <hr class="sidebar-divider">
                 <li class="nav-item">

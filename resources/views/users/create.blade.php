@@ -14,8 +14,6 @@
     </h1>
     <a class="btn btn-danger" type="button" href="{{route('users.index')}}">Back</a>
 </div>
-
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -29,7 +27,9 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ isset($user->id) ? route('users.update', $user->id) : route('users.store') }}">
+                    <form 
+                        enctype="multipart/form-data"
+                        method="POST" action="{{ isset($user->id) ? route('users.update', $user->id) : route('users.store') }}">
                         @csrf
                         @if(isset($user->id))
                         @method('PUT')
@@ -84,6 +84,25 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
+                            <div class="col-md-6">
+                                <select id="role" class="custom-select" name="role" required >
+                                    <option value="">--Please select role here--</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="encoder">Encoder</option>
+                                    <option value="verifier">Verifier</option>
+                                    <option value="head">Head</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="signature" class="col-md-4 col-form-label text-md-right">{{ __('Signature') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="signature" type="file" class="form-control-file" name="signature" required>
+                            </div>
+                        </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
@@ -102,4 +121,15 @@
         </div>
     </div>
 </div>
+@endsection
+
+
+@section('javascript')
+@if(isset($user->id))
+<script >
+    window.onload = function(){
+        $('#role').val('{{$user->roles->pluck('name')[0]}}')
+    }
+</script>
+@endif
 @endsection

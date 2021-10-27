@@ -2,16 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('cert', function(){
+    return view('certificates.index');
+})->name('cert');
 
 // Route::get('testmail', function(){
 //     $to_name = 'lester';
@@ -33,7 +26,7 @@ Auth::routes(['register' => false]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/certificate/{key}/verify/', [App\Http\Controllers\Guest\CertificateController::class, 'verify'])->name('verifyCertificate');
 Route::put('/certificate/{key}/verify/', [App\Http\Controllers\Guest\CertificateController::class, 'updateVerifyByFacility'])->name('verifyMyCertificate');
-Route::group(['middleware' => ['role:Super-Admin', 'auth']], function () {
+Route::group(['middleware' => ['role:admin', 'auth']], function () {
     //
     Route::resource('/facilities', App\Http\Controllers\FacilityController::class);
     Route::post('/facilities/createOrUpdate', [App\Http\Controllers\FacilityController::class, 'createOrUpdate'])->name('facilities.createOrUpdate');

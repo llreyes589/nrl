@@ -78,7 +78,7 @@ class PermissionsSeeder extends Seeder
             'password' => bcrypt('123'),
         ]);
 
-        $admin_user->assignRole($superadmin);
+        $admin_user->assignRole($admin);
         $encoder_user->assignRole($encoder);
         $verifier_user->assignRole($verifier);
         $head_user->assignRole($head);

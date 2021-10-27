@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Facility;
+use App\Models\User;
 
 class Certificate extends Model
 {
@@ -29,5 +30,15 @@ class Certificate extends Model
 
     function facility(){
         return $this->belongsTo(Facility::class);
+    }
+
+    function prepared_by_details(){
+        return $this->belongsTo('\App\Models\User', 'prepared_by', 'id');
+    }
+    function verified_by(){
+        return $this->belongsTo(User::class);
+    }
+    function approved_by(){
+        return $this->belongsTo(User::class);
     }
 }

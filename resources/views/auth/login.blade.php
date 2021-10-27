@@ -1,6 +1,9 @@
 @extends('layouts.auth')
 
 @section('content')
+<div class="embed-responsive embed-responsive-16by9">
+    <iframe class="embed-responsive-item" src="{{route('cert')}}" type="application/pdf"></iframe>
+</div>
 <h3 class="text-center">National Reference Laboratory <br>East Avenue Medical Center (NRL-EAMC)</h3>
 <hr>
 <form class="user" method="POST" action="{{ route('login') }}">

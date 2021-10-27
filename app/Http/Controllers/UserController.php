@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class UserController extends Controller
 {
@@ -40,12 +43,32 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required'],
         ]);
-        User::create([
+        $path = $request->file('signature')->store('signatures');
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'signature' => $path
         ]);
+        switch ($request->role) {
+            case 'admin':
+                $user->assignRole('admin');
+                break;
+            case 'encoder':
+                $user->assignRole('encoder');
+                break;
+            case 'verifier':
+                $user->assignRole('verifier');
+                break;
+            default:
+                $user->assignRole('head');
+                break;
+        }
+        
+
+        return $path;
         return redirect()->route('users.index')->with('message', 'User added successfully.')->with('classname', 'alert-success');
     }
 
@@ -85,12 +108,27 @@ class UserController extends Controller
             
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-
+        $path = $request->file('signature')->store('signatures');
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'signature' => $path
         ]);
+        switch ($request->role) {
+            case 'admin':
+                $user->syncRoles('admin');
+                break;
+            case 'encoder':
+                $user->syncRoles('encoder');
+                break;
+            case 'verifier':
+                $user->syncRoles('verifier');
+                break;
+            default:
+                $user->syncRoles('head');
+                break;
+        }
         return redirect()->route('users.index')->with('message', 'User updated successfully.')->with('classname', 'alert-success');
     }
 
