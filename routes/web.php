@@ -2,10 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('cert', function(){
-    return view('certificates.index');
-})->name('cert');
-
 // Route::get('testmail', function(){
 //     $to_name = 'lester';
 //     $to_email = 'clarenista@gmail.com';
