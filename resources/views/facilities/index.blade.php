@@ -84,35 +84,36 @@ NRL - Facilities
     <!-- Content Row -->
     <div class="row">
         <div class="col">
-            
-            <table class="table table-light" id="facility_table">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Accreditation Number</th>
-                        <th>Name</th>
-                        <th>Date Added</th>
-                        <th>Manage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($facilities as $facility)
+            <div class="table-responsive">
+                <table class="table table-light" id="facility_table">
+                    <thead class="thead-light">
                         <tr>
-                            <td>{{$facility->accreditation_no}}</td>
-                            <td>{{$facility->name}}</td>
-                            <td>{{$facility->created_at}}</td>
-                            <td>
-                                <form action="{{ route('facilities.destroy', $facility) }}" method="POST">
-                                    <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn btn-sm btn-danger">DEL</button>
-                                </form>
-                            </td>
+                            <th>Accreditation Number</th>
+                            <th>Name</th>
+                            <th>Date Added</th>
+                            <th>Manage</th>
                         </tr>
-                    @endforeach
-                    
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($facilities as $facility)
+                            <tr>
+                                <td>{{$facility->accreditation_no}}</td>
+                                <td>{{$facility->name}}</td>
+                                <td>{{$facility->created_at}}</td>
+                                <td>
+                                    <form action="{{ route('facilities.destroy', $facility) }}" method="POST">
+                                        <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
+                                        @csrf
+                                        @method('delete')
+                                        <button class="btn btn-sm btn-danger">DEL</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        
+                    </tbody>
+                </table>
+            </div>
         </div>
         
     </div>
@@ -130,7 +131,9 @@ NRL - Facilities
         $('#form-modal').modal('show')
     }
     $(document).ready( function () {
-        $('#facility_table').DataTable();
+        $('#facility_table').DataTable({
+            responsive: true
+        });
     } );
 </script>
 @endsection

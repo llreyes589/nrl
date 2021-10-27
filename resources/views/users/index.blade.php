@@ -61,7 +61,9 @@ NRL - Users
 @section('javascript')
 <script>
     $(document).ready( function () {
-        $('#users_table').DataTable();
+        $('#users_table').DataTable({
+            responsive:true
+        });
     } );
 </script>
 @endsection
