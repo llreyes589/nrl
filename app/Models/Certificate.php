@@ -35,10 +35,10 @@ class Certificate extends Model
     function prepared_by_details(){
         return $this->belongsTo('\App\Models\User', 'prepared_by', 'id');
     }
-    function verified_by(){
-        return $this->belongsTo(User::class);
+    function verified_by_details(){
+        return $this->belongsTo('\App\Models\User', 'verified_by', 'id');
     }
-    function approved_by(){
-        return $this->belongsTo(User::class);
+    function approved_by_details(){
+        return $this->belongsTo('\App\Models\User', 'approved_by', 'id');
     }
 }

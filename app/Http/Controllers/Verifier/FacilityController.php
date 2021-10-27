@@ -205,7 +205,6 @@ class FacilityController extends Controller
                         <p class="cursive">performance in the</p>
                         <p style="font-size: 20pt; font-weight: bold;">“CY 2018 PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING” </p>
                         <br>
-                        <br>
                         <p class="cursive">Given this 30th day of April 2019</p>
                     </td>
                     <td style="width:15%"></td>
@@ -228,16 +227,26 @@ class FacilityController extends Controller
                 </tr>
                 <tr style="text-align:center;">
                     <td style="width:45%">
+                        <div>
+                            <img src="'.asset('storage/'.$certificate->verified_by_details->signature).'" width="50">
+                        </div>
                         <p class="name">JENNIFER D. MERCADO, MD, MMHoA, FPSP</p>
-                        <p class="designation">Head, National Reference Laboratory</p>
+                        <p class="designation">Head, National Reference Laboratory
+                            <span>
+                                <img src="'.asset('storage/'.$certificate->verified_by_details->signature).'" width="15">
+                            </span>
+                        </p>
                         <p class="designation">East Avenue Medical Center 
                             <span>
-                                <img src="'.asset('storage/'.$certificate->prepared_by_details->signature).'" width="10">
+                                <img src="'.asset('storage/'.$certificate->prepared_by_details->signature).'" width="15">
                             </span>
                         </p>
                         </td>
                     <td style="width:10%"></td>
                     <td style="width:45%">
+                        <div>
+                            <img src="'.asset('images/lutero.jpg').'" width="50">
+                        </div>
                         <p class="name">ATTY. NICOLAS B. LUTERO III, CESO III</p>
                         <p class="designation">Director IV</p>
                         <p class="designation">Health Facilities and Services Regulatory Bureau</p>
