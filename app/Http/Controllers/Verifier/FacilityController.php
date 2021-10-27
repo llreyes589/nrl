@@ -221,31 +221,29 @@ class FacilityController extends Controller
                 </tr>
                 <tr>
                     <td colspan="3">
-                    <br>
-                    <br>
                     </td>
                 </tr>
                 <tr style="text-align:center;">
                     <td style="width:45%">
                         <div>
-                            <img src="'.asset('storage/'.$certificate->verified_by_details->signature).'" width="50">
+                            <img src="'.$certificate->approved_by_details ? asset('storage/'.$certificate->approved_by_details->signature) : ''.'" width="75">
                         </div>
                         <p class="name">JENNIFER D. MERCADO, MD, MMHoA, FPSP</p>
                         <p class="designation">Head, National Reference Laboratory
                             <span>
-                                <img src="'.asset('storage/'.$certificate->verified_by_details->signature).'" width="15">
+                                <img src="'.$certificate->verified_by_details ? asset('storage/'.$certificate->verified_by_details->signature) : ''.'" width="15">
                             </span>
                         </p>
                         <p class="designation">East Avenue Medical Center 
                             <span>
-                                <img src="'.asset('storage/'.$certificate->prepared_by_details->signature).'" width="15">
+                                <img src="'.$certificate->prepared_by_details ? asset('storage/'.$certificate->prepared_by_details->signature) : ''.'" width="15">
                             </span>
                         </p>
                         </td>
                     <td style="width:10%"></td>
                     <td style="width:45%">
                         <div>
-                            <img src="'.asset('images/lutero.jpg').'" width="50">
+                            <img src="'.$certificate->approved_by_details ? asset('images/lutero.jpg') : ''.'" width="75">
                         </div>
                         <p class="name">ATTY. NICOLAS B. LUTERO III, CESO III</p>
                         <p class="designation">Director IV</p>
