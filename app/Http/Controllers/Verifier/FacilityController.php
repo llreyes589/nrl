@@ -88,7 +88,7 @@ class FacilityController extends Controller
                 break;
         }
         $pdf = new PDF();
-        $qr = QrCode::format('png')->size(400)->generate(\route('verifyCertificate', ['key' => $key]));
+        $qr = QrCode::format('png')->size(400)->merge('http://1.bp.blogspot.com/-YSy27PtRhnM/TVOIUvjmCsI/AAAAAAAAAKE/dyvKbvJxN4M/s1600/nrl+eamc+logo.jpg', .3, true)->generate(\route('verifyCertificate', ['key' => $key]));
         $pdf::SetTitle($name.' Certificate');
         $pdf::AddPage();
         $imgdata = base64_encode($qr);
@@ -202,12 +202,18 @@ class FacilityController extends Controller
                         <p style="font-size: 22pt; font-weight: bold;">
                         '.$performace.'
                         </p>
+                    </td>
+                    <td style="width:15%"></td>
+                </tr>
+                <tr style="text-align:center;" >
+                    <td style="width:10%"></td>
+                    <td style="width:80%">
                         <p class="cursive">performance in the</p>
                         <p style="font-size: 20pt; font-weight: bold;">“CY 2018 PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING” </p>
                         <br>
                         <p class="cursive">Given this 30th day of April 2019</p>
                     </td>
-                    <td style="width:15%"></td>
+                    <td style="width:10%"></td>
                 </tr>
                 <tr>
                     <td style="width:40%">    
@@ -217,10 +223,6 @@ class FacilityController extends Controller
                     <td style="width:20%">   
                          
                         <img src="@'.$imgdata.'" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
                     </td>
                 </tr>
                 <tr style="text-align:center;">
