@@ -88,7 +88,7 @@ NFL - Facility
     <div class="col-md-8 col-sm-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <a href="{{route('verifiers.facilities.index')}}" class="btn btn-danger float-right" type="button">Back</a>
+                <a href="{{auth()->user()->can('create facility') ? route('facilities.index') : route('verifiers.facilities.index')}}" class="btn btn-danger float-right" type="button">Back</a>
                 <h3 class="m-0 font-weight-bold text-primary">{{$facility->name}}</h3>
             </div>
             <div class="card-body">

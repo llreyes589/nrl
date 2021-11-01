@@ -50,7 +50,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'signature' => $path
+            'signature' => $path,
+            'created_by' => auth()->id()
         ]);
         switch ($request->role) {
             case 'admin':
@@ -113,7 +114,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'signature' => $path
+            'signature' => $path,
+            'updated_by' => auth()->id()
         ]);
         switch ($request->role) {
             case 'admin':

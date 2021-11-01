@@ -38,6 +38,7 @@
                       Your certificate is ready, you may download it by clicking the link below.
                     </p>
                     <p><a href="{{$pdf}}">{{$pdf}}</a></p>
+                    <p>Please do not reply to this email. This is system generated.</p>
                     <hr>
                     <p>-NRL</p>
                   </td>

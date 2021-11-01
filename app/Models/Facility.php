@@ -21,15 +21,10 @@ class Facility extends Model
         'email', 
         'lab_email', 
         'or_no', 
-        'validity', 
+        'created_by',
+        'updated_by',
+        'deleted_by',
         'deleted_at',
-        'verified_by',
-        'verified_at',
-        'endorsed_by',
-        'endorsed_at',
-        'approved_by',
-        'approved_at',
-        'qrcode'
     ];
 
     function certificate(){

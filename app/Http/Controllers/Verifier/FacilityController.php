@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Facility;
 use App\Models\Certificate;
+use App\Models\Region;
 use Carbon\Carbon;
 use \setasign\Fpdi\Fpdi;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -15,9 +16,20 @@ use Illuminate\Support\Facades\Mail;
 
 class FacilityController extends Controller
 {
-    function index(){
-        $facilities = Facility::with('region_details')->get();
-        return view('verifiers.facilities.index', compact('facilities'));
+    function index(Request $request){
+        $facilities = [];
+        $regions = Region::all();
+        if($request->filter == 'R'){
+            $facilities = Facility::with('region_details')->where('region_id', $request->region)->get();
+            return view('verifiers.facilities.index', compact('facilities', 'regions'));
+        }else if($request->filter == 'A'){
+            $facilities =  Facility::with('region_details')->where('name', 'like', $request->alphabet.'%')->get();
+            return view('verifiers.facilities.index', compact('facilities', 'regions'));
+            
+        }else{
+            $facilities = Facility::with('region_details')->get();
+            return view('verifiers.facilities.index', compact('facilities', 'regions'));
+        }
     }
 
     function show($id){
@@ -80,7 +92,7 @@ class FacilityController extends Controller
                 $performace = 'VERY SATISFACTORY';
                 break;
             case 'HS':
-                $performace = 'HIGH SATISFACTORY';
+                $performace = 'HIGHLY SATISFACTORY';
                 break;
                 
             default:
@@ -110,6 +122,7 @@ class FacilityController extends Controller
         $tagvs = array(
             'p' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
             'h2' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
+            'img' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
         );
         $pdf::setHtmlVSpace($tagvs);
         // $pdf::SetCellPadding(0);
@@ -149,7 +162,6 @@ class FacilityController extends Controller
                         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/DOH_Logo.png" width="100"/>
                     </td>
                     <td style="width:40%">  
-                        <br>  
                         <br>  
                         <br>  
                         <p class="header">Republic of the Philippines Department of Health <br>Manila </p>
@@ -208,9 +220,9 @@ class FacilityController extends Controller
                     <td style="width:10%"></td>
                     <td style="width:80%">
                         <p class="cursive">performance in the</p>
-                        <p style="font-size: 20pt; font-weight: bold;">“CY 2018 PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING” </p>
+                        <p style="font-size: 20pt; font-weight: bold;">“CY 2021 PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING” </p>
                         <br>
-                        <p class="cursive">Given this 30th day of April 2019</p>
+                        <p class="cursive">Given this 3rd day of November 2021</p>
                     </td>
                     <td style="width:10%"></td>
                 </tr>
@@ -224,8 +236,10 @@ class FacilityController extends Controller
                         <img src="@'.$imgdata.'" />
                     </td>
                 </tr>
+            </table>
+            <table>
                 <tr style="text-align:center;">
-                    <td style="width:45%">
+                    <td style="width:50%">
                         <div>
                             <img src="'.asset('storage/'.$certificate->approved_by_details->signature).'" width="75">
                         </div>
@@ -241,8 +255,7 @@ class FacilityController extends Controller
                             </span>
                         </p>
                         </td>
-                    <td style="width:10%"></td>
-                    <td style="width:45%">
+                    <td style="width:50%">
                         <div>
                             <img src="'.asset('images/lutero.jpg').'" width="75">
                         </div>
@@ -250,7 +263,7 @@ class FacilityController extends Controller
                         <p class="designation">Director IV</p>
                         <p class="designation">Health Facilities and Services Regulatory Bureau</p>
                     </td>
-                </tr>
+                </tr>            
             </table>
             
         ';
@@ -295,6 +308,23 @@ class FacilityController extends Controller
         $name = 'test';
         $pdf = 'lorem';
         return view('emails.mail', compact('name', 'pdf'));
+    }
+
+    function search(Request $request){
+        $regions = Region::all();
+        $req = $request->all();
+        if($request->filter == 'R'){
+            $facilities = Facility::with('region_details')->where('region_id', $request->region)->get();
+            return view('verifiers.facilities.index', compact('facilities', 'regions', 'req'));
+        }else if($request->filter == 'A'){
+            return Facility::with('region_details')->where('name', 'like', $request->alphabet.'%')->get();
+            return view('verifiers.facilities.index', compact('facilities', 'regions', 'req'));
+            
+        }else{
+            $facilities = Facility::with('region_details')->get();
+            return view('verifiers.facilities.index', compact('facilities', 'regions'));
+
+        }
     }
 
 

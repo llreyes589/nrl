@@ -55,15 +55,7 @@ NRL - Verify my certificate
             </div>
             <div class="row">
                 <div class="col-md-2 col-sm-12">
-                    Issued to:
-                </div>
-                <div class="col-md col-sm-12">
-                    <strong>{{$cert_details->facility_verified_by}}</strong>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-2 col-sm-12">
-                    Issued at:
+                    Issued on:
                 </div>
                 <div class="col-md col-sm-12">
                     <strong>{{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->facility_verified_at))->toDayDateTimeString()}}</strong>

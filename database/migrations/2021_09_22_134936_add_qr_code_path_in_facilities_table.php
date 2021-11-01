@@ -14,7 +14,7 @@ class AddQrCodePathInFacilitiesTable extends Migration
     public function up()
     {
         Schema::table('facilities', function (Blueprint $table) {
-            $table->string('qrcode')->nullable();
+            // $table->string('qrcode')->nullable();
         });
     }
 

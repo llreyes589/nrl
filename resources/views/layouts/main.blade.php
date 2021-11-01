@@ -69,14 +69,29 @@
                         <i class="fas fa-fw fa-building"></i>
                         <span>Facilities</span></a>
                 </li>
-            @else   
-                <!-- Divider -->
-                <hr class="sidebar-divider d-none d-md-block">
+            @else
+             <!-- Divider -->
+            <hr class="sidebar-divider">
+            @can('create user')
             <li class="nav-item">
-                <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>Facilities</span></a>
-                </li>
+            <a class="nav-link" href="{{route('users.index')}}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Users</span></a>
+            </li>
+            @endcan
+                @role('verifier')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('facilities.index')}}">
+                            <i class="fas fa-fw fa-building"></i>
+                            <span>Facilities</span></a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
+                            <i class="fas fa-fw fa-building"></i>
+                            <span>Facilities</span></a>
+                    </li>
+                @endrole
                 
             @endrole
             <!-- Divider -->

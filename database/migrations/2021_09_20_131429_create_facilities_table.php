@@ -22,8 +22,11 @@ class CreateFacilitiesTable extends Migration
             $table->string('region_id');
             $table->string('head_of_lab');
             $table->string('contact_no');
-            $table->string('email');
-            $table->string('lab_email');
+            $table->string('email')->unique();
+            $table->string('lab_email')->unique();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
             $table->timestamps();
         });
     }

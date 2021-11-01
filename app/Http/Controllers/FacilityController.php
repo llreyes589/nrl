@@ -8,10 +8,20 @@ use App\Models\Region;
 
 class FacilityController extends Controller
 {
-    function index(){
+    function index(Request $request){
         $facilities = Facility::with('region_details')->get();
         $regions = Region::all();
-        return view('facilities.index', compact('facilities','regions'));
+        if($request->filter == 'R'){
+            $facilities = Facility::with('region_details')->where('region_id', $request->region)->get();
+            return view('facilities.index', compact('facilities', 'regions'));
+        }else if($request->filter == 'A'){
+            $facilities =  Facility::with('region_details')->where('name', 'like', $request->alphabet.'%')->get();
+            return view('facilities.index', compact('facilities', 'regions'));
+            
+        }else{
+            $facilities = Facility::with('region_details')->get();
+            return view('facilities.index', compact('facilities', 'regions'));
+        }
     }
 
     function create(){
@@ -28,11 +38,12 @@ class FacilityController extends Controller
     }
 
     function createOrUpdate(Facility $facility, Request $request){
+        $req = isset($request->id) ? $request->merge(['updated_by' => auth()->id()])->except('id') : $request->merge(['created_by' => auth()->id()])->except('id');
         $facility = Facility::updateOrCreate(
             [
                 'id' => $request->id,
             ],
-            $request->except('id')
+            $req
         );
         return redirect()->route('facilities.index')->with('message', 'Facility updated successfully.')->with('classname', 'alert-success');
     }

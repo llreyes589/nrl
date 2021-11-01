@@ -14,12 +14,12 @@ class AddApprovalsFieldsInFacilitiesTable extends Migration
     public function up()
     {
         Schema::table('facilities', function (Blueprint $table) {
-            $table->string('verified_by')->nullable();
-            $table->timestamp('verified_at')->nullable();
-            $table->string('endorsed_by')->nullable();
-            $table->timestamp('endorsed_at')->nullable();
-            $table->string('approved_by')->nullable();
-            $table->timestamp('approved_at')->nullable();
+            // $table->string('verified_by')->nullable();
+            // $table->timestamp('verified_at')->nullable();
+            // $table->string('endorsed_by')->nullable();
+            // $table->timestamp('endorsed_at')->nullable();
+            // $table->string('approved_by')->nullable();
+            // $table->timestamp('approved_at')->nullable();
         });
     }
 
