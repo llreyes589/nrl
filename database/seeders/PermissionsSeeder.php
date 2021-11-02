@@ -79,17 +79,17 @@ class PermissionsSeeder extends Seeder
         ]);
         $verifier_user1 = \App\Models\User::create([
             'name' => 'MARY ANN O. MANANSALA, RMT',
-            'email' => 'verifier1@gmail.com',
+            'email' => 'maryann.manansalarmt@gmail.com',
             'password' => bcrypt('12341234'),
         ]);
         $verifier_user2 = \App\Models\User::create([
             'name' => 'JARED F. SALAZAR, RMT',
-            'email' => 'verifier2@gmail.com',
+            'email' => 'jared_salazar@yahoo.com',
             'password' => bcrypt('12341234'),
         ]);
         $verifier_user3 = \App\Models\User::create([
             'name' => 'CLARISE B. ROBOSA, RMT',
-            'email' => 'verifier3@gmail.com',
+            'email' => 'clariserobosa@gmail.com',
             'password' => bcrypt('12341234'),
         ]);
         $verifier_user4 = \App\Models\User::create([
