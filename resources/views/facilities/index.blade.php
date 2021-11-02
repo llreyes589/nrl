@@ -82,27 +82,24 @@ NRL - Facilities
                 @csrf
                 <div class="form-group">
                     <label for="filter_by">Filter by</label>
-                    <select id="filter_by" class="custom-select" name="filter" value="{{request()->filter}}" required>
+                    <select id="filter_by" class="custom-select" name="filter_by" required>
                         <option value="">--Select here--</option>
                         <option value="R">Region</option>
                         <option value="A">Name (Alphabetical)</option>
                     </select>
                     <p></p>
-                    <select id="region_select" class="custom-select" name="region" value="{{request()->region}}" style="display:none;">
+                    <select id="region_select" class="custom-select" name="region" style="display:none;">
                         @foreach($regions as $region)
                             <option value="{{$region->id}}">{{$region->name}}</option>
                         @endforeach
                     </select>
-                    <select id="alphabet" class="custom-select" name="alphabet" value="{{request()->alphabet}}" style="display:none;">
+                    <select id="alphabet" class="custom-select" name="alphabet" style="display:none;">
                         @foreach(range('A', 'Z') as $alphabet)
                             <option value="{{$alphabet}}">{{$alphabet}}</option>
                         @endforeach
                     </select>
                     <p></p>
-                    <button class="btn btn-primary" type="submit">Submit</button>
-                    @if(isset(request()->filter))
-                    <a href="{{route('facilities.index')}}" class="btn btn-info" type="button">Show All</a>
-                    @endif
+                    <button class="btn btn-info" type="submit" id="show_all" style="display:none;">Show All</button>
                 </div>
             </form>
         </div>
@@ -128,7 +125,7 @@ NRL - Facilities
                             <th>Manage</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <!-- <tbody>
                         @foreach($facilities as $facility)
                             <tr>
                                 <td>{{$facility->accreditation_no}}</td>
@@ -136,20 +133,12 @@ NRL - Facilities
                                 <td>{{$facility->region_details->name}}</td>
                                 <td>{{$facility->created_at}}</td>
                                 <td>
-                                    <form action="{{ route('facilities.destroy', $facility) }}" method="POST">
-                                        @role('verifier')
-                                        <a class="btn btn-success btn-sm" href="{{route('verifiers.facilities.show', $facility->id)}}"><i class="fa fa-search"></i> View</a>
-                                        @endrole
-                                        <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-sm btn-danger">DEL</button>
-                                    </form>
+                                    
                                 </td>
                             </tr>
                         @endforeach
                         
-                    </tbody>
+                    </tbody> -->
                 </table>
             </div>
         </div>
@@ -168,41 +157,71 @@ NRL - Facilities
         $('#form-modal').modal('show')
     }
     $(document).ready( function () {
-        $('#facility_table').DataTable({
-            responsive: true
+        var table = $('#facility_table').DataTable({
+            responsive: true,
+            ajax: {
+                url: '/api/facilities',
+                dataSrc: 'facilities',
+                "data": function ( data ) {
+                    // Read values
+                    var filter = $('#filter_by').val();
+                    var region = $('#region_select').val();
+                    var alphabet = $('#alphabet').val();
+
+                    // Append to data
+                    data.filter = filter;
+                    data.region = region;
+                    data.alphabet = alphabet;
+                //    return  $.extend(d, fac_data);
+                }
+            },
+            columns: [
+                { data: 'accreditation_no' },
+                { data: 'name' },
+                { data: 'region_details.name' },
+                { data: 'created_at' },
+                { data: 'id', render: ()=>{
+                    return `<form action="{{ route('facilities.destroy', $facility) }}" method="POST">
+                                @role('verifier')
+                                <a class="btn btn-success btn-sm" href="{{route('verifiers.facilities.show', $facility->id)}}"><i class="fa fa-search"></i> View</a>
+                                @endrole
+                                <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-sm btn-danger">DEL</button>
+                            </form>`
+                } },
+            ]
         });
         
         $('#filter_by').change(function({target}){
             if(target.value === 'R'){
                 $('#region_select').show()
+                $('#show_all').show()
                 $('#alphabet').hide()
             }else if(target.value === 'A'){
+                $('#show_all').show()
                 $('#region_select').hide()
                 $('#alphabet').show()
             }else{
+                $('#show_all').hide()
                 $('#region_select').hide()
                 $('#alphabet').hide()
 
             }
-            console.log(target.value)
         })
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const filter = urlParams.get('filter')
-        if(filter){
-            $('#filter_by').val(filter)
-            if(filter === 'R'){
-                $('#region_select').show()
-                $('#alphabet').hide()
-            }else if(filter === 'A'){
-                $('#region_select').hide()
-                $('#alphabet').show()
-            }else{
-                $('#region_select').hide()
-                $('#alphabet').hide()
+        $('#alphabet').change(function(){
+            table.ajax.reload();
+        });
 
-            }
-        }
+        $('#region_select').change(function(){
+            table.ajax.reload();
+        });
+
+        $('#show_all').click(function(){
+            window.location.reload();
+            
+        })
     } );
 </script>
 @endsection
