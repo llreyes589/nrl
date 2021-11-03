@@ -36,4 +36,10 @@ class FacilityController extends Controller
             return response()->json(['facilities' => $facilities, 'regions' => Region::all()]);
         }
     }
+    
+    function show($id){
+        $facility = Facility::with('region_details')->find($id);
+        return $facility;
+        
+    }
 }

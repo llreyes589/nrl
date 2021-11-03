@@ -149,12 +149,14 @@ NRL - Facilities
 
 @section('javascript')
 <script>
-    function selectFacility(facility){
-        for (let [key, value] of Object.entries(facility)) {
-            $('input[name="'+key+'"]').val(value);
-            $('select[name="'+key+'"]').val(value);
-        }
-        $('#form-modal').modal('show')
+    function selectFacility(id){
+        $.get( '/api/facilities/'+id, function( data ) {
+            for (let [key, value] of Object.entries(data)) {
+                $('input[name="'+key+'"]').val(value);
+                $('select[name="'+key+'"]').val(value);
+            }
+            $('#form-modal').modal('show')
+        });
     }
     $(document).ready( function () {
         var table = $('#facility_table').DataTable({
@@ -185,7 +187,7 @@ NRL - Facilities
                                 @role('verifier')
                                 <a class="btn btn-success btn-sm" href="/verifier/facilities/`+id+`"><i class="fa fa-search"></i> View</a>
                                 @endrole
-                                <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
+                                <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility(`+id+`)">EDIT</button>
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-sm btn-danger">DEL</button>
