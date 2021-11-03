@@ -40,7 +40,7 @@ NRL - Facilities
                         @endforeach
                     </select>
                     <p></p>
-                    <button class="btn btn-info" type="button" id="show_all" style="display:none;">Show All</button
+                    <button class="btn btn-info" type="button" id="show_all" style="display:none;">Show All</button>
                 </div>
             </form>
         </div>

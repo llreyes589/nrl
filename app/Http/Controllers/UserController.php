@@ -146,6 +146,8 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('message', 'User deleted failed. You cannot delete your own profile.')->with('classname', 'alert-warning');
         }
         User::destroy($user->id);
+        $user->deleted_by = \auth()->id();
+        $user->save();
         return redirect()->route('users.index')->with('message', 'User deleted successfully.')->with('classname', 'alert-danger');
     }
 }

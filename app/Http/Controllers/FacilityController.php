@@ -34,6 +34,8 @@ class FacilityController extends Controller
 
     function destroy(Facility $facility){
         Facility::destroy($facility->id);
+        $facility->deleted_by = \auth()->id();
+        $facility->save();
         return redirect()->route('facilities.index')->with('message', 'Facility deleted successfully.')->with('classname', 'alert-danger');
     }
 

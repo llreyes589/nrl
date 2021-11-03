@@ -199,7 +199,7 @@ NFL - Facility
                         @role('encoder')
                             @if($facility->certificate != null)
                 
-                                @if(\Carbon\Carbon::parse($facility->certificate->validity) <= \Carbon\Carbon::now())
+                                @if(isset($facility->certificate->approved_by))
                 
                                 <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
                                     <span class="icon text-white-50">
@@ -353,6 +353,21 @@ NFL - Facility
             </div>
         </div> 
         @endif
+        <!-- <div class="card shadow mb-4">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                List of Approved Certificates</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>   -->
     </div>
 </div>
 

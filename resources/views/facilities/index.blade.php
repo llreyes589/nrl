@@ -78,7 +78,7 @@ NRL - Facilities
     <div class="row d-flex justify-content-end">
         <div class="col-md-4 col-sm-12">
             
-            <form method="get" action="{{route('facilities.index')}}">
+            <form method="get" action="{{route('facilities.index')}}" id=" id="searchForm">
                 @csrf
                 <div class="form-group">
                     <label for="filter_by">Filter by</label>
@@ -180,10 +180,10 @@ NRL - Facilities
                 { data: 'name' },
                 { data: 'region_details.name' },
                 { data: 'created_at' },
-                { data: 'id', render: ()=>{
-                    return `<form action="{{ route('facilities.destroy', $facility) }}" method="POST">
+                { data: 'id', render: (id)=>{
+                    return `<form action="/facilities/`+id+`" method="POST">
                                 @role('verifier')
-                                <a class="btn btn-success btn-sm" href="{{route('verifiers.facilities.show', $facility->id)}}"><i class="fa fa-search"></i> View</a>
+                                <a class="btn btn-success btn-sm" href="/verifier/facilities/`+id+`"><i class="fa fa-search"></i> View</a>
                                 @endrole
                                 <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility({{$facility}})">EDIT</button>
                                 @csrf
