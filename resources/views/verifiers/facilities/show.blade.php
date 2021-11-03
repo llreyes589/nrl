@@ -12,6 +12,104 @@ NFL - Facility
     </div>
 @endif
 
+<!-- Modal -->
+
+<div id="show_certificate_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="show_certificate_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="certificate_modal_title">Certificate No: <span class="cert_no"></span></h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                         <p> 
+                            OR No:
+                        </p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                         <strong class="or_no">
+                        </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                         <p> 
+                            Performance:
+                        </p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                         <strong class="performance">
+                        </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                         <p> 
+                            Validity:
+                        </p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                         <strong class="validity">
+                        </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                         <p> 
+                            Prepared by:
+                        </p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                         <strong class="prepared_by">
+                        </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                         <p> 
+                            Verified by:
+                        </p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                         <strong class="verified_by">
+                        </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                         <p> 
+                            Approved by:
+                        </p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                         <strong class="approved_by">
+                        </strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-sm-12">
+                         <p> 
+                            Issued On:
+                        </p>
+                    </div>
+                    <div class="col-md col-sm-12">
+                         <strong class="issued_on">
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-start">
+                <button class="btn btn-primary" data-dismiss="modal">Done</button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
 
 
 <!-- Modal -->
@@ -353,21 +451,31 @@ NFL - Facility
             </div>
         </div> 
         @endif
-        <!-- <div class="card shadow mb-4">
+        <div class="card shadow mb-4">
             <div class="card border-left-secondary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                List of Approved Certificates</div>
+                                Issued Certificates</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @forelse($certificates as $certificate)
+                                    <button onclick="viewCert({{$certificate}})" class="btn btn-primary btn-icon-split btn-sm">
+                                        <span class="icon text-white-50">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                        <span class="text">{{$certificate->certificate_no}}</span>
+                                    </button>
+                                @empty
+                                    <p class="lead text-danger text-center">No certificate found</p>
+                                @endforelse
                             </div>
                         </div>
                         
                     </div>
                 </div>
             </div>
-        </div>   -->
+        </div>  
     </div>
 </div>
 
@@ -398,6 +506,34 @@ NFL - Facility
             $('#encoder_modal').modal('hide')
 
         })
+
+    }
+    function viewCert(cert){
+        let performance = ''
+        switch (cert.performance) {
+            case 'E':
+                performance = 'EXCELLENT';
+                break;
+            case 'VS':
+                performance = 'VERY SATISFACTORY';
+                break;
+            case 'HS':
+                performance = 'HIGHLY SATISFACTORY';
+                break;
+                
+            default:
+                performance = 'SATISFACTORY';
+                break;
+        }
+        $('.cert_no').html(cert.certificate_no)
+        $('.or_no').html(cert.or_no)
+        $('.performance').html(performance)
+        $('.validity').html(cert.validity)
+        $('.prepared_by').html(cert.prepared_by_details.name)
+        $('.verified_by').html(cert.verified_by_details.name)
+        $('.approved_by').html(cert.approved_by_details.name)
+        $('.issued_on').html(cert.facility_verified_at)
+        $('#show_certificate_modal').modal('show')
     }
 </script>
 @endsection
