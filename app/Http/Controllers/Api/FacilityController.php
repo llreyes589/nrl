@@ -10,15 +10,26 @@ use App\Models\Region;
 class FacilityController extends Controller
 {
     function facilities(Request $request){
+        $facilities = Facility::with('region_details')->with(['certificate' => function($q){
+            $q->max('created_at');
+        }])->get();
+        $regions = Region::all();
+        return response()->json(['facilities' => $facilities, 'regions' => Region::all()]);
         if(\request()->filter == 'R'){
-            $facilities = Facility::with('region_details')->where('region_id', \request()->region)->get();
+            $facilities = Facility::with('region_details')->with(['certificate' => function($q){
+                $q->max('created_at');
+            }])->where('region_id', \request()->region)->get();
             return response()->json(['facilities' => $facilities, 'regions' => Region::all()]);
         }else if(\request()->filter == 'A'){
-            $facilities =  Facility::with('region_details')->where('name', 'like', \request()->alphabet.'%')->get();
+            $facilities =  Facility::with('region_details')->with(['certificate' => function($q){
+                $q->max('created_at');
+            }])->where('name', 'like', \request()->alphabet.'%')->get();
             return response()->json(['facilities' => $facilities, 'regions' => Region::all()]);
             
         }else{
-            $facilities = Facility::with('region_details')->get();
+            $facilities = Facility::with('region_details')->with(['certificate' => function($q){
+                $q->max('created_at');
+            }])->get();
             return response()->json(['facilities' => $facilities, 'regions' => Region::all()]);
         }
         // return response()->json(['facilities' => Facility::with('region_details')->get(), 'regions' => Region::all()]);

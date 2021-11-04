@@ -18,17 +18,27 @@ use Illuminate\Support\Facades\Mail;
 class FacilityController extends Controller
 {
     function index(Request $request){
-        $facilities = [];
+        $facilities = Facility::with('region_details')->with(['certificate' => function($q){
+            $q->max('created_at');
+        }])->get();
         $regions = Region::all();
+        return view('verifiers.facilities.index', compact('facilities', 'regions'));
+        // dd('test');
         if($request->filter == 'R'){
-            $facilities = Facility::with('region_details')->where('region_id', $request->region)->get();
+            $facilities = Facility::with('region_details')->with(['certificate' => function($q){
+                $q->max('created_at');
+            }])->where('region_id', $request->region)->get();
             return view('verifiers.facilities.index', compact('facilities', 'regions'));
         }else if($request->filter == 'A'){
-            $facilities =  Facility::with('region_details')->where('name', 'like', $request->alphabet.'%')->get();
+            $facilities =  Facility::with('region_details')->with(['certificate' => function($q){
+                $q->max('created_at');
+            }])->where('name', 'like', $request->alphabet.'%')->get();
             return view('verifiers.facilities.index', compact('facilities', 'regions'));
             
         }else{
-            $facilities = Facility::with('region_details')->get();
+            $facilities = Facility::with('region_details')->with(['certificate' => function($q){
+                $q->max('created_at');
+            }])->get();
             return view('verifiers.facilities.index', compact('facilities', 'regions'));
         }
     }

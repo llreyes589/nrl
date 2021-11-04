@@ -73,6 +73,16 @@ NRL - Facilities
 
 @section('javascript')
 <script>
+    function hasKey(fac_id,cert){
+        if(cert != null){
+            return `<form action="/verifier/facilities/`+fac_id+`/certificate/`+cert.id+`/emailFacility" method="post">
+                                @csrf
+                                <button class="btn btn-info btn-sm" type="submit"><i class="fa fa-certificate"></i> Issue Cert</button>
+                            </form> `
+        }else{
+            return ''
+        }
+    }
     $(document).ready( function () {
         let fac_data = {}
         var table = $('#facility_table').DataTable({
@@ -142,8 +152,14 @@ NRL - Facilities
                             </p>`
                 } },
                 { data: 'created_at' },
-                { data: 'id', render: (id)=>{
-                    return `<a class="btn btn-success btn-sm" href="facilities/`+id+`"><i class="fa fa-search"></i> View</a>`
+                { data: 'id', render: (id, type, row, meta)=>{
+                    return `
+                            <a class="btn btn-success btn-sm" href="facilities/`+id+`">
+                                <i class="fa fa-search"></i> View
+                            </a>
+                            `+hasKey(id, row.certificate)+`
+                                                                   
+                            `
                 } },
             ]
         });
