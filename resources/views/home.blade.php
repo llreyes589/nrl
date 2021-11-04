@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-NRL - Dashboard
+WTL | Dashboard
 @endsection
 
 @section('content')

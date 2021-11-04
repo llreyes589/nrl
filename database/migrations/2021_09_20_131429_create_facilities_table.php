@@ -15,15 +15,15 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
-            $table->string('accreditation_no')->unique();
+            $table->string('accreditation_no');
             $table->string('name');
             $table->string('address');
-            $table->string('city');
+            $table->string('city')->nullable();
             $table->string('region_id');
-            $table->string('head_of_lab');
+            $table->string('head_of_lab')->nullable();
             $table->string('contact_no');
-            $table->string('email')->unique();
-            $table->string('lab_email')->unique();
+            $table->string('email')->nullable();
+            $table->string('lab_email')->unique()->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();

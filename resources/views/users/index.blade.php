@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-NRL - Users
+WTL | Users
 @endsection
 
 @section('content')

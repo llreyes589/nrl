@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-NRL - Facilities
+WTL | Settings
 @endsection
 
 @section('content')

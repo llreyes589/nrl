@@ -1,5 +1,10 @@
 @extends('layouts.main')
 
+
+@section('title')
+WTL | Create User
+@endsection
+
 @section('content')
 
 

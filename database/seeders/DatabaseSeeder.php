@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\PermissionsSeeder;
 use Database\Seeders\RegionsSeeder;
+use Database\Seeders\FacilitiesSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +18,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             PermissionsSeeder::class,
-            RegionsSeeder::class
+            RegionsSeeder::class,
+            FacilitiesSeeder::class
         ]);
 
     }

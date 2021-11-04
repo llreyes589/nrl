@@ -67,34 +67,19 @@ class PermissionsSeeder extends Seeder
         ]);
 
         $encoder_user = \App\Models\User::create([
-            'name' => 'MARY KATHLENE S. TAMPIS',
+            'name' => 'Encoder',
             'email' => 'encoder@gmail.com',
             'password' => bcrypt('12341234'),
         ]);
 
         $verifier_user = \App\Models\User::create([
-            'name' => 'EVANGELINE R. CASTILLO, RMT',
+            'name' => 'SHIELA FLOR SALO-AVILA, RMT',
             'email' => 'verifier@gmail.com',
             'password' => bcrypt('12341234'),
         ]);
         $verifier_user1 = \App\Models\User::create([
-            'name' => 'MARY ANN O. MANANSALA, RMT',
-            'email' => 'maryann.manansalarmt@gmail.com',
-            'password' => bcrypt('12341234'),
-        ]);
-        $verifier_user2 = \App\Models\User::create([
-            'name' => 'JARED F. SALAZAR, RMT',
-            'email' => 'jared_salazar@yahoo.com',
-            'password' => bcrypt('12341234'),
-        ]);
-        $verifier_user3 = \App\Models\User::create([
-            'name' => 'CLARISE B. ROBOSA, RMT',
-            'email' => 'clariserobosa@gmail.com',
-            'password' => bcrypt('12341234'),
-        ]);
-        $verifier_user4 = \App\Models\User::create([
-            'name' => 'PAUL VENZ SHEEN DG FUENTES, RMT',
-            'email' => 'verifier4@gmail.com',
+            'name' => 'MARICAR B AGGARAO, RMT',
+            'email' => 'verifier1@gmail.com',
             'password' => bcrypt('12341234'),
         ]);
 
@@ -108,9 +93,6 @@ class PermissionsSeeder extends Seeder
         $encoder_user->assignRole($encoder);
         $verifier_user->assignRole($verifier);
         $verifier_user1->assignRole($verifier);
-        $verifier_user2->assignRole($verifier);
-        $verifier_user3->assignRole($verifier);
-        $verifier_user4->assignRole($verifier);
         $head_user->assignRole($head);
 
 

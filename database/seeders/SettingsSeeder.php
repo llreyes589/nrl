@@ -14,7 +14,7 @@ class SettingsSeeder extends Seeder
     public function run()
     {
         \App\Models\Setting::create([
-            'certificate_theme' => 'CY 2021 PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING',
+            'certificate_theme' => 'CY 2021 PROFICIENCY TESTING SCHEME for WATER MICROBIOLOGICAL TESTING LABORATORY',
             'certificate_given_at' => '2021-11-26',
             'updated_by' => 1
         ]);
