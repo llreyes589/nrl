@@ -194,7 +194,7 @@ class FacilityController extends Controller
                 </tr>
                 <tr style="text-align:center;" >
                     <td style="width:10%"></td>
-                    <td style="width:80%">
+                    <td style="width:70%">
                         <br>
                         <br>
                         <p class="cursive">is hereby presented to</p>
@@ -217,7 +217,7 @@ class FacilityController extends Controller
                         '.$performace.'
                         </p>
                     </td>
-                    <td style="width:80%"></td>
+                    <td style="width:10%"></td>
                 </tr>
                 <tr style="text-align:center;" >
                     <td style="width:5%"></td>
