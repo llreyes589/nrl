@@ -119,10 +119,7 @@ class FacilityController extends Controller
         // set bacground image
         $img_file = asset('images/cert_bg.png');
         $pdf::Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
-        // restore auto-page-break status
-        $pdf::SetAutoPageBreak($auto_page_break, $bMargin);
-        // set the starting point for the page content
-        $pdf::setPageMark();
+        
 
         $tagvs = array(
             'p' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
@@ -225,9 +222,7 @@ class FacilityController extends Controller
                     <td style="width:10%"></td>
                     <td style="width:80%">
                         <p class="cursive">performance in the</p>
-                        <p style="font-size: 20pt; font-weight: bold;">“
-                            '.$settings->certificate_theme.'
-                        ” </p>
+                        <p style="font-size: 20pt; font-weight: bold;">“'.$settings->certificate_theme.'” </p>
                         <br>
                         <p class="cursive">
                             Given this '.$given.'
@@ -277,6 +272,10 @@ class FacilityController extends Controller
             
         ';
         $pdf::writeHTML($doh_logo_html, true, false, true, false, '');
+        // restore auto-page-break status
+        $pdf::SetAutoPageBreak($auto_page_break, $bMargin);
+        // set the starting point for the page content
+        $pdf::setPageMark();
         
         $pdf::Output($certificate->or_no.'.pdf', $request->pub ? $request->pub : "I");
         
