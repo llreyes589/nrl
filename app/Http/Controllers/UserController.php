@@ -69,7 +69,6 @@ class UserController extends Controller
         }
         
 
-        return $path;
         return redirect()->route('users.index')->with('message', 'User added successfully.')->with('classname', 'alert-success');
     }
 

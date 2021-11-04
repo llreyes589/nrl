@@ -31,6 +31,14 @@ Route::group(['middleware' => ['role_or_permission:admin|create user', 'auth' ]]
     Route::resource('/users', App\Http\Controllers\UserController::class);
 });
 
+Route::name('settings.')->group(function(){
+    Route::group(['middleware' => ['auth']], function(){
+
+        Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('index');
+        Route::put('/settings/certificate', [App\Http\Controllers\SettingController::class, 'storeCertSettings'])->name('storeCertSettings');
+    });
+
+});
 
 
 Route::prefix('verifier')->group(function(){
