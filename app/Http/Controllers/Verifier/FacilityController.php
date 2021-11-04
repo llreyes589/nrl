@@ -143,12 +143,12 @@ class FacilityController extends Controller
                 text-align:center; 
             }
             p.header{
-                font-size: 18pt;
+                font-size: 16pt;
 
             }
             p.cursive{
                 font-family:Verdana, sans-serif;
-                font-size: 16pt;
+                font-size: 14pt;
                 font-style: italic;
                 
             }
@@ -222,8 +222,7 @@ class FacilityController extends Controller
                     <td style="width:15%"></td>
                 </tr>
                 <tr style="text-align:center;" >
-                    <td style="width:10%"></td>
-                    <td style="width:80%">
+                    <td style="width:90%" colspan="3">
                         <p class="cursive">performance in the</p>
                         <p style="font-size: 20pt; font-weight: bold;">“
                             '.$settings->certificate_theme.'
@@ -233,7 +232,6 @@ class FacilityController extends Controller
                             Given this '.$given.'
                         </p>
                     </td>
-                    <td style="width:10%"></td>
                 </tr>
                 <tr>
                     <td style="width:40%">    
