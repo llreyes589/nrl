@@ -124,9 +124,6 @@ class FacilityController extends Controller
         $pdf::SetAutoPageBreak($auto_page_break, $bMargin);
         // set the starting point for the page content
         $pdf::setPageMark();
-        $pdf::SetMargins(0, 0, 0);
-        $pdf::SetHeaderMargin(0);
-        $pdf::SetFooterMargin(0);
 
         $tagvs = array(
             'p' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
