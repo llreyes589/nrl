@@ -1,215 +1,277 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
+<html dir="ltr" lang="en"><head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Ample lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Ample admin lite dashboard bootstrap 5 dashboard template">
+    <meta name="description" content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
+    <meta name="robots" content="noindex,nofollow">
     <title>@yield('title')</title>
+    <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+    <!-- Custom CSS -->
+    <link href="{{asset('css/style.min.css')}}" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
 
-    <!-- Custom fonts for this template-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">  
-
-    <!-- Custom styles for this template-->
-    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
-
-</head>
-
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-text mx-3">NRL</div>
+  <body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader" style="display: none;">
+      <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
+      </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+      <!-- ============================================================== -->
+      <!-- Topbar header - style you can find in pages.scss -->
+      <!-- ============================================================== -->
+      <header class="topbar" data-navbarbg="skin5">
+        <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+          <div class="navbar-header" data-logobg="skin6">
+            <!-- ============================================================== -->
+            <!-- Logo -->
+            <!-- ============================================================== -->
+            <a class="navbar-brand" href="index.html">
+              <!-- Logo icon -->
+              <b class="logo-icon">
+                <!-- Dark Logo icon -->
+            </b>
+            <!--End Logo icon -->
+            <!-- Logo text -->
+            <span class="logo-text text-dark">
+                <!-- dark Logo text -->
+                <p class="lead">NRL</p>
+              </span>
             </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="/home">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-            
-            <!-- Heading 
-            <div class="sidebar-heading">
-                Interface
-            </div>
-        -->
-        
-            <!-- Nav Item - Pages Collapse Menu -->
-            @role('admin')
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-                <li class="nav-item">
-                <a class="nav-link" href="{{route('users.index')}}">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>Users</span></a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('facilities.index')}}">
-                        <i class="fas fa-fw fa-building"></i>
-                        <span>Facilities</span></a>
-                </li>
-            @else
-             <!-- Divider -->
-            <hr class="sidebar-divider">
-            @can('create user')
-            <li class="nav-item">
-            <a class="nav-link" href="{{route('users.index')}}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Users</span></a>
-            </li>
-            @endcan
-                @role('verifier')
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('facilities.index')}}">
-                            <i class="fas fa-fw fa-building"></i>
-                            <span>Facilities</span></a>
-                    </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
-                            <i class="fas fa-fw fa-building"></i>
-                            <span>Facilities</span></a>
-                    </li>
-                @endrole
-                
-            @endrole
-            <li class="nav-item">
-            <a class="nav-link" href="{{route('settings.index')}}">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Settings</span></a>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <ul class="navbar-nav ml-auto">
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->name}}</span>
-                                
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <div class="dropdown-item">Role: {{Auth::user()->roles->pluck('name')[0]}}</div>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    @yield('content')
-                    
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Powered by: </span>
-                        <img src="{{asset('images/bobongMD.png')}}" alt="bobongmdLogo" srcset="" class="img img-fluid" width="70">
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
+            <!-- ============================================================== -->
+            <!-- End Logo -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- toggle and nav items -->
+            <!-- ============================================================== -->
+            <a class="
+                nav-toggler
+                waves-effect waves-light
+                text-dark
+                d-block d-md-none
+              " href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+          </div>
+          <!-- ============================================================== -->
+          <!-- End Logo -->
+          <!-- ============================================================== -->
+          <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+            <ul class="navbar-nav d-none d-md-block d-lg-none">
+              <li class="nav-item">
+                <a class="
+                    nav-toggler nav-link
+                    waves-effect waves-light
+                    text-white
+                  " href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
+              </li>
+            </ul>
+            <!-- ============================================================== -->
+            <!-- Right side toggle and nav items -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav ms-auto d-flex align-items-center">
+              <!-- ============================================================== -->
+              <!-- Search -->
+              <!-- ============================================================== -->
+              <li class="in">
+                <form role="search" class="app-search d-none d-md-block me-3">
+                  <input type="text" placeholder="Search..." class="form-control mt-0">
+                  <a href="" class="active">
+                    <i class="fa fa-search"></i>
+                  </a>
+                </form>
+              </li>
+              <!-- ============================================================== -->
+              <!-- User profile and search -->
+              <!-- ============================================================== -->
+              <li>
+                <a class="profile-pic" href="#">
+                  <img src="plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle"><span class="text-white font-medium">Steave</span></a>
+              </li>
+              <!-- ============================================================== -->
+              <!-- User profile and search -->
+              <!-- ============================================================== -->
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- ============================================================== -->
+      <!-- End Topbar header -->
+      <!-- ============================================================== -->
+      <!-- ============================================================== -->
+      <!-- Left Sidebar - style you can find in sidebar.scss  -->
+      <!-- ============================================================== -->
+      <aside class="left-sidebar" data-sidebarbg="skin6">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+          <!-- Sidebar navigation-->
+          <nav class="sidebar-nav">
+            <ul id="sidebarnav" class="in">
+              <!-- User Profile-->
+              <li class="sidebar-item pt-2">
+                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="index.html" aria-expanded="false">
+                  <i class="far fa-clock" aria-hidden="true"></i>
+                  <span class="hide-menu">Dashboard</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="profile.html" aria-expanded="false">
+                  <i class="fa fa-user" aria-hidden="true"></i>
+                  <span class="hide-menu">Profile</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="basic-table.html" aria-expanded="false">
+                  <i class="fa fa-table" aria-hidden="true"></i>
+                  <span class="hide-menu">Basic Table</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="fontawesome.html" aria-expanded="false">
+                  <i class="fa fa-font" aria-hidden="true"></i>
+                  <span class="hide-menu">Icon</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="map-google.html" aria-expanded="false">
+                  <i class="fa fa-globe" aria-hidden="true"></i>
+                  <span class="hide-menu">Google Map</span>
+                </a>
+              </li>
+              <li class="sidebar-item selected">
+                <a class="sidebar-link waves-effect waves-dark sidebar-link active" href="blank.html" aria-expanded="false">
+                  <i class="fa fa-columns" aria-hidden="true"></i>
+                  <span class="hide-menu">Blank Page</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="404.html" aria-expanded="false">
+                  <i class="fa fa-info-circle" aria-hidden="true"></i>
+                  <span class="hide-menu">Error 404</span>
+                </a>
+              </li>
+              <li class="text-center p-20 upgrade-btn">
+                <a href="https://www.wrappixel.com/templates/ampleadmin/" class="btn d-grid btn-danger text-white" target="_blank">
+                  Upgrade to Pro</a>
+              </li>
+            </ul>
+          </nav>
+          <!-- End Sidebar navigation -->
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End Sidebar scroll-->
+      </aside>
+      <!-- ============================================================== -->
+      <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+      <!-- ============================================================== -->
+      <!-- ============================================================== -->
+      <!-- Page wrapper  -->
+      <!-- ============================================================== -->
+      <div class="page-wrapper" style="min-height: 250px">
+        <!-- ============================================================== -->
+        <!-- Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <div class="page-breadcrumb bg-white">
+          <div class="row align-items-center">
 
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
+            <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+              <div class="d-md-flex">
+                <ol class="breadcrumb ms-auto">
+                  <li><a href="#" class="fw-normal">Dashboard</a></li>
+                </ol>
+                <a href="https://www.wrappixel.com/templates/ampleadmin/" target="_blank" class="
+                    btn btn-danger
+                    d-none d-md-block
+                    pull-right
+                    ms-3
+                    hidden-xs hidden-sm
+                    waves-effect waves-light
+                    text-white
+                  ">Upgrade to Pro</a>
+              </div>
             </div>
+          </div>
+          <!-- /.col-lg-12 -->
         </div>
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+          <!-- ============================================================== -->
+          <!-- Start Page Content -->
+          <!-- ============================================================== -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="white-box">
+                @yield('content') 
+              </div>
+            </div>
+          </div>
+          <!-- ============================================================== -->
+          <!-- End PAge Content -->
+          <!-- ============================================================== -->
+          <!-- ============================================================== -->
+          <!-- Right sidebar -->
+          <!-- ============================================================== -->
+          <!-- .right-sidebar -->
+          <!-- ============================================================== -->
+          <!-- End Right sidebar -->
+          <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <footer class="footer text-center">
+          2021 © Ample Admin brought to you by
+          <a href="https://www.wrappixel.com/">wrappixel.com</a>
+        </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+      </div>
+      <!-- ============================================================== -->
+      <!-- End Page wrapper  -->
+      <!-- ============================================================== -->
     </div>
-
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
     <!-- Bootstrap core JavaScript-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-    <script src='{{asset("js/jquery.easing.min.js")}}'></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
+    <script src="{{asset('js/app-style-switcher.js')}}"></script>
+    <!--Wave Effects -->
+    <script src="{{asset('js/waves.js')}}"></script>
+    <!--Menu sidebar -->
+    <script src="{{asset('js/sidebarmenu.js')}}"></script>
+    <!--Custom JavaScript -->
+    <script src="{{asset('js/custom.js')}}"></script>
 
     @yield('javascript')
+  
 
-</body>
-
-</html>
+</body></html>
