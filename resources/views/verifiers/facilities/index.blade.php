@@ -69,19 +69,71 @@ NRL - Facilities
         
     </div>
     
-@endsection
-
-@section('javascript')
+    @endsection
+    
+    @section('javascript')
 <script>
     function hasKey(fac_id,cert){
         if(cert != null){
-            return `<form action="/verifier/facilities/`+fac_id+`/certificate/`+cert.id+`/emailFacility" method="post">
-                                @csrf
-                                <button class="btn btn-info btn-sm" type="submit"><i class="fa fa-certificate"></i> Issue Cert</button>
-                            </form> `
+            if(cert.approved_by != null){
+
+                if(cert.issued_by != null){
+                    return `<form action="/verifier/facilities/`+fac_id+`/certificate/`+cert.id+`/emailFacility" method="post">
+                                    @csrf
+                                    <button class="btn btn-info btn-sm" type="submit"><i class="fa fa-paper-plane"></i> Resend cert</button>
+                                </form> `
+                }
+                return `<form action="/verifier/facilities/`+fac_id+`/certificate/`+cert.id+`/emailFacility" method="post">
+                                    @csrf
+                                    <button class="btn btn-info btn-sm" type="submit"><i class="fa fa-certificate"></i> Issue Cert</button>
+                                </form> `
+            }else{
+                return ''
+            }
         }else{
             return ''
         }
+    }
+
+    function renderCertStatus(cert){
+        // console.log("{{ auth()->user()->can('prepare')}}" != 1)
+        if(cert != null){
+            if("{{ auth()->user()->can('prepare')}}" == 1){
+                if(cert.prepared_by){
+                    return `<span class="text-success">Prepared Certificate</span>`
+                }else{
+                    return `<span class="text-success">For Preparation</span>`
+                }
+            }else if("{{ auth()->user()->can('verify')}} " == 1){
+                if(cert.prepared_by){
+                    if(cert.verified_by){
+                        return `<span class="text-success">Verified</span>`
+                    }else{
+                        return `<span class="text-success">For Verification</span>`
+                    }
+                }else{
+                    return `<span class="text-success">Prepared Certificate</span>`
+                }
+            }else if("{{ auth()->user()->can('approve')}}" == 1){
+                if(cert.prepared_by){
+                    if(cert.verified_by){
+                        if(cert.approved_by){
+                            return `<span class="text-success">Approved</span>`
+                        }else{
+                            return `<span class="text-success">For Approval</span>`
+                        }
+                    }else{
+                        return `<span class="text-success">For Verification</span>`
+                    }
+                }else{
+                    return `<span class="text-success">Cert preparation</span>`
+                }
+            }
+        }else{
+            return `<span class="text-success">Cert preparation</span>`
+        }
+
+            
     }
     $(document).ready( function () {
         let fac_data = {}
@@ -107,49 +159,10 @@ NRL - Facilities
                 { data: 'accreditation_no' },
                 { data: 'name' },
                 { data: 'region_details.name' },
-                { data: 'certificate', render: ()=>{
-                    return `<p>
-                                @if(isset($facility->certificate))
-                                    @role('encoder')
-                                        @if(isset($facility->certificate->prepared_by))
-                                            <span class="text-success">Prepared Certificate</span>
-                                        @else
-                                            <span class="text-info">For Preparation</span>
-                                        @endif
-                                    @endrole
-                                    @role('verifier')
-                                        @if(isset($facility->certificate->prepared_by))
-                                            @if(isset($facility->certificate->verified_by))
-                                                <span class="text-success">Verified</span>
-                                            @else
-                                                <span class="text-info">For Verification</span>
-                                            @endif
-                                        @else
-                                            <span class="text-success">Prepared Certificate</span>
-                                        @endif
-                                    @endrole
-                                    @role('head')
-                                        @if(!isset($facility->certificate->prepared_by))
-                                            <span class="text-success">For Verification</span>
-                                        @else
-                                            
-                                            @if(isset($facility->certificate->verified_by))
-                                                
-                                                @if(isset($facility->certificate->approved_by))
-                                                    <span class="text-success">Approved</span>
-                                                @else
-                                                    <span class="text-success">For Approval</span>
-                                                @endif
-                                            @else
-                                                <span class="text-success">For Verification</span>
-                                            @endif
-                                        @endif
-                                        
-                                    @endrole
-                                @else
-                                    <span class="text-info">Cert preparation</span>
-                                @endif
-                            </p>`
+                { data: 'id', render: (id, type, row, meta)=>{
+                    // renderCertStatus(row)
+                    // return row.certificate
+                    return renderCertStatus(row.certificate)
                 } },
                 { data: 'created_at' },
                 { data: 'id', render: (id, type, row, meta)=>{

@@ -121,6 +121,7 @@ NRL - Facilities
                             <th>Accreditation Number</th>
                             <th>Name</th>
                             <th>Region</th>
+                            <th>Cert Status</th>
                             <th>Date Added</th>
                             <th>Manage</th>
                         </tr>
@@ -158,6 +159,60 @@ NRL - Facilities
             $('#form-modal').modal('show')
         });
     }
+    function renderCertStatus(cert){
+        // console.log("{{ auth()->user()->can('prepare')}}" != 1)
+        if(cert != null){
+            if("{{ auth()->user()->can('prepare')}}" == 1){
+                if(cert.prepared_by){
+                    return `<span class="text-success">Prepared Certificate</span>`
+                }else{
+                    return `<span class="text-success">For Preparation</span>`
+                }
+            }else if("{{ auth()->user()->can('verify')}} " == 1){
+                if(cert.prepared_by){
+                    if(cert.verified_by){
+                        return `<span class="text-success">Verified</span>`
+                    }else{
+                        return `<span class="text-success">For Verification</span>`
+                    }
+                }else{
+                    return `<span class="text-success">Prepared Certificate</span>`
+                }
+            }else if("{{ auth()->user()->can('approve')}}" == 1){
+                if(cert.prepared_by){
+                    if(cert.verified_by){
+                        if(cert.approved_by){
+                            return `<span class="text-success">Approved</span>`
+                        }else{
+                            return `<span class="text-success">For Approval</span>`
+                        }
+                    }else{
+                        return `<span class="text-success">For Verification</span>`
+                    }
+                }else{
+                    return `<span class="text-success">Cert preparation</span>`
+                }
+            }else{
+                if(cert.prepared_by){
+                    if(cert.verified_by){
+                        if(cert.approved_by){
+                            return `<span class="text-success">Approved</span>`
+                        }else{
+                            return `<span class="text-success">For Approval</span>`
+                        }
+                    }else{
+                        return `<span class="text-success">For Verification</span>`
+                    }
+                }else{
+                    return `<span class="text-success">Cert preparation</span>`
+                }
+            }
+        }else{
+            return `<span class="text-success">Cert preparation</span>`
+        }
+
+            
+    }
     $(document).ready( function () {
         var table = $('#facility_table').DataTable({
             responsive: true,
@@ -181,6 +236,12 @@ NRL - Facilities
                 { data: 'accreditation_no' },
                 { data: 'name' },
                 { data: 'region_details.name' },
+                { data: 'id', render: (id, type, row, meta)=>{
+                    // return row.certificate
+                    // renderCertStatus(row)
+                    // return row.certificate
+                    return renderCertStatus(row.certificate)
+                } },
                 { data: 'created_at' },
                 { data: 'id', render: (id)=>{
                     return `<form action="/facilities/`+id+`" method="POST">
