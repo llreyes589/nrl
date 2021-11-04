@@ -10,11 +10,8 @@ use App\Models\Region;
 class FacilityController extends Controller
 {
     function facilities(Request $request){
-        $facilities = Facility::with('region_details')->with(['certificate' => function($q){
-            $q->max('created_at');
-        }])->get();
+        $facilities = '';
         $regions = Region::all();
-        return response()->json(['facilities' => $facilities, 'regions' => Region::all()]);
         if(\request()->filter == 'R'){
             $facilities = Facility::with('region_details')->with(['certificate' => function($q){
                 $q->max('created_at');
