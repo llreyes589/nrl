@@ -112,7 +112,7 @@
             </a>
           </li>
           @endrole
-          @can('create user')
+          @can('approve')
           <li class="nav-item">
             <a href="{{route('users.index')}}" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
@@ -122,7 +122,7 @@
             </a>
           </li>
           @endcan
-          @role('verifier')
+          @can('verify')
           <li class="nav-item">
             <a href="{{route('facilities.index')}}" class="nav-link">
               <i class="nav-icon fas fa-building"></i>
@@ -131,7 +131,8 @@
               </p>
             </a>
           </li>
-          @else
+          @endcan
+          @can('approve')
           <li class="nav-item">
             <a href="{{route('verifiers.facilities.index')}}" class="nav-link">
               <i class="nav-icon fas fa-building"></i>
@@ -140,7 +141,17 @@
               </p>
             </a>
           </li>
-          @endrole
+          @endcan
+          @can('prepare')
+          <li class="nav-item">
+            <a href="{{route('verifiers.facilities.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-building"></i>
+              <p>
+                Facilities
+              </p>
+            </a>
+          </li>
+          @endcan
           
           <li class="nav-item">
             <a href="{{route('settings.index')}}" class="nav-link">
