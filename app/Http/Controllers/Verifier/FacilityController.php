@@ -93,7 +93,6 @@ class FacilityController extends Controller
         $settings = Setting::find(1);
         $given = \Carbon\Carbon::parse($settings->certificate_given_at);
         \Carbon\Carbon::setToStringFormat('jS \d\a\y \o\f F Y');
-        return;
         // Image method signature:
         // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
         $certificate = Certificate::where('key',$key)->first();
@@ -155,12 +154,12 @@ class FacilityController extends Controller
                 text-align:center; 
             }
             p.header{
-                font-size: 18pt;
+                font-size: 16pt;
 
             }
             p.cursive{
                 font-family:Verdana, sans-serif;
-                font-size: 16pt;
+                font-size: 14pt;
                 font-style: italic;
                 
             }
@@ -207,8 +206,8 @@ class FacilityController extends Controller
                     <td colspan="3"></td>
                 </tr>
                 <tr style="text-align:center;" >
-                    <td style="width:15%"></td>
-                    <td style="width:70%">
+                    <td style="width:10%"></td>
+                    <td style="width:80%">
                         <br>
                         <br>
                         <p class="cursive">is hereby presented to</p>
@@ -231,21 +230,19 @@ class FacilityController extends Controller
                         '.$performace.'
                         </p>
                     </td>
-                    <td style="width:15%"></td>
+                    <td style="width:10%"></td>
                 </tr>
                 <tr style="text-align:center;" >
-                    <td style="width:10%"></td>
-                    <td style="width:80%">
+                    <td style="width:5%"></td>
+                    <td style="width:90%">
                         <p class="cursive">performance in the</p>
-                        <p style="font-size: 20pt; font-weight: bold;">“
-                            '.$settings->certificate_theme.'
-                        ” </p>
+                        <p style="font-size: 20pt; font-weight: bold;">“'.$settings->certificate_theme.'” </p>
                         <br>
                         <p class="cursive">
                             Given this '.$given.'
                         </p>
                     </td>
-                    <td style="width:10%"></td>
+                    <td style="width:5%"></td>
                 </tr>
                 <tr>
                     <td style="width:40%">    
