@@ -145,12 +145,12 @@ class FacilityController extends Controller
                 text-align:center; 
             }
             p.header{
-                font-size: 16pt;
+                font-size: 18pt;
 
             }
             p.cursive{
                 font-family:Verdana, sans-serif;
-                font-size: 14pt;
+                font-size: 16pt;
                 font-style: italic;
                 
             }
@@ -217,23 +217,25 @@ class FacilityController extends Controller
                         </p>
                         <br>
                         <p class="cursive">for successful participation, passing and achieving</p>
-                        <p style="font-size: 20pt; font-weight: bold;">
+                        <p style="font-size: 22pt; font-weight: bold;">
                         '.$performace.'
                         </p>
                     </td>
                     <td style="width:15%"></td>
                 </tr>
                 <tr style="text-align:center;" >
-                    <td style="width:5%"></td>
-                    <td style="width:90%">
+                    <td style="width:10%"></td>
+                    <td style="width:80%">
                         <p class="cursive">performance in the</p>
-                        <p style="font-size: 20pt; font-weight: bold;">“'.$settings->certificate_theme.'” </p>
+                        <p style="font-size: 20pt; font-weight: bold;">“
+                            '.$settings->certificate_theme.'
+                        ” </p>
                         <br>
                         <p class="cursive">
                             Given this '.$given.'
                         </p>
                     </td>
-                    <td style="width:5%"></td>
+                    <td style="width:10%"></td>
                 </tr>
                 <tr>
                     <td style="width:40%">    
