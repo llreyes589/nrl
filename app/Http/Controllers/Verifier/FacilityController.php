@@ -106,12 +106,12 @@ class FacilityController extends Controller
             case 'VS':
                 $performace = 'VERY SATISFACTORY';
                 break;
-            case 'HS':
-                $performace = 'HIGHLY SATISFACTORY';
+            case 'A':
+                $performace = 'ACCEPTED';
                 break;
                 
             default:
-                $performace = 'SATISFACTORY';
+                $performace = $certificate->performance;
                 break;
         }
         $pdf = new PDF();

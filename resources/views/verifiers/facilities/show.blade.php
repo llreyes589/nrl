@@ -167,8 +167,7 @@ NFL - Facility
                             <option value="">--Please select performance here--</option>
                             <option value="E">Excellent</option>
                             <option value="HS">Highly Satisfactory</option>
-                            <option value="VS">Very Satisfactory</option>
-                            <option value="S">Satisfactory</option>
+                            <option value="A">Acceptable</option>
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="submit">Add</button>
@@ -276,11 +275,11 @@ NFL - Facility
                                 case 'HS':
                                     $performance = 'Highly Satisfactory';
                                     break;
-                                case 'VS':
-                                    $performance = 'Very Satisfactory';
+                                case 'A':
+                                    $performance = 'Accepted';
                                     break;
                                 default:
-                                    $performance = 'Satisfactory';
+                                    $facility->certificate->performance;
                                     break;
                             }
                         ?>
