@@ -60,7 +60,9 @@ WTL | Facilities
                             <label for="" class="text-uppercase">lab email address:</label>
                             <input class="form-control" type="email" name="lab_email" placeholder="Enter lab email address">
                         </div>
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary"id="btnSave" >Save</button>
+                        <button type="submit" class="btn btn-secondary" style="display:none;" id="btnUpdate">Update</button>
+
                     </form>
                 </div>
                 
@@ -72,7 +74,7 @@ WTL | Facilities
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"> Facilities</h1>
-        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#form-modal">Add new</button>
+        <button class="btn btn-primary" type="button"  id="btnAddNew">Add new</button>
 
     </div>
     <div class="row d-flex justify-content-end">
@@ -157,7 +159,20 @@ WTL | Facilities
                 $('select[name="'+key+'"]').val(value);
             }
             $('#form-modal').modal('show')
+            $('#btnUpdate').show()
+            $('#btnSave').hide()
         });
+    }
+    function clearInputs(){
+        $('input[name="accreditation_no"').val('')
+        $('input[name="name"').val('')
+        $('input[name="address"').val('')
+        $('input[name="city"').val('')
+        $('select[name="region_id"').val(1)
+        $('input[name="head_of_lab"').val('')
+        $('input[name="contact_no"').val('')
+        $('input[name="email"').val('')
+        $('input[name="lab_email"').val('')
     }
     function renderCertStatus(cert){
         // console.log("{{ auth()->user()->can('prepare')}}" != 1)
@@ -214,6 +229,13 @@ WTL | Facilities
             
     }
     $(document).ready( function () {
+        $('#btnAddNew').click(function(){
+            $('#form-modal').modal('show')
+            $('#btnSave').show()
+            $('#btnUpdate').hide()
+            $('#accreditation_no').val(0)
+            clearInputs()
+        })
         var table = $('#facility_table').DataTable({
             responsive: true,
             ajax: {

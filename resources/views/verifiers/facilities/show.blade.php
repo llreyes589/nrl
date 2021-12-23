@@ -170,7 +170,7 @@ NFL - Facility
                             <option value="A">Acceptable</option>
                         </select>
                     </div>
-                    <button class="btn btn-primary btn-sm" type="submit">Add</button>
+                    <button class="btn btn-primary btn-sm" type="submit">Save</button>
                     <button class="btn btn-secondary btn-sm" type="button" id="cancel_btn">Cancel</button>
                 </form>
             </div>
