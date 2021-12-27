@@ -138,12 +138,39 @@ class FacilityController extends Controller
         $tagvs = array(
             'p' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
             'h2' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
-            'img' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)),
+            'img' => array(0 => array('h' => -2, 'n' => -2), 1 => array('h' => -2, 'n'=> -2)),
         );
         $pdf::setHtmlVSpace($tagvs);
+        $pdf::setImageScale ( PDF_IMAGE_SCALE_RATIO );
+
+        $pdf::setJPEGQuality ( 90 );
+
+        // $pdf::Image ( $img_file );
+        // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
+        if($certificate->approved_by_details){
+            $pdf::Image(asset('storage/'.$certificate->approved_by_details->signature), 35, 255, 40, 10, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+            $pdf::Image(asset('images/lutero.png'), 137, 253, 40, 10, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+        }
         // $pdf::SetCellPadding(0);
         // $pdf::SetFont('helvetica', '', 12);
-        
+        $head_html = '
+            <table>
+            <tr style="text-align:center;">
+                <td style="width:50%">
+                    <p class="name">JENNIFER D. MERCADO, MD, MMHoA, FPSP</p>
+                    <p class="designation">Head, National Reference Laboratory
+                    </p>
+                    <p class="designation">East Avenue Medical Center 
+                    </p>
+                    </td>
+                <td style="width:50%">
+                    <p class="name">ATTY. NICOLAS B. LUTERO III, CESO III</p>
+                    <p class="designation">Director IV</p>
+                    <p class="designation">Health Facilities and Services Regulatory Bureau</p>
+                </td>
+            </tr>            
+        </table>            
+        ';
         $doh_logo_html = 
         '
         <style>
@@ -193,6 +220,8 @@ class FacilityController extends Controller
                     <td colspan="3">
                         <br>
                         <br>
+                        <br>
+                        <br>
                         <p class="cursive">This</p>
                         <br>
                     </td>
@@ -236,7 +265,7 @@ class FacilityController extends Controller
                     <td style="width:5%"></td>
                     <td style="width:90%">
                         <p class="cursive">performance in the</p>
-                        <p style="font-size: 20pt; font-weight: bold;">“'.$settings->certificate_theme.'” </p>
+                        <p style="font-size: 20pt; font-weight: bold;">"'.$settings->certificate_theme.'" </p>
                         <br>
                         <p class="cursive">
                             Given this '.$given.'
@@ -255,37 +284,11 @@ class FacilityController extends Controller
                     </td>
                 </tr>
             </table>
-            <table>
-                <tr style="text-align:center;">
-                    <td style="width:50%">
-                        <div>
-                            <img src="'.asset('storage/'.$certificate->approved_by_details->signature).'" width="75">
-                        </div>
-                        <p class="name">JENNIFER D. MERCADO, MD, MMHoA, FPSP</p>
-                        <p class="designation">Head, National Reference Laboratory
-                            <span>
-                                <img src="'.asset('storage/'.$certificate->verified_by_details->signature).'" width="15">
-                            </span>
-                        </p>
-                        <p class="designation">East Avenue Medical Center 
-                            <span>
-                                <img src="'.asset('storage/'.$certificate->prepared_by_details->signature).'" width="15">
-                            </span>
-                        </p>
-                        </td>
-                    <td style="width:50%">
-                        <div>
-                            <img src="'.asset('images/lutero.jpg').'" width="75">
-                        </div>
-                        <p class="name">ATTY. NICOLAS B. LUTERO III, CESO III</p>
-                        <p class="designation">Director IV</p>
-                        <p class="designation">Health Facilities and Services Regulatory Bureau</p>
-                    </td>
-                </tr>            
-            </table>
+
             
         ';
         $pdf::writeHTML($doh_logo_html, true, false, true, false, '');
+        $pdf::writeHTMLCell(0, 0, 10, 260, $head_html, 0, 1, 0, true, '', true);
         
         
         $pdf::Output($certificate->or_no.'.pdf', $request->pub ? $request->pub : "I");
