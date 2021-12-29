@@ -45,7 +45,12 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required'],
         ]);
-        $path = $request->file('signature')->store('signatures');
+        if($request->file('signature')){
+
+            $path = $request->file('signature')->store('signatures');
+        }else{
+            $path = '';
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
