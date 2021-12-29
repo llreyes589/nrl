@@ -22,11 +22,11 @@ class FacilitiesSeeder extends Seeder
             if (!$firstline) {
                 Facility::create([
                     "region_id" => $data['0'],
-                    "accreditation_no" => $data['1'],
-                    "name" => utf8_encode($data['2']),
-                    "address" => utf8_encode($data['3']),
-                    "contact_no" => $data['4'],
-                    "email" => $data['5'],
+                    "accreditation_no" => $data['3'],
+                    "name" => utf8_encode($data['4']),
+                    "address" => utf8_encode($data['5']),
+                    "contact_no" => $data['6'],
+                    "email" => $data['7'],
                 ]);    
             }
             $firstline = false;
