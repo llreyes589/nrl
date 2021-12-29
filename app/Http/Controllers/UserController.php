@@ -45,7 +45,12 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required'],
         ]);
-        $path = $request->file('signature')->store('signatures');
+        if($request->file('signature')){
+
+            $path = $request->file('signature')->store('signatures');
+        }else{
+            $path = '';
+        }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -60,11 +65,17 @@ class UserController extends Controller
             case 'encoder':
                 $user->assignRole('encoder');
                 break;
+            case 'encoder2':
+                $user->assignRole(['encoder', 'encoder2']);
+                break;                
             case 'verifier':
                 $user->assignRole('verifier');
                 break;
-            default:
+            case 'head':
                 $user->assignRole('head');
+                break;                
+            default:
+                $request->role;
                 break;
         }
         
@@ -104,11 +115,14 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        $validated = $request->validate([
-            
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-        $path = $request->file('signature')->store('signatures');
+        $user->syncRoles([]);
+        if($request->file('signature')){
+
+            $path = $request->file('signature')->store('signatures');
+        }else{
+            $path = $user->signature;
+        }
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -118,16 +132,22 @@ class UserController extends Controller
         ]);
         switch ($request->role) {
             case 'admin':
-                $user->syncRoles('admin');
+                $user->assignRole('admin');
                 break;
             case 'encoder':
-                $user->syncRoles('encoder');
+                $user->assignRole('encoder');
                 break;
+            case 'encoder2':
+                $user->assignRole(['encoder','encoder2']);
+                break;                
             case 'verifier':
-                $user->syncRoles('verifier');
+                $user->assignRole('verifier');
                 break;
+            case 'head':
+                $user->assignRole('head');
+                break;                
             default:
-                $user->syncRoles('head');
+                $request->role;
                 break;
         }
         return redirect()->route('users.index')->with('message', 'User updated successfully.')->with('classname', 'alert-success');

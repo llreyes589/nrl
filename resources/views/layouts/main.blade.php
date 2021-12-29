@@ -111,47 +111,37 @@
               </p>
             </a>
           </li>
+          @else
+            @can('approve')
+            <li class="nav-item">
+              <a href="{{route('users.index')}}" class="nav-link">
+                <i class="nav-icon fas fa-users"></i>
+                <p>
+                  Users
+                </p>
+              </a>
+            </li>
+            @endcan
+            @role('verifier|encoder2')
+            <li class="nav-item">
+              <a href="{{route('facilities.index')}}" class="nav-link">
+                <i class="nav-icon fas fa-building"></i>
+                <p>
+                  Facilities
+                </p>
+              </a>
+            </li>
+            @else
+            <li class="nav-item">
+              <a href="{{route('verifiers.facilities.index')}}" class="nav-link">
+                <i class="nav-icon fas fa-building"></i>
+                <p>
+                  Facilities
+                </p>
+              </a>
+            </li>
+            @endrole
           @endrole
-          @can('approve')
-          <li class="nav-item">
-            <a href="{{route('users.index')}}" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                Users
-              </p>
-            </a>
-          </li>
-          @endcan
-          @can('verify')
-          <li class="nav-item">
-            <a href="{{route('facilities.index')}}" class="nav-link">
-              <i class="nav-icon fas fa-building"></i>
-              <p>
-                Facilities
-              </p>
-            </a>
-          </li>
-          @endcan
-          @can('approve')
-          <li class="nav-item">
-            <a href="{{route('verifiers.facilities.index')}}" class="nav-link">
-              <i class="nav-icon fas fa-building"></i>
-              <p>
-                Facilities
-              </p>
-            </a>
-          </li>
-          @endcan
-          @can('prepare')
-          <li class="nav-item">
-            <a href="{{route('verifiers.facilities.index')}}" class="nav-link">
-              <i class="nav-icon fas fa-building"></i>
-              <p>
-                Facilities
-              </p>
-            </a>
-          </li>
-          @endcan
           
           <li class="nav-item">
             <a href="{{route('settings.index')}}" class="nav-link">

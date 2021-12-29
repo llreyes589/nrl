@@ -72,7 +72,11 @@ WTL | Create User
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                @if(isset($user->id))
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"  name="password"  autocomplete="new-password">
+                                @else
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" required  name="password"  autocomplete="new-password">
+                                @endif
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -86,7 +90,11 @@ WTL | Create User
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
                             <div class="col-md-6">
+                                @if(isset($user->id))
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" autocomplete="new-password">
+                                @else
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
@@ -96,6 +104,7 @@ WTL | Create User
                                     <option value="">--Please select role here--</option>
                                     <option value="admin">Admin</option>
                                     <option value="encoder">Encoder</option>
+                                    <option value="encoder2">Encoder 2</option>
                                     <option value="verifier">Verifier</option>
                                     <option value="head">Head</option>
                                 </select>
@@ -105,7 +114,7 @@ WTL | Create User
                             <label for="signature" class="col-md-4 col-form-label text-md-right">{{ __('Signature') }}</label>
 
                             <div class="col-md-6">
-                                <input id="signature" type="file" class="form-control-file" name="signature" required>
+                                <input id="signature" type="file" class="form-control-file" name="signature">
                             </div>
                         </div>
 
@@ -133,7 +142,13 @@ WTL | Create User
 @if(isset($user->id))
 <script >
     window.onload = function(){
-        $('#role').val('{{$user->roles->pluck('name')[0]}}')
+        if("{{$user->hasAllPermissions(['create facility','add certificate'])}}"){
+            
+            $('#role').val('encoder2')
+        }else{
+
+            $('#role').val('{{$user->roles->pluck('name')[0]}}')
+        }
     }
 </script>
 @endif
