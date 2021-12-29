@@ -79,7 +79,7 @@
                     <span>Users</span></a>
             </li>
             @endcan
-                @role('verifier')
+                @role('verifier|encoder2')
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('facilities.index')}}">
                             <i class="fas fa-fw fa-building"></i>

@@ -245,7 +245,7 @@ NRL - Facilities
                 { data: 'created_at' },
                 { data: 'id', render: (id)=>{
                     return `<form action="/facilities/`+id+`" method="POST">
-                                @role('verifier')
+                                @role('verifier|encoder2')
                                 <a class="btn btn-success btn-sm" href="/verifier/facilities/`+id+`"><i class="fa fa-search"></i> View</a>
                                 @endrole
                                 <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility(`+id+`)">EDIT</button>
