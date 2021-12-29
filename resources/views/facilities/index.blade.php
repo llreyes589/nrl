@@ -126,20 +126,7 @@ NRL - Facilities
                             <th>Manage</th>
                         </tr>
                     </thead>
-                    <!-- <tbody>
-                        @foreach($facilities as $facility)
-                            <tr>
-                                <td>{{$facility->accreditation_no}}</td>
-                                <td>{{$facility->name}}</td>
-                                <td>{{$facility->region_details->name}}</td>
-                                <td>{{$facility->created_at}}</td>
-                                <td>
-                                    
-                                </td>
-                            </tr>
-                        @endforeach
-                        
-                    </tbody> -->
+
                 </table>
             </div>
         </div>
