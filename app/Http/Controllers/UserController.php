@@ -126,7 +126,7 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password ? bcrypt($request->password) : $user->signature,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
             'signature' => $path,
             'updated_by' => auth()->id()
         ]);
