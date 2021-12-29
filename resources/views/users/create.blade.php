@@ -109,11 +109,7 @@
                             <label for="signature" class="col-md-4 col-form-label text-md-right">{{ __('Signature') }}</label>
 
                             <div class="col-md-6">
-                                @if(isset($user->id))
                                 <input id="signature" type="file" class="form-control-file" name="signature">
-                                @else
-                                <input id="signature" type="file" class="form-control-file" name="signature" required>
-                                @endif
                             </div>
                         </div>
 
