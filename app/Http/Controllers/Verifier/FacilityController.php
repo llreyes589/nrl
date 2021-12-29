@@ -100,18 +100,18 @@ class FacilityController extends Controller
         $name = $certificate->facility->name;
         $performace  = '';
         switch ($certificate->performance) {
+            case 'A':
+                $performace = 'ACCEPTABLE';
+                break;
             case 'E':
                 $performace = 'EXCELLENT';
-                break;
-            case 'VS':
-                $performace = 'VERY SATISFACTORY';
                 break;
             case 'HS':
                 $performace = 'HIGHLY SATISFACTORY';
                 break;
                 
             default:
-                $performace = 'SATISFACTORY';
+                $certificate->performace;
                 break;
         }
         $pdf = new PDF();

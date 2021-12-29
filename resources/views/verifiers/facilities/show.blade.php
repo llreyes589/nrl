@@ -165,10 +165,9 @@ NFL - Facility
                         <label for="performance">Performance</label>
                         <select id="performance" class="custom-select" name="performance" required>
                             <option value="">--Please select performance here--</option>
+                            <option value="A">Acceptable</option>
                             <option value="E">Excellent</option>
                             <option value="HS">Highly Satisfactory</option>
-                            <option value="VS">Very Satisfactory</option>
-                            <option value="S">Satisfactory</option>
                         </select>
                     </div>
                     <button class="btn btn-primary btn-sm" type="submit">Add</button>
@@ -270,17 +269,17 @@ NFL - Facility
                         <?php
                             $performance = '';
                             switch ($facility->certificate->performance) {
+                                case 'A':
+                                    $performance = 'Acceptable';
+                                    break;
                                 case 'E':
                                     $performance = 'Excellent';
                                     break;
                                 case 'HS':
                                     $performance = 'Highly Satisfactory';
                                     break;
-                                case 'VS':
-                                    $performance = 'Very Satisfactory';
-                                    break;
                                 default:
-                                    $performance = 'Satisfactory';
+                                    $facility->certificate->performance;
                                     break;
                             }
                         ?>
