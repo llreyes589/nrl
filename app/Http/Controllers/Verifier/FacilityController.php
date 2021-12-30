@@ -47,6 +47,7 @@ class FacilityController extends Controller
         $facility = Facility::with(['certificate' => function($q){
             $q->max('created_at');
         }])->find($id);
+        // dd($facility);
         $certificates = Certificate::with('prepared_by_details')->with('verified_by_details')->with('approved_by_details')->where('facility_id', $id)->where('facility_verified_at', '!=', null)->get();
         // dd($certificates);
         return view('verifiers.facilities.show', compact('facility', 'certificates'));
@@ -303,8 +304,23 @@ class FacilityController extends Controller
             'updated_at' => \Carbon\Carbon::now(),
             'key' => md5(microtime())
             ]);
-        $facility->certificate()->insert($request->except('_token'));
+        try {
+            $facility->certificate()->insert($request->except('_token'));
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
         return redirect()->route('verifiers.facilities.show', $id)->with('message', 'Facility certificate successfully created.')->with('classname', 'alert-success');
+    }
+    
+    function edit_certificate(Request $request, $id){
+        $cert = Certificate::find($id);
+        try {
+            $cert->update($request->except('_token','_method'));
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
+        return redirect()->route('verifiers.facilities.show', $cert->facility_id)->with('message', 'Facility certificate successfully updated.')->with('classname', 'alert-success');
+
     }
 
     function emailFacility(Request $request, $id, $cert_id){

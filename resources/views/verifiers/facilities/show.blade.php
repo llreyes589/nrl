@@ -134,8 +134,53 @@ NFL - Facility
 </div>
 <!-- End Modal -->
 
+@if(isset($facility->certificate->id))
+<div id="edit_cert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="certificate_modal_title">Edit Certificate</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post"  action="{{route('verifiers.facilities.edit_certificate', $facility->certificate->id)}}">
+                    @method('PUT')
+                    @csrf
+                    <div class="form-group">
+                        <label for="or_no">OR Number:</label>
+                        <input id="or_no" class="form-control" value="{{$facility->certificate != null ? $facility->certificate->or_no : ''}}" type="text" name="or_no" placeholder="OR Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="or_no">Certificate Number:</label>
+                        <input id="or_no" class="form-control" value="{{$facility->certificate != null ? $facility->certificate->certificate_no : ''}}" type="text" name="certificate_no" placeholder="Certificate Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="validity">Validity</label>
+                        <input id="validity" class="form-control" value="{{$facility->certificate != null ? $facility->certificate->validity : ''}}" type="date" name="validity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="performance">Performance</label>
+                        <select id="performance" class="custom-select" name="performance" required>
+                            <option value="">--Please select performance here--</option>
+                            <option value="A" {{$facility->certificate->performance == 'A' ? 'selected' : ''}}>Acceptable</option>
+                            <option value="E" {{$facility->certificate->performance == 'E' ? 'selected' : ''}}>Excellent</option>
+                            <option value="HS" {{$facility->certificate->performance == 'HS' ? 'selected' : ''}}>Highly Satisfactory</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-sm" type="submit">Update</button>
+                    <button class="btn btn-secondary btn-sm" type="button" id="cancel_btn">Cancel</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+@endif
 
 <!-- Encoder Modal -->
+
 
 <div id="encoder_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="encoder_modal_title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal" role="document">
@@ -237,12 +282,12 @@ NFL - Facility
                         <p class=""><strong>{{$facility->lab_email}}</strong></p>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" >
                     <div class="col-md-4 col-sm-12">
-                        <p>OR No.:</p>
+                        <p>OR No.: </p>
                     </div>
                     <div class="col-md col-sm-12">
-                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->or_no : 'N/A'}}</strong></p>
+                        <p class=""><strong>{{$facility->certificate != null ? $facility->certificate->or_no : 'N/A'}}</strong></p>
                     </div>
                 </div>
                 <div class="row">
@@ -250,7 +295,7 @@ NFL - Facility
                         <p>Certificate No.:</p>
                     </div>
                     <div class="col-md col-sm-12">
-                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->certificate_no : 'N/A'}}</strong></p>
+                        <p class=""><strong>{{$facility->certificate != null ? $facility->certificate->certificate_no : 'N/A'}}</strong></p>
                     </div>
                 </div>
                 <div class="row">
@@ -258,7 +303,7 @@ NFL - Facility
                         <p>Validity:</p>
                     </div>
                     <div class="col-md col-sm-12">
-                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->validity : 'N/A'}}</strong></p>
+                        <p class=""><strong>{{$facility->certificate != null ? $facility->certificate->validity : 'N/A'}}</strong></p>
                     </div>
                 </div>
                 @if(isset($facility->certificate->performance))
@@ -284,7 +329,7 @@ NFL - Facility
                             }
                         ?>
                         <div class="col-md col-sm-12">
-                            <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $performance : 'N/A'}}</strong></p>
+                            <p class=""><strong>{{$facility->certificate != null ? $performance : 'N/A'}}</strong></p>
                         </div>
                     </div>
                 @endif
@@ -303,6 +348,13 @@ NFL - Facility
                                         <i class="fas fa-certificate"></i>
                                     </span>
                                     <span class="text">Prepare Certificate</span>
+                                </button>
+                                @else
+                                <button class="btn btn-info btn-icon-split btn-sm" id="edit_certificate_btn">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-edit"></i>
+                                    </span>
+                                    <span class="text">Edit Certificate</span>
                                 </button>
                                 @endif
                 
@@ -503,7 +555,12 @@ NFL - Facility
 
         $('#cancel_btn').click(function(){
             $('#encoder_modal').modal('hide')
+            $('#edit_cert_modal').modal('hide')
 
+        })
+
+        $('#edit_certificate_btn').click(function(){
+            $('#edit_cert_modal').modal('show')
         })
 
     }

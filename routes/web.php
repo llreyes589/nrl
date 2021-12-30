@@ -51,6 +51,7 @@ Route::prefix('verifier')->group(function(){
             Route::group(['middleware' => ['role:encoder']], function () {
                 Route::put('/facilities/{id}/certificate/{cert_id}/updatePrepared', [App\Http\Controllers\Verifier\FacilityController::class, 'updatePrepared'])->name('updatePrepared');
                 Route::post('/facilities/{id}/certificate/create', [App\Http\Controllers\Verifier\FacilityController::class, 'create_certificate'])->name('create_certificate');
+                Route::put('/certificate/{id}/edit', [App\Http\Controllers\Verifier\FacilityController::class, 'edit_certificate'])->name('edit_certificate');
             });
             Route::group(['middleware' => ['role:verifier']], function () {
                 Route::put('/facilities/{id}/certificate/{cert_id}/updateVerified', [App\Http\Controllers\Verifier\FacilityController::class, 'updateVerified'])->name('updateVerified');

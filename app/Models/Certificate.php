@@ -15,6 +15,7 @@ class Certificate extends Model
         'facility_id', 
         'or_no',
         'validity',
+        'certificate_no',
         'performance', 
         'prepared_by', 
         'prepared_at', 
