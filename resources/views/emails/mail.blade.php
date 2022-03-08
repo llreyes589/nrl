@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -15,9 +16,16 @@
   </noscript>
   <![endif]-->
   <style>
-    table, td, div, h1, p {font-family: Arial, sans-serif;}
+    table,
+    td,
+    div,
+    h1,
+    p {
+      font-family: Arial, sans-serif;
+    }
   </style>
 </head>
+
 <body style="margin:0;padding:0;">
   <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
     <tr>
@@ -35,7 +43,7 @@
                   <td style="padding:0 0 36px 0;color:#153643;">
                     <h1 style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">Hello <strong>{{ $name }}</strong>,</h1>
                     <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
-                      Your certificate is ready, you may download it by clicking the link below.
+                      Your certificate is ready, you may download it by clicking the link below. Please verify the authenticity of this email by scanning the QR code in the certificate.
                     </p>
                     <p><a href="{{$pdf}}">{{$pdf}}</a></p>
                     <p>Please do not reply to this email. This is system generated.</p>
@@ -52,7 +60,7 @@
                 <tr>
                   <td style="padding:0;width:50%;" align="left">
                     <p style="margin:0;font-size:14px;line-height:16px;font-family:Arial,sans-serif;color:#ffffff;">
-                      &reg; powered by: BOBONGMD<br/>
+                      &reg; powered by: BOBONGMD<br />
                     </p>
                   </td>
                 </tr>
@@ -64,4 +72,5 @@
     </tr>
   </table>
 </body>
+
 </html>
