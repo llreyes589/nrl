@@ -7,9 +7,9 @@ NFL - Facility
 @section('content')
 
 @if(Session::has('message'))
-    <div class="alert {{session('classname')}}">
-        {{session('message')}}
-    </div>
+<div class="alert {{session('classname')}}">
+    {{session('message')}}
+</div>
 @endif
 
 <!-- Modal -->
@@ -26,78 +26,78 @@ NFL - Facility
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-2 col-sm-12">
-                         <p> 
+                        <p>
                             OR No:
                         </p>
                     </div>
                     <div class="col-md col-sm-12">
-                         <strong class="or_no">
+                        <strong class="or_no">
                         </strong>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-sm-12">
-                         <p> 
+                        <p>
                             Performance:
                         </p>
                     </div>
                     <div class="col-md col-sm-12">
-                         <strong class="performance">
+                        <strong class="performance">
                         </strong>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-sm-12">
-                         <p> 
+                        <p>
                             Validity:
                         </p>
                     </div>
                     <div class="col-md col-sm-12">
-                         <strong class="validity">
+                        <strong class="validity">
                         </strong>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-sm-12">
-                         <p> 
+                        <p>
                             Prepared by:
                         </p>
                     </div>
                     <div class="col-md col-sm-12">
-                         <strong class="prepared_by">
+                        <strong class="prepared_by">
                         </strong>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-sm-12">
-                         <p> 
+                        <p>
                             Verified by:
                         </p>
                     </div>
                     <div class="col-md col-sm-12">
-                         <strong class="verified_by">
+                        <strong class="verified_by">
                         </strong>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-sm-12">
-                         <p> 
+                        <p>
                             Approved by:
                         </p>
                     </div>
                     <div class="col-md col-sm-12">
-                         <strong class="approved_by">
+                        <strong class="approved_by">
                         </strong>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-2 col-sm-12">
-                         <p> 
+                        <p>
                             Issued On:
                         </p>
                     </div>
                     <div class="col-md col-sm-12">
-                         <strong class="issued_on">
+                        <strong class="issued_on">
                         </strong>
                     </div>
                 </div>
@@ -105,11 +105,56 @@ NFL - Facility
             <div class="modal-footer d-flex justify-content-start">
                 <button class="btn btn-primary" data-dismiss="modal">Done</button>
             </div>
-            
+
         </div>
     </div>
 </div>
 <!-- End Modal -->
+
+@if(isset($facility->certificate->id))
+<div id="edit_cert_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit_modal_title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="certificate_modal_title">Edit Certificate</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{route('verifiers.facilities.edit_certificate', $facility->certificate->id)}}">
+                    @method('PUT')
+                    @csrf
+                    <div class="form-group">
+                        <label for="or_no">OR Number:</label>
+                        <input id="or_no" class="form-control" value="{{$facility->certificate != null ? $facility->certificate->or_no : ''}}" type="text" name="or_no" placeholder="OR Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="or_no">Certificate Number:</label>
+                        <input id="or_no" class="form-control" value="{{$facility->certificate != null ? $facility->certificate->certificate_no : ''}}" type="text" name="certificate_no" placeholder="Certificate Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="validity">Validity</label>
+                        <input id="validity" class="form-control" value="{{$facility->certificate != null ? $facility->certificate->validity : ''}}" type="date" name="validity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="performance">Performance</label>
+                        <select id="performance" class="custom-select" name="performance" required>
+                            <option value="">--Please select performance here--</option>
+                            <option value="A" {{$facility->certificate->performance == 'A' ? 'selected' : ''}}>Acceptable</option>
+                            <option value="E" {{$facility->certificate->performance == 'E' ? 'selected' : ''}}>Excellent</option>
+                            <option value="HS" {{$facility->certificate->performance == 'HS' ? 'selected' : ''}}>Highly Satisfactory</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-sm" type="submit">Update</button>
+                    <button class="btn btn-secondary btn-sm" type="button" id="cancel_btn">Cancel</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endif
 
 
 <!-- Modal -->
@@ -128,7 +173,7 @@ NFL - Facility
                     <iframe class="embed-responsive-item" id="certificate_container" src="" allowfullscreen></iframe>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -174,7 +219,7 @@ NFL - Facility
                     <button class="btn btn-secondary btn-sm" type="button" id="cancel_btn">Cancel</button>
                 </form>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -242,7 +287,7 @@ NFL - Facility
                         <p>OR No.:</p>
                     </div>
                     <div class="col-md col-sm-12">
-                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->or_no : 'N/A'}}</strong></p>
+                        <p class=""><strong>{{$facility->certificate != null ? $facility->certificate->or_no : 'N/A'}}</strong></p>
                     </div>
                 </div>
                 <div class="row">
@@ -250,7 +295,7 @@ NFL - Facility
                         <p>Certificate No.:</p>
                     </div>
                     <div class="col-md col-sm-12">
-                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->certificate_no : 'N/A'}}</strong></p>
+                        <p class=""><strong>{{$facility->certificate != null ? $facility->certificate->certificate_no : 'N/A'}}</strong></p>
                     </div>
                 </div>
                 <div class="row">
@@ -258,35 +303,35 @@ NFL - Facility
                         <p>Validity:</p>
                     </div>
                     <div class="col-md col-sm-12">
-                        <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $facility->certificate->validity : 'N/A'}}</strong></p>
+                        <p class=""><strong>{{$facility->certificate != null ? $facility->certificate->validity : 'N/A'}}</strong></p>
                     </div>
                 </div>
                 @if(isset($facility->certificate->performance))
-                    <div class="row">
-                        <div class="col-md-4 col-sm-12">
-                            <p>Performance:</p>
-                        </div>
-                        <?php
-                            $performance = '';
-                            switch ($facility->certificate->performance) {
-                                case 'E':
-                                    $performance = 'Excellent';
-                                    break;
-                                case 'HS':
-                                    $performance = 'Highly Satisfactory';
-                                    break;
-                                case 'A':
-                                    $performance = 'Accepted';
-                                    break;
-                                default:
-                                    $facility->certificate->performance;
-                                    break;
-                            }
-                        ?>
-                        <div class="col-md col-sm-12">
-                            <p class=""><strong>{{$facility->certificate != null && \Carbon\Carbon::parse($facility->certificate->validity) >= \Carbon\Carbon::now() ? $performance : 'N/A'}}</strong></p>
-                        </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <p>Performance:</p>
                     </div>
+                    <?php
+                    $performance = '';
+                    switch ($facility->certificate->performance) {
+                        case 'E':
+                            $performance = 'Excellent';
+                            break;
+                        case 'HS':
+                            $performance = 'Highly Satisfactory';
+                            break;
+                        case 'A':
+                            $performance = 'Accepted';
+                            break;
+                        default:
+                            $facility->certificate->performance;
+                            break;
+                    }
+                    ?>
+                    <div class="col-md col-sm-12">
+                        <p class=""><strong>{{$facility->certificate != null ? $performance : 'N/A'}}</strong></p>
+                    </div>
+                </div>
                 @endif
                 <div class="row">
                     <div class="col-md-4 col-sm-12">
@@ -294,83 +339,90 @@ NFL - Facility
                     </div>
                     <div class="col-md col-sm-12">
                         @role('encoder')
-                            @if($facility->certificate != null)
-                
-                                @if(isset($facility->certificate->approved_by))
-                
-                                <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-certificate"></i>
-                                    </span>
-                                    <span class="text">Prepare Certificate</span>
-                                </button>
-                                @endif
-                
-                                @if(!isset($facility->certificate->prepared_by))
-                                    <form method="POST" action="{{route('verifiers.facilities.updatePrepared', ['id'=>$facility->id, 'cert_id' => $facility->certificate->id])}}">
-                                        @csrf
-                                        @method('PUT')
-                                        <button class="btn btn-primary btn-icon-split btn-sm">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-flag"></i>
-                                            </span>
-                                            <span class="text">Flag as Prepared</span>
-                                        </button>
-                                    </form>
-                                @endif
-                            @else
-                                <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-certificate"></i>
-                                    </span>
-                                    <span class="text">Prepare Certificate</span>
-                                </button>
-                            @endif
-                
+                        @if($facility->certificate != null)
+
+                        @if(isset($facility->certificate->approved_by))
+
+                        <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-certificate"></i>
+                            </span>
+                            <span class="text">Prepare Certificate</span>
+                        </button>
+                        @else
+                        <button class="btn btn-info btn-icon-split btn-sm" id="edit_certificate_btn">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-edit"></i>
+                            </span>
+                            <span class="text">Edit Certificate</span>
+                        </button>
+                        @endif
+
+                        @if(!isset($facility->certificate->prepared_by))
+                        <form method="POST" action="{{route('verifiers.facilities.updatePrepared', ['id'=>$facility->id, 'cert_id' => $facility->certificate->id])}}">
+                            @csrf
+                            @method('PUT')
+                            <button class="btn btn-primary btn-icon-split btn-sm">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-flag"></i>
+                                </span>
+                                <span class="text">Flag as Prepared</span>
+                            </button>
+                        </form>
+                        @endif
+                        @else
+                        <button class="btn btn-success btn-icon-split btn-sm" id="add_certificate_btn">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-certificate"></i>
+                            </span>
+                            <span class="text">Prepare Certificate</span>
+                        </button>
+                        @endif
+
                         @endrole
-                
+
                         @role('verifier')
-                            @if($facility->certificate != null)
-                                @if(isset($facility->certificate->prepared_by))
-                                    @if(!isset($facility->certificate->verified_by))
-                                        <form method="POST" action="{{route('verifiers.facilities.updateVerified', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
-                                            @csrf
-                                            @method('PUT')
-                                            <button class="btn btn-primary btn-icon-split btn-sm">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-flag"></i>
-                                                </span>
-                                                <span class="text">Flag as Verified</span>
-                                            </button>
-                                        </form>
-                                    @endif
-                                @endif
-                            @endif
+                        @if($facility->certificate != null)
+                        @if(isset($facility->certificate->prepared_by))
+                        @if(!isset($facility->certificate->verified_by))
+                        <form method="POST" action="{{route('verifiers.facilities.updateVerified', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
+                            @csrf
+                            @method('PUT')
+                            <button class="btn btn-primary btn-icon-split btn-sm">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-flag"></i>
+                                </span>
+                                <span class="text">Flag as Verified</span>
+                            </button>
+                        </form>
+                        @endif
+                        @endif
+                        @endif
                         @endrole
-                
+
                         @role('head')
-                            @if($facility->certificate != null)
-                                @if(isset($facility->certificate->verified_by))
-                                    @if(!isset($facility->certificate->approved_by))
-                                        <form method="POST" action="{{route('verifiers.facilities.updateApproved', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
-                                            @csrf
-                                            @method('PUT')
-                                            <button class="btn btn-primary btn-icon-split btn-sm">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-flag"></i>
-                                                </span>
-                                                <span class="text">Flag as Approved</span>
-                                            </button>
-                                        </form>
-                                    @endif
-                                @endif
-                            @endif
+                        @if($facility->certificate != null)
+                        @if(isset($facility->certificate->verified_by))
+                        @if(!isset($facility->certificate->approved_by))
+                        <form method="POST" action="{{route('verifiers.facilities.updateApproved', ['id' => $facility->id, 'cert_id' => $facility->certificate->id])}}">
+                            @csrf
+                            @method('PUT')
+                            <button class="btn btn-primary btn-icon-split btn-sm">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-flag"></i>
+                                </span>
+                                <span class="text">Flag as Approved</span>
+                            </button>
+                        </form>
+                        @endif
+                        @endif
+                        @endif
                         @endrole
                     </div>
                 </div>
-                
+
             </div>
-        </div>        
+        </div>
     </div>
     <div class="col-md-4 col-sm-12">
         <div class="card shadow mb-4">
@@ -384,52 +436,52 @@ NFL - Facility
                                 <div class="row mb-1">
                                     <div class="col">
                                         @if($facility->certificate != null)
-                                            @if(isset($facility->certificate->prepared_by))
-                                                <div class="btn btn-success btn-icon-split btn-sm">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-check"></i>
-                                                    </span>
-                                                    <span class="text">Certificate Prepared</span>
-                                                </div>
-                                            @endif
+                                        @if(isset($facility->certificate->prepared_by))
+                                        <div class="btn btn-success btn-icon-split btn-sm">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-check"></i>
+                                            </span>
+                                            <span class="text">Certificate Prepared</span>
+                                        </div>
+                                        @endif
                                         @endif
                                     </div>
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col">
                                         @if(isset($facility->certificate))
-                                            @if(isset($facility->certificate->verified_by))
-                                                <div class="btn btn-success btn-icon-split btn-sm">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-check"></i>
-                                                    </span>
-                                                    <span class="text">Endorsed for Approval</span>
-                                                </div>
-                                            @endif
+                                        @if(isset($facility->certificate->verified_by))
+                                        <div class="btn btn-success btn-icon-split btn-sm">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-check"></i>
+                                            </span>
+                                            <span class="text">Endorsed for Approval</span>
+                                        </div>
+                                        @endif
                                         @endif
                                     </div>
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col">
                                         @if(isset($facility->certificate))
-                                            @if(isset($facility->certificate->approved_by))
-                                                <div class="btn btn-success btn-icon-split btn-sm">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-check"></i>
-                                                    </span>
-                                                    <span class="text">Approved</span>
-                                                </div>
-                                            @endif
+                                        @if(isset($facility->certificate->approved_by))
+                                        <div class="btn btn-success btn-icon-split btn-sm">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-check"></i>
+                                            </span>
+                                            <span class="text">Approved</span>
+                                        </div>
+                                        @endif
                                         @endif
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
         @if(isset($facility->certificate->approved_by))
         <div class="card shadow mb-4">
             <div class="card border-left-info shadow h-100 py-2">
@@ -439,16 +491,14 @@ NFL - Facility
                             <!-- <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 View Certificate</div> -->
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                <button 
-                                    disable="{{$facility->certificate->approved_by}}"
-                                    class="btn btn-info btn-sm" type="button" id="generate_certificate_btn"><i class="fa fa-certificate"></i> View Certificate</button>
+                                <button disable="{{$facility->certificate->approved_by}}" class="btn btn-info btn-sm" type="button" id="generate_certificate_btn"><i class="fa fa-certificate"></i> View Certificate</button>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
         @endif
         <div class="card shadow mb-4">
             <div class="card border-left-secondary shadow h-100 py-2">
@@ -459,22 +509,22 @@ NFL - Facility
                                 Issued Certificates</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 @forelse($certificates as $certificate)
-                                    <button onclick="viewCert({{$certificate}})" class="btn btn-primary btn-icon-split btn-sm">
-                                        <span class="icon text-white-50">
-                                            <i class="fa fa-search"></i>
-                                        </span>
-                                        <span class="text">{{$certificate->certificate_no}}</span>
-                                    </button>
+                                <button onclick="viewCert({{$certificate}})" class="btn btn-primary btn-icon-split btn-sm">
+                                    <span class="icon text-white-50">
+                                        <i class="fa fa-search"></i>
+                                    </span>
+                                    <span class="text">{{$certificate->certificate_no}}</span>
+                                </button>
                                 @empty
-                                    <p class="lead text-danger text-center">No certificate found</p>
+                                <p class="lead text-danger text-center">No certificate found</p>
                                 @endforelse
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
     </div>
 </div>
 
@@ -482,32 +532,37 @@ NFL - Facility
 
 @section('javascript')
 <script>
-    window.onload = function(){
-        $('#generate_certificate_btn').click(function(){
+    window.onload = function() {
+        $('#generate_certificate_btn').click(function() {
             $('#certificate_modal').modal('show')
         })
 
-        $('#certificate_modal').on('hide.bs.modal', function(){
+        $('#certificate_modal').on('hide.bs.modal', function() {
             $('#certificate_container').attr('src', '')
         })
 
-        @if(isset($facility->certificate))
-        $('#certificate_modal').on('show.bs.modal', function(){
+        @if(isset($facility -> certificate))
+        $('#certificate_modal').on('show.bs.modal', function() {
             $('#certificate_container').attr('src', '{{route("certificate", ["key" => $facility->certificate->key])}}')
         })
         @endif
 
-        $('#add_certificate_btn').click(function(){
+        $('#add_certificate_btn').click(function() {
             $('#encoder_modal').modal('show')
         })
 
-        $('#cancel_btn').click(function(){
+        $('#cancel_btn').click(function() {
             $('#encoder_modal').modal('hide')
+            $('#edit_cert_modal').modal('hide')
 
+        })
+        $('#edit_certificate_btn').click(function() {
+            $('#edit_cert_modal').modal('show')
         })
 
     }
-    function viewCert(cert){
+
+    function viewCert(cert) {
         let performance = ''
         switch (cert.performance) {
             case 'E':
@@ -519,7 +574,7 @@ NFL - Facility
             case 'HS':
                 performance = 'HIGHLY SATISFACTORY';
                 break;
-                
+
             default:
                 performance = 'SATISFACTORY';
                 break;
