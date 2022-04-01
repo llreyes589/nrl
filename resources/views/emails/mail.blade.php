@@ -35,10 +35,10 @@
                   <td style="padding:0 0 36px 0;color:#153643;">
                     <h1 style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">Hello <strong>{{ $name }}</strong>,</h1>
                     <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
-                      Your certificate is ready, you may download it by clicking the link below.
+                      Your certificate is ready, you may download it by clicking the link below. Please verify the authenticity of this email by scanning the QR code in the certificate.
                     </p>
                     <p><a href="{{$pdf}}">{{$pdf}}</a></p>
-                    <p>Please do not reply to this email. This is system generated.</p>
+                    <p>Please do not reply to this email. This is system generated. </p>
                     <hr>
                     <p>-NRL</p>
                   </td>
