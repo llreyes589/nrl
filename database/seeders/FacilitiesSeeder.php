@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Facility;
+use App\Models\Certificate;
+use Illuminate\Support\Str;
 
 class FacilitiesSeeder extends Seeder
 {
@@ -15,6 +17,7 @@ class FacilitiesSeeder extends Seeder
     public function run()
     {
         Facility::truncate();
+        Certificate::truncate();
         $csvFile = fopen(base_path("database/seeders/wtl.csv"), "r");
   
         $firstline = true;
@@ -22,7 +25,7 @@ class FacilitiesSeeder extends Seeder
             if (!$firstline) {
                 $facility = Facility::create([
                     "region_id" => $data['0'],
-                    "accreditation_no" => $data['3'],
+                    "accreditation_no" => Facility::where('accreditation_no', $data[3])->exists() ? Str::random(12) : $data[3],
                     "name" => utf8_encode($data['4']),
                     "address" => utf8_encode($data['5']),
                     "contact_no" => $data['6'],
