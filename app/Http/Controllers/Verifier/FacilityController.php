@@ -100,21 +100,20 @@ class FacilityController extends Controller
         $certificate = Certificate::where('key', $key)->first();
         // dd($certificate->prepared_by_details->signature);
         $name = $certificate->facility->name;
-        $performace  = '';
+        $performance  = '';
         switch ($certificate->performance) {
             case 'E':
-                $performace = 'EXCELLENT';
-                break;
-            case 'VS':
-                $performace = 'VERY SATISFACTORY';
-                break;
+            $performance = 'EXCELLENT';
+            break;
+            case 'HS':
+            $performance = 'HIGHLY SATISFACTORY';
+            break;
             case 'A':
-                $performace = 'ACCEPTED';
-                break;
-
+            $performance = 'ACCEPTED';
+            break;
             default:
-                $performace = $certificate->performance;
-                break;
+                $certificate->performance;
+            break;
         }
         $pdf = new PDF();
         $qr = QrCode::format('png')->size(300)->merge('http://1.bp.blogspot.com/-YSy27PtRhnM/TVOIUvjmCsI/AAAAAAAAAKE/dyvKbvJxN4M/s1600/nrl+eamc+logo.jpg', .2, true)->generate(\route('verifyCertificate', ['key' => $key]));
@@ -258,7 +257,7 @@ class FacilityController extends Controller
                         <br>
                         <p class="cursive">for successful participation, passing and achieving</p>
                         <p style="font-size: 22pt; font-weight: bold;">
-                        ' . $performace . '
+                        ' . $performance . '
                         </p>
                     </td>
                     <td style="width:10%"></td>
