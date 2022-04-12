@@ -321,7 +321,7 @@ NFL - Facility
                             $performance = 'Highly Satisfactory';
                             break;
                         case 'A':
-                            $performance = 'Accepted';
+                            $performance = 'Acceptable';
                             break;
                         default:
                             $facility->certificate->performance;
