@@ -103,17 +103,17 @@ class FacilityController extends Controller
         $performance  = '';
         switch ($certificate->performance) {
             case 'E':
-            $performance = 'EXCELLENT';
-            break;
+                $performance = 'EXCELLENT';
+                break;
             case 'HS':
-            $performance = 'HIGHLY SATISFACTORY';
-            break;
+                $performance = 'HIGHLY SATISFACTORY';
+                break;
             case 'A':
-            $performance = 'ACCEPTED';
-            break;
+                $performance = 'ACCEPTABLE';
+                break;
             default:
                 $certificate->performance;
-            break;
+                break;
         }
         $pdf = new PDF();
         $qr = QrCode::format('png')->size(300)->merge('http://1.bp.blogspot.com/-YSy27PtRhnM/TVOIUvjmCsI/AAAAAAAAAKE/dyvKbvJxN4M/s1600/nrl+eamc+logo.jpg', .2, true)->generate(\route('verifyCertificate', ['key' => $key]));
