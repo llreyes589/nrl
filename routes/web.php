@@ -22,29 +22,28 @@ Auth::routes(['register' => false]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/certificate/{key}/verify/', [App\Http\Controllers\Guest\CertificateController::class, 'verify'])->name('verifyCertificate');
 Route::put('/certificate/{key}/verify/', [App\Http\Controllers\Guest\CertificateController::class, 'updateVerifyByFacility'])->name('verifyMyCertificate');
-Route::group(['middleware' => ['role_or_permission:admin|create facility', 'auth' ]], function () {
+Route::group(['middleware' => ['role_or_permission:admin|create facility', 'auth']], function () {
     //
     Route::resource('/facilities', App\Http\Controllers\FacilityController::class);
     Route::post('/facilities/createOrUpdate', [App\Http\Controllers\FacilityController::class, 'createOrUpdate'])->name('facilities.createOrUpdate');
 });
-Route::group(['middleware' => ['role_or_permission:admin|create user', 'auth' ]], function () {
+Route::group(['middleware' => ['role_or_permission:admin|create user', 'auth']], function () {
     Route::resource('/users', App\Http\Controllers\UserController::class);
 });
 
-Route::name('settings.')->group(function(){
-    Route::group(['middleware' => ['auth']], function(){
+Route::name('settings.')->group(function () {
+    Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('index');
         Route::put('/settings/certificate', [App\Http\Controllers\SettingController::class, 'storeCertSettings'])->name('storeCertSettings');
     });
-
 });
 
 
-Route::prefix('verifier')->group(function(){
-    Route::name('verifiers.facilities.')->group(function(){
-        Route::group(['middleware' => ['auth']], function(){
-            Route::get('/email/preview' , [App\Http\Controllers\Verifier\FacilityController::class, 'emailPrev']);
+Route::prefix('verifier')->group(function () {
+    Route::name('verifiers.facilities.')->group(function () {
+        Route::group(['middleware' => ['auth']], function () {
+            Route::get('/email/preview', [App\Http\Controllers\Verifier\FacilityController::class, 'emailPrev']);
             Route::get('/facilities', [App\Http\Controllers\Verifier\FacilityController::class, 'index'])->name('index');
             Route::post('/facilities', [App\Http\Controllers\Verifier\FacilityController::class, 'search'])->name('search');
             Route::get('/facilities/{id}', [App\Http\Controllers\Verifier\FacilityController::class, 'show'])->name('show');
@@ -56,15 +55,17 @@ Route::prefix('verifier')->group(function(){
             Route::group(['middleware' => ['role:verifier']], function () {
                 Route::put('/facilities/{id}/certificate/{cert_id}/updateVerified', [App\Http\Controllers\Verifier\FacilityController::class, 'updateVerified'])->name('updateVerified');
             });
-    
+
             Route::group(['middleware' => ['role:head']], function () {
-                Route::resource('/users', App\Http\Controllers\UserController::class);  
+                Route::resource('/users', App\Http\Controllers\UserController::class);
                 Route::put('/facilities/{id}/certificate/{cert_id}/updateApproved', [App\Http\Controllers\Verifier\FacilityController::class, 'updateApproved'])->name('updateApproved');
                 Route::post('/facilities/{id}/certificate/{cert_id}/emailFacility', [App\Http\Controllers\Verifier\FacilityController::class, 'emailFacility'])->name('emailFacility');
             });
-    
         });
     });
 });
 // certificate
 Route::get('/certificate/{key}', [App\Http\Controllers\Verifier\FacilityController::class, 'certificate'])->name('certificate');
+
+// PT
+Route::resource('/proficiency-testing', App\Http\Controllers\ProficiencyTestingController::class);

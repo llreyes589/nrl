@@ -14,11 +14,9 @@
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">  
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
@@ -47,55 +45,60 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-            
+
             <!-- Heading 
             <div class="sidebar-heading">
                 Interface
             </div>
         -->
-        
+
             <!-- Nav Item - Pages Collapse Menu -->
             @role('admin')
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-                <li class="nav-item">
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <li class="nav-item">
                 <a class="nav-link" href="{{route('users.index')}}">
-                        <i class="fas fa-fw fa-users"></i>
-                        <span>Users</span></a>
-                </li>
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Users</span></a>
+            </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('facilities.index')}}">
-                        <i class="fas fa-fw fa-building"></i>
-                        <span>Facilities</span></a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('facilities.index')}}">
+                    <i class="fas fa-fw fa-building"></i>
+                    <span>Facilities</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('proficiency-testing.index')}}">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Proficiency Testings</span></a>
+            </li>
             @else
-             <!-- Divider -->
+            <!-- Divider -->
             <hr class="sidebar-divider">
             @can('create user')
             <li class="nav-item">
-            <a class="nav-link" href="{{route('users.index')}}">
+                <a class="nav-link" href="{{route('users.index')}}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
             </li>
             @endcan
-                @role('verifier|encoder2')
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('facilities.index')}}">
-                            <i class="fas fa-fw fa-building"></i>
-                            <span>Facilities</span></a>
-                    </li>
-                @else
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
-                            <i class="fas fa-fw fa-building"></i>
-                            <span>Facilities</span></a>
-                    </li>
-                @endrole
-                
+            @role('verifier|encoder2')
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('facilities.index')}}">
+                    <i class="fas fa-fw fa-building"></i>
+                    <span>Facilities</span></a>
+            </li>
+            @else
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
+                    <i class="fas fa-fw fa-building"></i>
+                    <span>Facilities</span></a>
+            </li>
+            @endrole
+
             @endrole
             <li class="nav-item">
-            <a class="nav-link" href="{{route('settings.index')}}">
+                <a class="nav-link" href="{{route('settings.index')}}">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Settings</span></a>
             </li>
@@ -123,19 +126,16 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->name}}</span>
-                                
+
                             </a>
                             <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <div class="dropdown-item">Role: {{Auth::user()->roles->pluck('name')[0]}}</div>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                    {{ __('Logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -152,7 +152,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     @yield('content')
-                    
+
                 </div>
                 <!-- /.container-fluid -->
 
@@ -182,8 +182,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
