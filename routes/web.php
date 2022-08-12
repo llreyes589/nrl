@@ -68,7 +68,8 @@ Route::prefix('verifier')->group(function () {
 Route::get('/certificate/{key}', [App\Http\Controllers\Verifier\FacilityController::class, 'certificate'])->name('certificate');
 
 // PT
-Route::resource('/proficiency-testing', App\Http\Controllers\ProficiencyTestingController::class);
+
+Route::resource('/proficiency-testing', App\Http\Controllers\ProficiencyTestingController::class)->middleware('role:admin');
 Route::prefix('facility')->group(function () {
     Route::name('proficiency-testing.facility.')->group(function () {
         Route::get('/proficiency-testing', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'index'])->name('index');
