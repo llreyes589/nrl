@@ -50,4 +50,12 @@ class ProficiencyTestingController extends Controller
         }
         return redirect(\route('proficiency-testing.index'))->with(['message' => 'PT sucessfully updated', 'classname' => 'alert-success']);
     }
+
+    public function applicants($id)
+    {
+        $pt = ProficiencyTesting::find($id);
+        $applications = $pt->applications;
+        // dd($applications);
+        return view('pt.applicantsList', compact('applications'));
+    }
 }

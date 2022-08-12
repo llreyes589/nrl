@@ -56,6 +56,7 @@ NRL - Proficiency Testing Program
                         <td>
                             @role('admin')
                             <a href="{{route('proficiency-testing.edit', $pt->id)}}" class="btn btn-info">Edit</a>
+                            <a href="{{route('proficiency-testing.applicants', $pt->id)}}" class="btn btn-primary">Applicants</a>
                             @endrole
                             @role('Facility')
                             <a href="{{route('proficiency-testing.facility.apply', $pt->id)}}" class="btn btn-success">View/Apply</a>

@@ -23,4 +23,13 @@ class ProficiencyTestingApplication extends Model
     {
         return $this->hasMany('\App\Models\User', 'user_id', 'id');
     }
+    public function user()
+    {
+        return $this->belongsTo('\App\Models\User', 'user_id', 'id');
+    }
+
+    public function pt()
+    {
+        return $this->belongsTo('\App\Models\ProficiencyTesting', 'proficiency_testing_id', 'id');
+    }
 }
