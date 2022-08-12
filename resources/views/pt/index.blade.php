@@ -27,6 +27,9 @@ NRL - Proficiency Testing Program
                     <tr>
                         <th>SDTL</th>
                         <th>Cycle</th>
+                        @role('Facility')
+                        <th>Status</th>
+                        @endrole
                         <th>Date Added</th>
                         <th>Manage</th>
                     </tr>
@@ -35,10 +38,27 @@ NRL - Proficiency Testing Program
                     @foreach($pts as $pt)
                     <tr>
                         <td>{{$pt->sdtl}}</td>
-                        <td>{{$pt->cycle}}</td>
+                        <td>{{$pt->cycle }}
+                            <!-- <pre>{{$pt->applications->where('user_id', Auth::id())}}</pre> -->
+                        </td>
+                        @role('Facility')
+
+                        <td>
+                            @if(count($pt->applications->where('user_id', Auth::id())) > 0)
+                            <span class="badge badge-pill badge-success">Applied</span>
+                            @endif
+                        </td>
+
+                        @endrole
                         <td>{{$pt->created_at}}</td>
                         <td>
+                            @role('admin')
                             <a href="{{route('proficiency-testing.edit', $pt->id)}}" class="btn btn-info">Edit</a>
+                            @endrole
+                            @role('Facility')
+                            <a href="{{route('proficiency-testing.facility.apply', $pt->id)}}" class="btn btn-success">View/Apply</a>
+                            @endrole
+
                             <!-- <button class="btn btn-danger" type="button">Delete</button> -->
                         </td>
                     </tr>

@@ -102,6 +102,13 @@
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Settings</span></a>
             </li>
+            @role('Facility')
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('proficiency-testing.facility.index')}}">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Proficiency Testings</span></a>
+            </li>
+            @endrole
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 

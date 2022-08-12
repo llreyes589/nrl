@@ -69,3 +69,10 @@ Route::get('/certificate/{key}', [App\Http\Controllers\Verifier\FacilityControll
 
 // PT
 Route::resource('/proficiency-testing', App\Http\Controllers\ProficiencyTestingController::class);
+Route::prefix('facility')->group(function () {
+    Route::name('proficiency-testing.facility.')->group(function () {
+        Route::get('/proficiency-testing', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'index'])->name('index');
+        Route::get('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'apply'])->name('apply');
+        Route::post('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveApplication'])->name('saveApplication');
+    });
+});

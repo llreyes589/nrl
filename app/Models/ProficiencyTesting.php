@@ -14,4 +14,9 @@ class ProficiencyTesting extends Model
         'cycle',
         'method_used'
     ];
+
+    public function applications()
+    {
+        return $this->hasMany('\App\Models\ProficiencyTestingApplication', 'proficiency_testing_id', 'id');
+    }
 }
