@@ -37,4 +37,17 @@ class ProficiencyTestingController extends Controller
         ]);
         return redirect(route('proficiency-testing.facility.index', $id))->with(['message' => 'Application successfully sent', 'classname' => 'alert-success']);
     }
+
+    public function saveReceipt($id)
+    {
+        if (\request()->file('receipt')) {
+
+            $path = \request()->file('receipt')->store('receipts');
+        } else {
+            $path = '';
+        }
+
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['receipt_path' => $path]);
+        return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Receipt successfully submitted', 'classname' => 'alert-success']);
+    }
 }

@@ -8,7 +8,7 @@ NRL - Proficiency Testing Program Application
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800"> PT Application <u>(SDTL-{{$pt->sdtl}} | Cycle-{{$pt->cycle}})</u></h1>
-    <a href="{{route('proficiency-testing.index')}}" class="btn btn-danger">Cancel</a>
+    <a href="{{route('proficiency-testing.facility.index')}}" class="btn btn-danger">Cancel</a>
 
 </div>
 @if(Session::has('message'))
@@ -23,6 +23,42 @@ if ($application)
 // dd($test_method);
 ?>
 
+<!-- MODAL -->
+<div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="my-modal-title">Upload receipt</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{route('proficiency-testing.facility.saveReceipt', $pt->id)}}" enctype="multipart/form-data">
+                    @csrf
+                    @method("PUT")
+                    <div class="form-group row">
+                        <label for="receipt" class="col-md-4 col-form-label text-md-right">{{ __('Receipt') }}</label>
+
+                        <div class="col-md-6">
+                            <input id="receipt" type="file" class="form-control-file" name="receipt">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END MODAL -->
+
 <div class="row">
     <div class="col-md-4 col-sm-12">
         <div class="card">
@@ -30,6 +66,9 @@ if ($application)
                 <h4 for="cycle">PT Details</h4>
                 @if($application)
                 <span class="badge badge-pill badge-success">Applied</span>
+                @if($application->receipt_path)
+                <span class="badge badge-pill badge-primary">Receipt Uploaded</span>
+                @endif
                 @endif
                 <hr>
                 <div class="form-group">
@@ -40,9 +79,20 @@ if ($application)
                     <label for="cycle">Cycle</label>
                     <input type="text" class="form-control" readonly value="{{$pt->cycle}}" />
                 </div>
+                @if($application)
+                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#form-modal">Upload Receipt</button>
+                @endif
             </div>
         </div>
 
+        @if($application && $application->receipt_path)
+        <div class="card mt-2">
+            <div class="card-body">
+                <h5 class="card-title">Uploaded File:</h5>
+                <img src="/storage/{{$application->receipt_path}}" class="img img-fluid" alt="">
+            </div>
+        </div>
+        @endif
     </div>
     <div class="col-md col-sm-12">
         <div class="card">

@@ -48,6 +48,11 @@ NRL - Proficiency Testing Program
                         <td>
                             @if(count($pt->applications->where('user_id', Auth::id())) > 0)
                             <span class="badge badge-pill badge-success">Applied</span>
+
+                            @if($pt->applications->where('user_id', Auth::id())->first()->receipt_path)
+                            <span class="badge badge-pill badge-primary">Receipt Uploaded</span>
+
+                            @endif
                             @endif
                         </td>
 
