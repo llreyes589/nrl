@@ -167,9 +167,12 @@ if ($application)
                         <textarea id="tetrahydrocannabinol" class="form-control" name="tetrahydrocannabinol" rows="3"></textarea>
                         @endif
                     </div>
-                    <br>
+                    <div class="alert alert-primary" role="alert">
+                        <p class="lead p-0 m-0">Total: <span class="font-weight-bold">P1,500.00</span></p>
+                    </div>
+                    <hr />
                     @if(!$application)
-                    <button class="btn btn-primary" id="submit" type="submit">Submit</button>
+                    <button class="btn btn-primary" id="submit" type="submit">Apply/Checkout</button>
                     @endif
                 </form>
             </div>
