@@ -16,7 +16,8 @@ class ProficiencyTestingApplication extends Model
         'methamphetamine',
         'tetrahydrocannabinol',
         'receipt_path',
-        'unboxing_video_path'
+        'unboxing_video_path',
+        'specimen_sent'
     ];
 
     public function users()

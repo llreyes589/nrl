@@ -73,6 +73,7 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::resource('/proficiency-testing', App\Http\Controllers\ProficiencyTestingController::class);
     Route::name('proficiency-testing.')->group(function () {
         Route::get('/proficiency-testing/{id}/applicants', [App\Http\Controllers\ProficiencyTestingController::class, 'applicants'])->name('applicants');
+        Route::put('/proficiency-testing/{id}/applicants/{application_id}', [App\Http\Controllers\ProficiencyTestingController::class, 'sendSpecimen'])->name('applicants.sendSpecimen');
     });
 });
 
@@ -82,5 +83,6 @@ Route::prefix('facility')->group(function () {
         Route::get('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'apply'])->name('apply');
         Route::post('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveApplication'])->name('saveApplication');
         Route::put('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveReceipt'])->name('saveReceipt');
+        Route::put('/proficiency-testing/{id}/receiveSpecimen', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'receiveSpecimen'])->name('receiveSpecimen');
     });
 });

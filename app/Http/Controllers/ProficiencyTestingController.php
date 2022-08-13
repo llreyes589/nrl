@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProficiencyTesting;
+use App\Models\ProficiencyTestingApplication;
 use Exception;
 use Illuminate\Database\QueryException;
 
@@ -57,5 +58,12 @@ class ProficiencyTestingController extends Controller
         $applications = $pt->applications;
         // dd($applications);
         return view('pt.applicantsList', compact('applications'));
+    }
+
+    public function sendSpecimen($id, $application_id)
+    {
+        $application = ProficiencyTestingApplication::find($application_id);
+        $application->update(['specimen_sent' => 1]);
+        return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Specimen sent successfully', 'classname' => 'alert-success']);
     }
 }

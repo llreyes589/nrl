@@ -28,6 +28,7 @@ NRL - Proficiency Testing Applications List
                         <th>Facility</th>
                         <th>SDTL</th>
                         <th>Cycle</th>
+                        <th>Status</th>
                         <th>Date Added</th>
                         <th>Manage</th>
                     </tr>
@@ -38,8 +39,21 @@ NRL - Proficiency Testing Applications List
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>
+                        <td>@if($app->specimen_sent)<span class="badge badge-pill badge-info">Specimen sent</span> @endif</td>
                         <td>{{$app->created_at}}</td>
-                        <td><button class="btn btn-primary" type="button">Approve</button></td>
+                        <td>
+                            <button class="btn btn-primary" type="button">Approve</button>
+                            @if($app->receipt_path)
+                            <a href="/storage/{{$app->receipt_path}}" target="_blank" class="btn btn-success">Receipt</a>
+                            @if($app->specimen_sent <=0) <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
+                                @csrf
+                                @method('PUT')
+
+                                <button class="btn btn-info" type="submit">Send Specimen</button>
+                                </form>
+                                @endif
+                                @endif
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

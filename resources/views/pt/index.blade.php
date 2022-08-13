@@ -24,7 +24,7 @@ NRL - Proficiency Testing Program
 <div class="row">
     <div class="col">
         <div class="table-responsive">
-            <table class="table table-light" id="pt_table">
+            <table class="table table-light table-striped" id="pt_table">
                 <thead class="thead-light">
                     <tr>
                         <th>SDTL</th>
@@ -53,6 +53,14 @@ NRL - Proficiency Testing Program
                             <span class="badge badge-pill badge-primary">Receipt Uploaded</span>
 
                             @endif
+                            @if($pt->applications->where('user_id', Auth::id())->first()->specimen_sent)
+                            <span class="badge badge-pill badge-info">Specimen Sent</span>
+
+                            @endif
+                            @if($pt->applications->where('user_id', Auth::id())->first()->unboxing_video_path)
+                            <span class="badge badge-pill badge-dark">Specimen received</span>
+
+                            @endif
                             @endif
                         </td>
 
@@ -65,9 +73,17 @@ NRL - Proficiency Testing Program
                             @endrole
                             @role('Facility')
                             <a href="{{route('proficiency-testing.facility.apply', $pt->id)}}" class="btn btn-success">View/Apply</a>
-                            @endrole
+                            @if($pt->applications->where('user_id', Auth::id())->first())
+                            @if(strlen($pt->applications->where('user_id', Auth::id())->first()->unboxing_video_path) <= 0 && $pt->applications->where('user_id', Auth::id())->first()->specimen_sent && $pt->applications->where('user_id', Auth::id())->first()->receipt_path) <form action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <button class="btn btn-secondary" type="submit">Receive specimen</button>
+                                </form>
+                                @endif
+                                @endif
+                                @endrole
 
-                            <!-- <button class="btn btn-danger" type="button">Delete</button> -->
+                                <!-- <button class="btn btn-danger" type="button">Delete</button> -->
                         </td>
                     </tr>
                     @endforeach

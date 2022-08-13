@@ -50,4 +50,10 @@ class ProficiencyTestingController extends Controller
         \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['receipt_path' => $path]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Receipt successfully submitted', 'classname' => 'alert-success']);
     }
+
+    public function receiveSpecimen($id)
+    {
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['unboxing_video_path' => 'received']);
+        return redirect(route('proficiency-testing.facility.index'))->with(['message' => 'Specimen successfully received', 'classname' => 'alert-success']);
+    }
 }
