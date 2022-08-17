@@ -79,6 +79,12 @@ if ($application)
                     <label for="cycle">Cycle</label>
                     <input type="text" class="form-control" readonly value="{{$pt->cycle}}" />
                 </div>
+                @if($pt->instruction_file_path)
+
+                <a href="/storage/{{$pt->instruction_file_path}}" download>
+                    <p>Download instructions</p>
+                </a>
+                @endif
                 @if($application)
                 <button class="btn btn-info" type="button" data-toggle="modal" data-target="#form-modal">Upload Receipt</button>
                 @endif
@@ -101,10 +107,8 @@ if ($application)
                     @csrf
                     <h4 for="cycle">Test Method Used</h4>
                     <hr>
-                    <div class="custom-control custom-checkbox">
-                        <input id="immunoassay" class="custom-control-input" type="checkbox" name="" value="immunoassay">
-                        <label for="immunoassay" class="custom-control-label">Immunoassay Test Kit</label>
-                    </div>
+                    <p class="lead">Immunoassay Test Kit</p>
+
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="my-addon">Brand</span>
@@ -116,10 +120,7 @@ if ($application)
                         @endif
                     </div>
                     <br>
-                    <div class="custom-control custom-checkbox">
-                        <input id="instrumented" class="custom-control-input" type="checkbox" name="" value="true">
-                        <label for="instrumented" class="custom-control-label">Instrumented</label>
-                    </div>
+                    <p class="lead">Instrumented</p>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="my-addon">Type of Instrument used</span>
@@ -168,7 +169,7 @@ if ($application)
                         @endif
                     </div>
                     <div class="alert alert-primary" role="alert">
-                        <p class="lead p-0 m-0">Total: <span class="font-weight-bold">P1,500.00</span></p>
+                        <p class="lead p-0 m-0">Total amount: <span class="font-weight-bold">P{{$pt->total_amount}}</span></p>
                     </div>
                     <hr />
                     @if(!$application)

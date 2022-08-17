@@ -24,12 +24,21 @@ class ProficiencyTestingController extends Controller
 
     public function store(Request $request)
     {
+
+        if (\request()->file('instruction_file')) {
+
+            $path = \request()->file('instruction_file')->store('instruction_files');
+        } else {
+            $path = null;
+        }
         $pt = ProficiencyTesting::where('sdtl', $request->sdtl)->where('cycle', $request->cycle)->first();
         if ($pt) return redirect(\route('proficiency-testing.create'))->with(['message' => 'PT already exists', 'classname' => 'alert-danger'])->withInput();
         $validated = $request->validate([
             'sdtl' => 'required | numeric ',
             'cycle' => 'required | numeric ',
+            'total_amount' => 'required | numeric ',
         ]);
+        $request->merge(['instruction_file_path' => $path]);
         ProficiencyTesting::create($request->except('_token'));
         return redirect(\route('proficiency-testing.index'))->with(['message' => 'PT sucessfully saved', 'classname' => 'alert-success']);
     }
@@ -42,6 +51,13 @@ class ProficiencyTestingController extends Controller
 
     public function update($id)
     {
+        if (\request()->file('instruction_file')) {
+
+            $path = \request()->file('instruction_file')->store('instruction_files');
+        } else {
+            $path = null;
+        }
+        \request()->merge(['instruction_file_path' => $path]);
         $pt = ProficiencyTesting::find($id);
         try {
 
@@ -65,5 +81,11 @@ class ProficiencyTestingController extends Controller
         $application = ProficiencyTestingApplication::find($application_id);
         $application->update(['specimen_sent' => 1]);
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Specimen sent successfully', 'classname' => 'alert-success']);
+    }
+    public function verifyPayment($id, $application_id)
+    {
+        $application = ProficiencyTestingApplication::find($application_id);
+        $application->update(['verified_payment' => 1]);
+        return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment verified successfully', 'classname' => 'alert-success']);
     }
 }

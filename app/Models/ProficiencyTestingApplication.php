@@ -17,7 +17,8 @@ class ProficiencyTestingApplication extends Model
         'tetrahydrocannabinol',
         'receipt_path',
         'unboxing_video_path',
-        'specimen_sent'
+        'specimen_sent',
+        'verified_payment'
     ];
 
     public function users()

@@ -39,20 +39,45 @@ NRL - Proficiency Testing Applications List
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>
-                        <td>@if($app->specimen_sent)<span class="badge badge-pill badge-info">Specimen sent</span> @endif</td>
+                        <td>
+                            <!-- specimen sent -->
+                            @if($app->specimen_sent)
+                            <span class="badge badge-pill badge-info">Specimen sent</span>
+                            @endif
+                            <!-- verified payment -->
+                            @if($app->verified_payment === 1)
+                            <span class="badge badge-pill badge-success">Payment verified</span>
+                            @endif
+                        </td>
                         <td>{{$app->created_at}}</td>
                         <td>
-                            <button class="btn btn-primary" type="button">Approve</button>
-                            @if($app->receipt_path)
-                            <a href="/storage/{{$app->receipt_path}}" target="_blank" class="btn btn-success">Receipt</a>
-                            @if($app->specimen_sent <=0) <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
-                                @csrf
-                                @method('PUT')
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @if($app->receipt_path )
+                                    @if($app->verified_payment != 1)
+                                    <form action="{{route('proficiency-testing.applicants.verifyPayment', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
+                                        @csrf
+                                        @method('PUT')
 
-                                <button class="btn btn-info" type="submit">Send Specimen</button>
-                                </form>
-                                @endif
-                                @endif
+                                        <button class="dropdown-item btn btn-primary" type="submit"><i class="fa fa-check fa-sm"></i> Verify payment</button>
+                                    </form>
+                                    @endif
+                                    <a href="/storage/{{$app->receipt_path}}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
+                                    @if($app->specimen_sent <=0) <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <button class="dropdown-item btn btn-info" type="submit"><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
+                                        </form>
+                                        @endif
+                                        @endif
+
+                                </div>
+                            </div>
+
                         </td>
                     </tr>
                     @endforeach

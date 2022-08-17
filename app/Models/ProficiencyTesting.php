@@ -12,7 +12,9 @@ class ProficiencyTesting extends Model
     protected $fillable = [
         'sdtl',
         'cycle',
-        'method_used'
+        'method_used',
+        'instruction_file_path',
+        'total_amount',
     ];
 
     public function applications()
