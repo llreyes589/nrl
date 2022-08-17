@@ -23,8 +23,8 @@ if ($application)
 // dd($test_method);
 ?>
 
-<!-- MODAL -->
-<div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+<!-- Upload Receipt MODAL -->
+<div id="upload-receipt-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -57,7 +57,52 @@ if ($application)
         </div>
     </div>
 </div>
-<!-- END MODAL -->
+<!-- END Upload Receipt MODAL -->
+
+<!-- receive-specimen-modal MODAL -->
+<div id="receive-specimen-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="my-modal-title">Receive Specimen</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" enctype="multipart/form-data">
+                    @csrf
+                    @method("PUT")
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="accept" name="status" value="accept" required>
+                        <label class="custom-control-label" for="accept">Accept</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="reject" name="status" value="reject" required>
+                        <label class="custom-control-label" for="reject">Reject</label>
+                    </div>
+                    <hr>
+                    <div class="form-group row" id="unboxing_video_path_container" style="display: none;">
+                        <label for="unboxing_video_path" class="col-md-4 col-form-label text-md-right">{{ __('Attach Video/Image') }}</label>
+
+                        <div class="col-md-6">
+                            <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- END receive-specimen-modal MODAL -->
 
 <div class="row">
     <div class="col-md-4 col-sm-12">
@@ -69,6 +114,9 @@ if ($application)
                 @if($application->receipt_path)
                 <span class="badge badge-pill badge-primary">Receipt Uploaded</span>
                 @endif
+                @if($application->unboxing_video_path)
+                <span class="badge badge-pill badge-secondary">Specimen Received : {{$application->unboxing_video_path === 'accepted' ? 'Accepted' : 'Rejected'}}</span>
+                @endif
                 @endif
                 <hr>
                 <div class="form-group">
@@ -79,23 +127,38 @@ if ($application)
                     <label for="cycle">Cycle</label>
                     <input type="text" class="form-control" readonly value="{{$pt->cycle}}" />
                 </div>
-                @if($pt->instruction_file_path)
-
-                <a href="/storage/{{$pt->instruction_file_path}}" download>
-                    <p>Download instructions</p>
-                </a>
-                @endif
+                <hr />
                 @if($application)
-                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#form-modal">Upload Receipt</button>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        @if($pt->instruction_file_path)
+
+                        <a href="/storage/{{$pt->instruction_file_path}}" class="dropdown-item btn btn-success" download>
+                            <i class="fa fa-download fa-sm"></i> Download instructions
+                        </a>
+                        @endif
+                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#upload-receipt-modal"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
+                        @if(!$application->unboxing_video_path)
+                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#receive-specimen-modal"><i class="fab fa-get-pocket"></i> Receive specimen</button>
+                        @endif
+                    </div>
+                </div>
                 @endif
             </div>
         </div>
 
-        @if($application && $application->receipt_path)
+        @if($application )
         <div class="card mt-2">
             <div class="card-body">
-                <h5 class="card-title">Uploaded File:</h5>
+                <h5 class="card-title">Uploaded File/s:</h5>
+                <hr>
+                @if($application->receipt_path)
+                <p>Receipt</p>
                 <img src="/storage/{{$application->receipt_path}}" class="img img-fluid" alt="">
+                @endif
             </div>
         </div>
         @endif
@@ -186,6 +249,19 @@ if ($application)
 
 @section('javascript')
 <script>
-    $(function() {})
+    $(function() {
+        const status = $('[name="status"]')
+        const unboxing_video_path_container = $('#unboxing_video_path_container')
+        const unboxing_video_path_input = $('#unboxing_video_path')
+        status.change(function(e) {
+            if (e.target.value === 'reject') {
+                unboxing_video_path_container.show()
+                unboxing_video_path_input.attr('required', 'required');
+            } else {
+                unboxing_video_path_container.hide()
+                unboxing_video_path_input.removeAttr('required')
+            }
+        })
+    })
 </script>
 @endsection

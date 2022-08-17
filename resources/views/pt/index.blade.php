@@ -58,7 +58,7 @@ NRL - Proficiency Testing Program
 
                             @endif
                             @if($pt->applications->where('user_id', Auth::id())->first()->unboxing_video_path)
-                            <span class="badge badge-pill badge-dark">Specimen received</span>
+                            <span class="badge badge-pill badge-dark">Specimen Received: {{$pt->applications->where('user_id', Auth::id())->first()->unboxing_video_path === 'accepted' ? 'Accepted' : 'Rejected'}}</span>
 
                             @endif
                             @endif
@@ -67,23 +67,19 @@ NRL - Proficiency Testing Program
                         @endrole
                         <td>{{$pt->created_at}}</td>
                         <td>
+                            <!-- admin role -->
                             @role('admin')
                             <a href="{{route('proficiency-testing.edit', $pt->id)}}" class="btn btn-info">Edit</a>
                             <a href="{{route('proficiency-testing.applicants', $pt->id)}}" class="btn btn-primary">Applicants</a>
                             @endrole
-                            @role('Facility')
-                            <a href="{{route('proficiency-testing.facility.apply', $pt->id)}}" class="btn btn-success">View/Apply</a>
-                            @if($pt->applications->where('user_id', Auth::id())->first())
-                            @if(strlen($pt->applications->where('user_id', Auth::id())->first()->unboxing_video_path) <= 0 && $pt->applications->where('user_id', Auth::id())->first()->specimen_sent && $pt->applications->where('user_id', Auth::id())->first()->receipt_path) <form action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <button class="btn btn-secondary" type="submit">Receive specimen</button>
-                                </form>
-                                @endif
-                                @endif
-                                @endrole
 
-                                <!-- <button class="btn btn-danger" type="button">Delete</button> -->
+                            <!-- facility role -->
+                            @role('Facility')
+                            <a href="{{route('proficiency-testing.facility.apply', $pt->id)}}" class="btn btn-success btn-sm"><i class="fa fa-search fa-sm"></i> View</a>
+
+                            @endrole
+
+                            <!-- <button class="btn btn-danger" type="button">Delete</button> -->
                         </td>
                     </tr>
                     @endforeach
