@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PDO;
 
 class ProficiencyTestingApplication extends Model
 {
@@ -33,5 +34,10 @@ class ProficiencyTestingApplication extends Model
     public function pt()
     {
         return $this->belongsTo('\App\Models\ProficiencyTesting', 'proficiency_testing_id', 'id');
+    }
+
+    public function specimens()
+    {
+        return $this->hasMany('\App\Models\Specimen', 'proficiency_testing_application_id', 'id');
     }
 }

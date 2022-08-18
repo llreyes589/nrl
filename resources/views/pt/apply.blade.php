@@ -114,8 +114,11 @@ if ($application)
                 @if($application->receipt_path)
                 <span class="badge badge-pill badge-primary">Receipt Uploaded</span>
                 @endif
-                @if($application->unboxing_video_path)
-                <span class="badge badge-pill badge-secondary">Specimen Received : {{$application->unboxing_video_path === 'accepted' ? 'Accepted' : 'Rejected'}}</span>
+                @if($application->specimens()->latest('created_at')->first())
+                <span class="badge badge-pill badge-info">Specimen Sent</span>
+                @endif
+                @if($application->specimens()->latest('created_at')->first()->unboxing_video_path)
+                <span class="badge badge-pill badge-secondary">Specimen Received : {{$application->specimens()->latest('created_at')->first()->unboxing_video_path == 'accepted' ? 'Accepted' : 'Rejected'}}</span>
                 @endif
                 @endif
                 <hr>
@@ -141,8 +144,10 @@ if ($application)
                         </a>
                         @endif
                         <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#upload-receipt-modal"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
-                        @if(!$application->unboxing_video_path)
+                        @if($application->specimens()->latest('created_at')->first())
+                        @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
                         <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#receive-specimen-modal"><i class="fab fa-get-pocket"></i> Receive specimen</button>
+                        @endif
                         @endif
                     </div>
                 </div>

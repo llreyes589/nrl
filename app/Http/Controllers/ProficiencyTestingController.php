@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ProficiencyTesting;
 use App\Models\ProficiencyTestingApplication;
 use Exception;
+use App\Models\Specimen;
 use Illuminate\Database\QueryException;
 
 class ProficiencyTestingController extends Controller
@@ -78,8 +79,10 @@ class ProficiencyTestingController extends Controller
 
     public function sendSpecimen($id, $application_id)
     {
+
         $application = ProficiencyTestingApplication::find($application_id);
-        $application->update(['specimen_sent' => 1]);
+        $application->specimens()->create(['sent_by' => auth()->id()]);
+        // $application->update(['specimen_sent' => 1]);
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Specimen sent successfully', 'classname' => 'alert-success']);
     }
     public function verifyPayment($id, $application_id)

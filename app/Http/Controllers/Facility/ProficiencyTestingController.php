@@ -59,7 +59,8 @@ class ProficiencyTestingController extends Controller
         } else {
             $path = 'accepted';
         }
-        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['unboxing_video_path' => $path]);
+        // dd(\request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens);
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens()->latest('created_at')->first()->update(['unboxing_video_path' => $path]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Specimen successfully received', 'classname' => 'alert-success']);
     }
 }

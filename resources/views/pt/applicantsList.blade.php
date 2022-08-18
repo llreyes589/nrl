@@ -41,8 +41,12 @@ NRL - Proficiency Testing Applications List
                         <td>{{$app->pt->cycle}}</td>
                         <td>
                             <!-- specimen sent -->
-                            @if($app->specimen_sent)
+                            @if($app->specimens()->latest('created_at')->first())
                             <span class="badge badge-pill badge-info">Specimen sent</span>
+                            @endif
+
+                            @if($app->specimens()->latest('created_at')->first()->unboxing_video_path)
+                            <span class="badge badge-pill badge-secondary">Specimen Received : {{$app->specimens()->latest('created_at')->first()->unboxing_video_path === 'accepted' ? 'Accepted' : 'Rejected'}}</span>
                             @endif
                             <!-- verified payment -->
                             @if($app->verified_payment === 1)
@@ -66,14 +70,25 @@ NRL - Proficiency Testing Applications List
                                     </form>
                                     @endif
                                     <a href="/storage/{{$app->receipt_path}}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
-                                    @if($app->specimen_sent <=0) <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
+                                    @if( $app->verified_payment != 0)
+                                    @if(!$app->specimens()->latest('created_at')->first() ) <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
                                         @csrf
                                         @method('PUT')
 
                                         <button class="dropdown-item btn btn-info" type="submit"><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
-                                        </form>
-                                        @endif
-                                        @endif
+                                    </form>
+                                    @else
+                                    @if($app->specimens()->latest('created_at')->first()->unboxing_video_path != 'accepted' && $app->specimens()->latest('created_at')->first()->unboxing_video_path != null)
+                                    <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <button class="dropdown-item btn btn-info" type="submit"><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
+                                    </form>
+                                    @endif
+                                    @endif
+                                    @endif
+                                    @endif
 
                                 </div>
                             </div>
