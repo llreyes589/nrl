@@ -23,18 +23,18 @@ if ($application)
 // dd($test_method);
 ?>
 
-<!-- Upload Receipt MODAL -->
-<div id="upload-receipt-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+<!-- MODAL -->
+<div class="modal" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true" id="form-modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="my-modal-title">Upload receipt</h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="my-modal-title"></h5>
+                <button class="close" data-dismiss="modal" id="close-form-modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form method="POST" action="{{route('proficiency-testing.facility.saveReceipt', $pt->id)}}" enctype="multipart/form-data">
+            <div class="modal-body" id="modal-body">
+                <form method="POST" action="{{route('proficiency-testing.facility.saveReceipt', $pt->id)}}" enctype="multipart/form-data" id="upload-receipt-form" style="display:none;">
                     @csrf
                     @method("PUT")
                     <div class="form-group row">
@@ -52,25 +52,8 @@ if ($application)
                         </div>
                     </div>
                 </form>
-            </div>
 
-        </div>
-    </div>
-</div>
-<!-- END Upload Receipt MODAL -->
-
-<!-- receive-specimen-modal MODAL -->
-<div id="receive-specimen-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="my-modal-title">Receive Specimen</h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" enctype="multipart/form-data">
+                <form method="POST" action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" enctype="multipart/form-data" id="receive-specimen-form" style="display:none;">
                     @csrf
                     @method("PUT")
                     <div class="custom-control custom-radio">
@@ -102,7 +85,9 @@ if ($application)
         </div>
     </div>
 </div>
-<!-- END receive-specimen-modal MODAL -->
+<!-- END MODAL -->
+
+
 
 <div class="row">
     <div class="col-md-4 col-sm-12">
@@ -143,12 +128,13 @@ if ($application)
                             <i class="fa fa-download fa-sm"></i> Download instructions
                         </a>
                         @endif
-                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#upload-receipt-modal"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
+                        <button class="dropdown-item btn btn-info" id="btn-upload-receipt-modal" type="button" data-toggle="modal" data-target="#upload-receipt-form"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
                         @if($application->specimens()->latest('created_at')->first())
                         @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
-                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#receive-specimen-modal"><i class="fab fa-get-pocket"></i> Receive specimen</button>
+                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> Receive specimen</button>
                         @endif
                         @endif
+                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Send result</button>
                     </div>
                 </div>
                 @endif
@@ -266,6 +252,41 @@ if ($application)
                 unboxing_video_path_container.hide()
                 unboxing_video_path_input.removeAttr('required')
             }
+        })
+
+        const form_modal = $('#form-modal')
+        const close_form_modal = $('#close-form-modal')
+        const modal_body = $('#modal-body')
+        const btn_upload_receipt_modal = $('#btn-upload-receipt-modal')
+        const my_modal_title = $('#my-modal-title')
+        const upload_receipt_form = $('#upload-receipt-form')
+        const receive_specimen_form = $('#receive-specimen-form')
+        const send_result_form = $('#send-result-form')
+        btn_upload_receipt_modal.click(function(e) {
+            my_modal_title.text('Upload Receipt')
+            // switch ($(this).data('target')) {
+            //     case '#upload-receipt-form':
+            //         break;
+            //     case '#receive-specimen-form':
+            //         my_modal_title.text('Receive Specimen')
+            //         break;
+            //     case '#send-result-form':
+            //         my_modal_title.text('Send Result')
+            //         break;
+
+            //     default:
+            //         break;
+            // }
+            form_modal.modal('show')
+            $(`${$(this).data('target')}`).show();
+
+            console.log($(`${$(this).data('target')}`))
+        })
+        close_form_modal.click(function(e) {
+            $('form.show').removeClass('show')
+            form_modal.modal('toggle')
+            // modal_body.empty()
+            $('.modal-backdrop').hide();
         })
     })
 </script>

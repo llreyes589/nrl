@@ -19,7 +19,8 @@ class ProficiencyTestingApplication extends Model
         'receipt_path',
         'unboxing_video_path',
         'specimen_sent',
-        'verified_payment'
+        'verified_payment',
+        'result_path'
     ];
 
     public function users()
