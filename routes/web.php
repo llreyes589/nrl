@@ -85,5 +85,6 @@ Route::prefix('facility')->group(function () {
         Route::post('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveApplication'])->name('saveApplication');
         Route::put('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveReceipt'])->name('saveReceipt');
         Route::put('/proficiency-testing/{id}/receiveSpecimen', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'receiveSpecimen'])->name('receiveSpecimen');
+        Route::put('/proficiency-testing/{id}/saveResult', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveResult'])->name('saveResult');
     });
 });

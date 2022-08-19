@@ -29,11 +29,12 @@ if ($application)
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="my-modal-title"></h5>
-                <button class="close" data-dismiss="modal" id="close-form-modal" aria-label="Close">
+                <button class="close" id="close-form-modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" id="modal-body">
+                <!-- upload-receipt-form -->
                 <form method="POST" action="{{route('proficiency-testing.facility.saveReceipt', $pt->id)}}" enctype="multipart/form-data" id="upload-receipt-form" style="display:none;">
                     @csrf
                     @method("PUT")
@@ -53,6 +54,8 @@ if ($application)
                     </div>
                 </form>
 
+
+                <!-- receive-specimen-form -->
                 <form method="POST" action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" enctype="multipart/form-data" id="receive-specimen-form" style="display:none;">
                     @csrf
                     @method("PUT")
@@ -76,6 +79,26 @@ if ($application)
                         <div class="col-md-6 offset-md-4">
                             <button type="submit" class="btn btn-primary">
                                 Submit
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- send-result-form -->
+                <form method="POST" action="{{route('proficiency-testing.facility.saveResult', $pt->id)}}" enctype="multipart/form-data" id="send-result-form" style="display:none;" enctype="multipart/form-data">
+                    @csrf
+                    @method("PUT")
+                    <div class="form-group row">
+                        <label for="result" class="col-md-4 col-form-label text-md-right">{{ __('Result') }}</label>
+
+                        <div class="col-md-6">
+                            <input id="result" type="file" class="form-control-file" name="result" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                Send
                             </button>
                         </div>
                     </div>
@@ -105,6 +128,9 @@ if ($application)
                 @if($application->specimens()->latest('created_at')->first()->unboxing_video_path)
                 <span class="badge badge-pill badge-secondary">Specimen Received : {{$application->specimens()->latest('created_at')->first()->unboxing_video_path == 'accepted' ? 'Accepted' : 'Rejected'}}</span>
                 @endif
+                @if($application->result_path)
+                <span class="badge badge-pill badge-warning">Result sent</span>
+                @endif
                 @endif
                 <hr>
                 <div class="form-group">
@@ -128,13 +154,15 @@ if ($application)
                             <i class="fa fa-download fa-sm"></i> Download instructions
                         </a>
                         @endif
-                        <button class="dropdown-item btn btn-info" id="btn-upload-receipt-modal" type="button" data-toggle="modal" data-target="#upload-receipt-form"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
+                        <button class="dropdown-item btn btn-info" id="btn-upload-receipt-modal" type="button" data-target="#upload-receipt-form"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
                         @if($application->specimens()->latest('created_at')->first())
                         @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
-                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> Receive specimen</button>
+                        <button class="dropdown-item btn btn-info" id="btn-receive-specimen-modal" type="button" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> Receive specimen</button>
+                        @endif
+                        @if(!$application->result_path)
+                        <button class="dropdown-item btn btn-info" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Send result</button>
                         @endif
                         @endif
-                        <button class="dropdown-item btn btn-info" type="button" data-toggle="modal" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Send result</button>
                     </div>
                 </div>
                 @endif
@@ -258,34 +286,47 @@ if ($application)
         const close_form_modal = $('#close-form-modal')
         const modal_body = $('#modal-body')
         const btn_upload_receipt_modal = $('#btn-upload-receipt-modal')
+        const btn_receive_specimen_modal = $('#btn-receive-specimen-modal')
+        const btn_send_result_modal = $('#btn-send-result-modal')
+
+
         const my_modal_title = $('#my-modal-title')
         const upload_receipt_form = $('#upload-receipt-form')
         const receive_specimen_form = $('#receive-specimen-form')
         const send_result_form = $('#send-result-form')
+        let formShowed;
         btn_upload_receipt_modal.click(function(e) {
             my_modal_title.text('Upload Receipt')
-            // switch ($(this).data('target')) {
-            //     case '#upload-receipt-form':
-            //         break;
-            //     case '#receive-specimen-form':
-            //         my_modal_title.text('Receive Specimen')
-            //         break;
-            //     case '#send-result-form':
-            //         my_modal_title.text('Send Result')
-            //         break;
+            form_modal.modal({
+                backdrop: 'static',
+                keyboard: false
+            }, 'show')
+            formShowed = $(`${$(this).data('target')}`)
+            formShowed.show()
+        })
+        btn_receive_specimen_modal.click(function(e) {
+            my_modal_title.text('Receive Specimen')
+            form_modal.modal({
+                backdrop: 'static',
+                keyboard: false
+            }, 'show')
+            formShowed = $(`${$(this).data('target')}`)
+            formShowed.show()
 
-            //     default:
-            //         break;
-            // }
-            form_modal.modal('show')
-            $(`${$(this).data('target')}`).show();
+        })
+        btn_send_result_modal.click(function(e) {
+            my_modal_title.text('Send Result')
+            form_modal.modal({
+                backdrop: 'static',
+                keyboard: false
+            }, 'show')
+            formShowed = $(`${$(this).data('target')}`)
+            formShowed.show()
 
-            console.log($(`${$(this).data('target')}`))
         })
         close_form_modal.click(function(e) {
-            $('form.show').removeClass('show')
+            formShowed.hide()
             form_modal.modal('toggle')
-            // modal_body.empty()
             $('.modal-backdrop').hide();
         })
     })

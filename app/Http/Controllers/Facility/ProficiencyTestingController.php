@@ -63,4 +63,17 @@ class ProficiencyTestingController extends Controller
         \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens()->latest('created_at')->first()->update(['unboxing_video_path' => $path]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Specimen successfully received', 'classname' => 'alert-success']);
     }
+
+    public function saveResult($id)
+    {
+        if (\request()->file('result')) {
+
+            $path = \request()->file('result')->store('results');
+        } else {
+            $path = null;
+        }
+
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['result_path' => $path]);
+        return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Result sent successfully ', 'classname' => 'alert-success']);
+    }
 }
