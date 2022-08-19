@@ -61,6 +61,9 @@ NRL - Proficiency Testing Program
                             <span class="badge badge-pill badge-dark">Specimen Received: {{$pt->applications->where('user_id', Auth::id())->first()->specimens()->latest('created_at')->first()->unboxing_video_path === 'accepted' ? 'Accepted' : 'Rejected'}}</span>
 
                             @endif
+                            @if($pt->applications->where('user_id', Auth::id())->first()->result_path)
+                            <span class="badge badge-pill badge-warning">Result sent</span>
+                            @endif
                             @endif
                         </td>
 

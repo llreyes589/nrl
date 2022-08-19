@@ -7,7 +7,7 @@ NRL - Proficiency Testing Program Application
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"> PT Application <u>(SDTL-{{$pt->sdtl}} | Cycle-{{$pt->cycle}})</u></h1>
+    <h1 class="h3 mb-0 text-gray-800"> @role('admin'){{$application->user->name}} <br>@endrole PT Application <u>(SDTL-{{$pt->sdtl}} | Cycle-{{$pt->cycle}})</u></h1>
     <a href="{{route('proficiency-testing.facility.index')}}" class="btn btn-danger">Cancel</a>
 
 </div>
@@ -142,6 +142,7 @@ if ($application)
                     <input type="text" class="form-control" readonly value="{{$pt->cycle}}" />
                 </div>
                 <hr />
+                @role('Facility')
                 @if($application)
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -166,6 +167,7 @@ if ($application)
                     </div>
                 </div>
                 @endif
+                @endrole
             </div>
         </div>
 
@@ -176,7 +178,12 @@ if ($application)
                 <hr>
                 @if($application->receipt_path)
                 <p>Receipt</p>
-                <img src="/storage/{{$application->receipt_path}}" class="img img-fluid" alt="">
+                <img src="/storage/{{$application->receipt_path}}" class="img-fluid" alt="">
+                @endif
+                <hr>
+                @if($application->result_path)
+                <p>Result:</p>
+                <img src="/storage/{{$application->result_path}}" class="img-fluid" alt="">
                 @endif
             </div>
         </div>

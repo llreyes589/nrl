@@ -81,27 +81,24 @@
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('settings.index')}}">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Settings</span></a>
+            </li>
             @endcan
+            @endrole
             @role('verifier|encoder2')
             <li class="nav-item">
                 <a class="nav-link" href="{{route('facilities.index')}}">
                     <i class="fas fa-fw fa-building"></i>
                     <span>Facilities</span></a>
             </li>
-            @else
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('verifiers.facilities.index')}}">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>Facilities</span></a>
-            </li>
-            @endrole
 
             @endrole
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('settings.index')}}">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Settings</span></a>
-            </li>
+
+
+
             @role('Facility')
             <li class="nav-item">
                 <a class="nav-link" href="{{route('proficiency-testing.facility.index')}}">

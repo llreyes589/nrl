@@ -101,4 +101,13 @@ class ProficiencyTestingController extends Controller
         $application->update(['score' => \request()->score, 'scored_by' => \auth()->id(), 'scored_at' => \Carbon\Carbon::now()]);
         return redirect(route('proficiency-testing.applicants', $id))->with(['message' => 'Score saved successfully ', 'classname' => 'alert-success']);
     }
+    public function showApplication($id, $application_id)
+    {
+        $pt = ProficiencyTesting::find($id);
+        $application = ProficiencyTestingApplication::find($application_id);
+
+        return view('pt.apply', compact('pt', 'application'));
+        // $application->update(['score' => \request()->score, 'scored_by' => \auth()->id(), 'scored_at' => \Carbon\Carbon::now()]);
+        // return redirect(route('proficiency-testing.applicants', $id))->with(['message' => 'Score saved successfully ', 'classname' => 'alert-success']);
+    }
 }
