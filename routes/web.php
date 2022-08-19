@@ -75,6 +75,7 @@ Route::group(['middleware' => ['role:admin']], function () {
         Route::get('/proficiency-testing/{id}/applicants', [App\Http\Controllers\ProficiencyTestingController::class, 'applicants'])->name('applicants');
         Route::put('/proficiency-testing/{id}/applicants/{application_id}', [App\Http\Controllers\ProficiencyTestingController::class, 'sendSpecimen'])->name('applicants.sendSpecimen');
         Route::put('/proficiency-testing/{id}/applicants/{application_id}/verifyPayment', [App\Http\Controllers\ProficiencyTestingController::class, 'verifyPayment'])->name('applicants.verifyPayment');
+        Route::put('/proficiency-testing/{id}/applicants/{application_id}/saveScore', [App\Http\Controllers\ProficiencyTestingController::class, 'saveScore'])->name('saveScore');
     });
 });
 

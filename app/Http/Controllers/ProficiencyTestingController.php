@@ -91,4 +91,14 @@ class ProficiencyTestingController extends Controller
         $application->update(['verified_payment' => 1]);
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment verified successfully', 'classname' => 'alert-success']);
     }
+
+    public function saveScore($id, $application_id)
+    {
+        $application = ProficiencyTestingApplication::find($application_id);
+        $validated = \request()->validate([
+            'score' => 'required | numeric ',
+        ]);
+        $application->update(['score' => \request()->score, 'scored_by' => \auth()->id(), 'scored_at' => \Carbon\Carbon::now()]);
+        return redirect(route('proficiency-testing.applicants', $id))->with(['message' => 'Score saved successfully ', 'classname' => 'alert-success']);
+    }
 }
