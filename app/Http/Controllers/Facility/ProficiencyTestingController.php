@@ -35,7 +35,7 @@ class ProficiencyTestingController extends Controller
             'methamphetamine' => \request()->methamphetamine,
             'tetrahydrocannabinol' => \request()->tetrahydrocannabinol,
         ]);
-        return redirect(route('proficiency-testing.facility.index', $id))->with(['message' => 'Application successfully sent', 'classname' => 'alert-success']);
+        return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Application successfully sent', 'classname' => 'alert-success']);
     }
 
     public function saveReceipt($id)

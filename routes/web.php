@@ -43,6 +43,10 @@ Route::name('settings.')->group(function () {
 Route::prefix('verifier')->group(function () {
     Route::name('verifiers.facilities.')->group(function () {
         Route::group(['middleware' => ['auth']], function () {
+
+
+
+
             Route::get('/email/preview', [App\Http\Controllers\Verifier\FacilityController::class, 'emailPrev']);
             Route::get('/facilities', [App\Http\Controllers\Verifier\FacilityController::class, 'index'])->name('index');
             Route::post('/facilities', [App\Http\Controllers\Verifier\FacilityController::class, 'search'])->name('search');
@@ -54,6 +58,7 @@ Route::prefix('verifier')->group(function () {
             });
             Route::group(['middleware' => ['role:verifier']], function () {
                 Route::put('/facilities/{id}/certificate/{cert_id}/updateVerified', [App\Http\Controllers\Verifier\FacilityController::class, 'updateVerified'])->name('updateVerified');
+                Route::get('/proficiency-testing', [App\Http\Controllers\ProficiencyTestingController::class, 'index']);
             });
 
             Route::group(['middleware' => ['role:head']], function () {
@@ -69,7 +74,7 @@ Route::get('/certificate/{key}', [App\Http\Controllers\Verifier\FacilityControll
 
 // PT
 
-Route::group(['middleware' => ['role:admin']], function () {
+Route::group(['middleware' => ['role:admin|verifier|head']], function () {
     Route::resource('/proficiency-testing', App\Http\Controllers\ProficiencyTestingController::class);
     Route::name('proficiency-testing.')->group(function () {
         Route::get('/proficiency-testing/{id}/applicants', [App\Http\Controllers\ProficiencyTestingController::class, 'applicants'])->name('applicants');
@@ -78,16 +83,14 @@ Route::group(['middleware' => ['role:admin']], function () {
         Route::put('/proficiency-testing/{id}/applicants/{application_id}/saveScore', [App\Http\Controllers\ProficiencyTestingController::class, 'saveScore'])->name('saveScore');
         Route::get('/proficiency-testing/{id}/applicants/{application_id}/show', [App\Http\Controllers\ProficiencyTestingController::class, 'showApplication'])->name('applicants.showApplication');
     });
-    Route::name('ptApplication.')->group(function () {
+});
+Route::name('ptApplication.')->group(function () {
 
-        // Certificate Admin Side
-        // Create cert
-        Route::post('/proficiency-testing/{id}/applicants/{application_id}/certificate/create', [App\Http\Controllers\PtApplicationController::class, 'create_certificate'])->name('create_certificate');
-        Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/verify', [App\Http\Controllers\PtApplicationController::class, 'verify_certificate'])->name('verify_certificate');
-        Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/approve', [App\Http\Controllers\PtApplicationController::class, 'approve_certificate'])->name('approve_certificate');
-    });
-
-    // updateApproved
+    // Certificate Admin Side
+    // Create cert
+    Route::post('/proficiency-testing/{id}/applicants/{application_id}/certificate/create', [App\Http\Controllers\PtApplicationController::class, 'create_certificate'])->name('create_certificate')->middleware(['role:admin']);
+    Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/verify', [App\Http\Controllers\PtApplicationController::class, 'verify_certificate'])->name('verify_certificate')->middleware(['role:verifier']);
+    Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/approve', [App\Http\Controllers\PtApplicationController::class, 'approve_certificate'])->name('approve_certificate')->middleware(['role:head']);
 });
 
 Route::prefix('facility')->group(function () {

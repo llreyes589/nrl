@@ -88,14 +88,14 @@
             </li>
             @endcan
             @endrole
-            @role('verifier|encoder2')
+            @role('verifier|encoder2|head')
             <li class="nav-item">
-                <a class="nav-link" href="{{route('facilities.index')}}">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>Facilities</span></a>
+                <a class="nav-link" href="/proficiency-testing">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Proficiency Testings</span></a>
             </li>
-
             @endrole
+
 
 
 

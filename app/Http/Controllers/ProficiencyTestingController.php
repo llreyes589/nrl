@@ -11,6 +11,12 @@ use Illuminate\Database\QueryException;
 
 class ProficiencyTestingController extends Controller
 {
+    public function __construct()
+    {
+
+        //Multiple exclude
+        // $this->middleware('log')->except(['index','privacy']);
+    }
     public function index()
     {
         $pts = ProficiencyTesting::all();

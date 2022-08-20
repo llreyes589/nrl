@@ -191,42 +191,63 @@ if ($application)
                         Actions
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <!-- download instruction -->
                         @if($pt->instruction_file_path)
-
                         <a href="/storage/{{$pt->instruction_file_path}}" class="dropdown-item btn btn-success" download>
                             <i class="fa fa-download fa-sm"></i> Download instructions
                         </a>
                         @endif
+
+                        <!-- upload receipt -->
                         <button class="dropdown-item btn btn-info" id="btn-upload-receipt-modal" type="button" data-target="#upload-receipt-form"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
+
+                        <!-- specimen -->
                         @if($application->specimens()->latest('created_at')->first())
                         @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
                         <button class="dropdown-item btn btn-info" id="btn-receive-specimen-modal" type="button" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> Receive specimen</button>
-                        @endif
-                        @if(!$application->result_path)
+                        @else
+
+                        @if($application->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && !$application->result_path)
                         <button class="dropdown-item btn btn-info" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Send result</button>
                         @endif
+                        @endif
                         @if($application->certificate)
+                        @if($application->certificate->approved_by)
                         <button class="dropdown-item btn btn-success" id="btn-view-certificate-modal" type="submit" data-target="#view-cert-frame"><i class="fa fa-certificate fa-sm"></i> View Certificate</button>
+                        @endif
                         @endif
                         @endif
                     </div>
                 </div>
                 @endif
                 @else
+                @if($application->certificate)
+                @if(!$application->certificate->prepared_by)
                 <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
+                @endif
 
+                @can('verify')
+                @if(!$application->certificate->verified_by)
                 <form method="post" action="{{route('ptApplication.verify_certificate',['id' => $pt->id, 'application_id' => $application->id])}}">
                     @csrf
                     @method('PUT')
                     <button class="btn btn-secondary" id="btn-verify-certificate-modal" type="submit" data-target="#verify-certificate-form">Verify Certificate</button>
                 </form>
+                @endif
+                @endcan
+
+                @can('approve')
+                @if(!$application->certificate->approved_by)
                 <form method="post" action="{{route('ptApplication.approve_certificate',['id' => $pt->id, 'application_id' => $application->id])}}">
                     @csrf
                     @method('PUT')
                     <button class="btn btn-success" id="btn-approve-certificate-modal" type="submit" data-target="#approve-certificate-form">Approve Certificate</button>
                 </form>
-                @if($application->certificate)
+                @endif
+                @endcan
+                @if($application->certificate->approved_by)
                 <button class="btn btn-success" id="btn-view-certificate-modal" type="submit" data-target="#view-cert-frame">View Certificate</button>
+                @endif
                 @endif
                 @endrole
             </div>

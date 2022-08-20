@@ -73,8 +73,10 @@ NRL - Proficiency Testing Program
                         <td>{{$pt->created_at}}</td>
                         <td>
                             <!-- admin role -->
-                            @role('admin')
+                            @role('admin|verifier|head')
+                            @can('edit user')
                             <a href="{{route('proficiency-testing.edit', $pt->id)}}" class="btn btn-info">Edit</a>
+                            @endcan
                             <a href="{{route('proficiency-testing.applicants', $pt->id)}}" class="btn btn-primary">Applicants</a>
                             @endrole
 
