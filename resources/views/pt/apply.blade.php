@@ -25,7 +25,7 @@ if ($application)
 
 <!-- MODAL -->
 <div class="modal" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true" id="form-modal">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="my-modal-title"></h5>
@@ -103,6 +103,46 @@ if ($application)
                         </div>
                     </div>
                 </form>
+
+
+                @if($application)
+                <!-- Prepare certificate -->
+
+                <form method="post" action="{{route('ptApplication.create_certificate', ['id' => $pt->id, 'application_id' => $application->id])}}" id="prepare-certificate-form" style="display:none;">
+                    @csrf
+                    <div class="form-group">
+                        <label for="or_no">OR Number:</label>
+
+                        <input id="or_no" class="form-control" type="text" name="or_no" placeholder="OR Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="or_no">Certificate Number:</label>
+                        <input id="or_no" class="form-control" type="text" name="certificate_no" placeholder="Certificate Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="validity">Validity</label>
+                        <input id="validity" class="form-control" type="date" name="validity" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="performance">Performance</label>
+                        <select id="performance" class="custom-select" name="performance" required>
+                            <option value="">--Please select performance here--</option>
+                            <option value="A">Acceptable</option>
+                            <option value="E">Excellent</option>
+                            <option value="HS">Highly Satisfactory</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-sm" type="submit">Add</button>
+
+                </form>
+
+                @if($application->certificate)
+                <!-- View certificate -->
+                <div class="embed-responsive embed-responsive-16by9" id="view-cert-frame" style="display:none;">
+                    <iframe class="embed-responsive-item" allowfullscreen src="{{route('certificate', $application->certificate->key)}}"></iframe>
+                </div>
+                @endif
+                @endif
             </div>
 
         </div>
@@ -125,8 +165,10 @@ if ($application)
                 @if($application->specimens()->latest('created_at')->first())
                 <span class="badge badge-pill badge-info">Specimen Sent</span>
                 @endif
+                @if(count($application->specimens) > 0)
                 @if($application->specimens()->latest('created_at')->first()->unboxing_video_path)
                 <span class="badge badge-pill badge-secondary">Specimen Received : {{$application->specimens()->latest('created_at')->first()->unboxing_video_path == 'accepted' ? 'Accepted' : 'Rejected'}}</span>
+                @endif
                 @endif
                 @if($application->result_path)
                 <span class="badge badge-pill badge-warning">Result sent</span>
@@ -163,9 +205,28 @@ if ($application)
                         @if(!$application->result_path)
                         <button class="dropdown-item btn btn-info" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Send result</button>
                         @endif
+                        @if($application->certificate)
+                        <button class="dropdown-item btn btn-success" id="btn-view-certificate-modal" type="submit" data-target="#view-cert-frame"><i class="fa fa-certificate fa-sm"></i> View Certificate</button>
+                        @endif
                         @endif
                     </div>
                 </div>
+                @endif
+                @else
+                <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
+
+                <form method="post" action="{{route('ptApplication.verify_certificate',['id' => $pt->id, 'application_id' => $application->id])}}">
+                    @csrf
+                    @method('PUT')
+                    <button class="btn btn-secondary" id="btn-verify-certificate-modal" type="submit" data-target="#verify-certificate-form">Verify Certificate</button>
+                </form>
+                <form method="post" action="{{route('ptApplication.approve_certificate',['id' => $pt->id, 'application_id' => $application->id])}}">
+                    @csrf
+                    @method('PUT')
+                    <button class="btn btn-success" id="btn-approve-certificate-modal" type="submit" data-target="#approve-certificate-form">Approve Certificate</button>
+                </form>
+                @if($application->certificate)
+                <button class="btn btn-success" id="btn-view-certificate-modal" type="submit" data-target="#view-cert-frame">View Certificate</button>
                 @endif
                 @endrole
             </div>
@@ -179,8 +240,8 @@ if ($application)
                 @if($application->receipt_path)
                 <p>Receipt</p>
                 <img src="/storage/{{$application->receipt_path}}" class="img-fluid" alt="">
-                @endif
                 <hr>
+                @endif
                 @if($application->result_path)
                 <p>Result:</p>
                 <img src="/storage/{{$application->result_path}}" class="img-fluid" alt="">
@@ -295,12 +356,12 @@ if ($application)
         const btn_upload_receipt_modal = $('#btn-upload-receipt-modal')
         const btn_receive_specimen_modal = $('#btn-receive-specimen-modal')
         const btn_send_result_modal = $('#btn-send-result-modal')
-
+        const btn_prepare_certificate_modal = $('#btn-prepare-certificate-modal')
+        const btn_view_certificate_modal = $('#btn-view-certificate-modal')
 
         const my_modal_title = $('#my-modal-title')
         const upload_receipt_form = $('#upload-receipt-form')
-        const receive_specimen_form = $('#receive-specimen-form')
-        const send_result_form = $('#send-result-form')
+
         let formShowed;
         btn_upload_receipt_modal.click(function(e) {
             my_modal_title.text('Upload Receipt')
@@ -329,6 +390,28 @@ if ($application)
             }, 'show')
             formShowed = $(`${$(this).data('target')}`)
             formShowed.show()
+
+        })
+        btn_prepare_certificate_modal.click(function(e) {
+            my_modal_title.text('Prepare Certificate')
+            form_modal.modal({
+                backdrop: 'static',
+                keyboard: false
+            }, 'show')
+            formShowed = $(`${$(this).data('target')}`)
+            formShowed.show()
+
+        })
+        btn_view_certificate_modal.click(function(e) {
+            my_modal_title.text('View Certificate')
+            form_modal.modal({
+                backdrop: 'static',
+                keyboard: false
+            }, 'show')
+            formShowed = $(`${$(this).data('target')}`)
+
+            formShowed.show()
+            console.log(formShowed)
 
         })
         close_form_modal.click(function(e) {

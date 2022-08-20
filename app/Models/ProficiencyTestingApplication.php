@@ -44,4 +44,8 @@ class ProficiencyTestingApplication extends Model
     {
         return $this->hasMany('\App\Models\Specimen', 'proficiency_testing_application_id', 'id');
     }
+    public function certificate()
+    {
+        return $this->hasOne('\App\Models\Certificate', 'proficiency_testing_application_id', 'id');
+    }
 }

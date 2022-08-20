@@ -12,34 +12,43 @@ class Certificate extends Model
     use HasFactory;
 
     protected $fillable = [
-        'facility_id', 
+        'facility_id',
         'or_no',
         'validity',
         'certificate_no',
-        'performance', 
-        'prepared_by', 
-        'prepared_at', 
-        'verified_by', 
-        'verified_at', 
+        'performance',
+        'prepared_by',
+        'prepared_at',
+        'verified_by',
+        'verified_at',
         'approved_by',
-        'approved_at', 
-        'facility_verified_by', 
-        'facility_verified_at', 
-        'issued_by', 
+        'approved_at',
+        'facility_verified_by',
+        'facility_verified_at',
+        'issued_by',
         'issued_at'
     ];
 
-    function facility(){
+    function facility()
+    {
         return $this->belongsTo(Facility::class);
     }
 
-    function prepared_by_details(){
+    function prepared_by_details()
+    {
         return $this->belongsTo('\App\Models\User', 'prepared_by', 'id');
     }
-    function verified_by_details(){
+    function verified_by_details()
+    {
         return $this->belongsTo('\App\Models\User', 'verified_by', 'id');
     }
-    function approved_by_details(){
+    function approved_by_details()
+    {
         return $this->belongsTo('\App\Models\User', 'approved_by', 'id');
+    }
+
+    function ptApplication()
+    {
+        return $this->belongsTo('\App\Models\ProficiencyTestingApplication', 'proficiency_testing_application_id', 'id');
     }
 }

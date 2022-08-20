@@ -11,27 +11,34 @@ class Facility extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'accreditation_no', 
-        'name', 
-        'address', 
-        'city', 
-        'region_id', 
-        'head_of_lab', 
-        'contact_no', 
-        'email', 
-        'lab_email', 
-        'or_no', 
+        'accreditation_no',
+        'name',
+        'address',
+        'city',
+        'region_id',
+        'head_of_lab',
+        'contact_no',
+        'email',
+        'lab_email',
+        'or_no',
         'created_by',
         'updated_by',
         'deleted_by',
         'deleted_at',
     ];
 
-    function certificate(){
+    function certificate()
+    {
         return $this->hasOne(Certificate::class)->orderBy('created_at', 'desc');
     }
 
-    function region_details(){
+    function region_details()
+    {
         return $this->hasOne('App\Models\Region', 'id', 'region_id');
+    }
+
+    function credential()
+    {
+        return $this->hasOne('App\Models\User', 'user_id', 'id');
     }
 }

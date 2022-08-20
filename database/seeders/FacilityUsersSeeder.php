@@ -50,7 +50,7 @@ class FacilityUsersSeeder extends Seeder
                     'username' => $username,
                     'password' => bcrypt('facility1234')
                 ]);
-
+                Facility::find($value->id)->update(['user_id' => $user->id]);
                 // $user->assignRole($facility);
             }
         }

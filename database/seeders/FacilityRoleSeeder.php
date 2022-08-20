@@ -24,7 +24,7 @@ class FacilityRoleSeeder extends Seeder
         $facility = Role::create(['name' => 'Facility']);
         $facility->givePermissionTo('apply pt');
         $facility->givePermissionTo('send video');
-        $users = \App\Models\User::all();
+        $users = \App\Models\User::where('username', '!=', null)->get();
         foreach ($users as $key => $value) {
             if ($value->username) {
                 $users[$key]->assignRole($facility);

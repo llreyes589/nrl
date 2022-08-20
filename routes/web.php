@@ -78,6 +78,16 @@ Route::group(['middleware' => ['role:admin']], function () {
         Route::put('/proficiency-testing/{id}/applicants/{application_id}/saveScore', [App\Http\Controllers\ProficiencyTestingController::class, 'saveScore'])->name('saveScore');
         Route::get('/proficiency-testing/{id}/applicants/{application_id}/show', [App\Http\Controllers\ProficiencyTestingController::class, 'showApplication'])->name('applicants.showApplication');
     });
+    Route::name('ptApplication.')->group(function () {
+
+        // Certificate Admin Side
+        // Create cert
+        Route::post('/proficiency-testing/{id}/applicants/{application_id}/certificate/create', [App\Http\Controllers\PtApplicationController::class, 'create_certificate'])->name('create_certificate');
+        Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/verify', [App\Http\Controllers\PtApplicationController::class, 'verify_certificate'])->name('verify_certificate');
+        Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/approve', [App\Http\Controllers\PtApplicationController::class, 'approve_certificate'])->name('approve_certificate');
+    });
+
+    // updateApproved
 });
 
 Route::prefix('facility')->group(function () {

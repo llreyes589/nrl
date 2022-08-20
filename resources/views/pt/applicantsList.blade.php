@@ -83,8 +83,10 @@ NRL - Proficiency Testing Applications List
                             <span class="badge badge-pill badge-info">Specimen sent</span>
                             @endif
 
+                            @if(count($app->specimens) > 0)
                             @if($app->specimens()->latest('created_at')->first()->unboxing_video_path)
                             <span class="badge badge-pill badge-secondary">Specimen Received : {{$app->specimens()->latest('created_at')->first()->unboxing_video_path === 'accepted' ? 'Accepted' : 'Rejected'}}</span>
+                            @endif
                             @endif
                             @if($app->result_path)
                             <span class="badge badge-pill badge-warning">Result sent</span>

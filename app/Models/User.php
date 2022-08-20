@@ -49,4 +49,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('\App\Models\ProficiencyTestingApplication', 'user_id', 'id');
     }
+
+    function certificate()
+    {
+        return $this->hasOne(Certificate::class)->orderBy('created_at', 'desc');
+    }
+
+    function region_details()
+    {
+        return $this->hasOne('App\Models\Region', 'id', 'region_id');
+    }
 }
