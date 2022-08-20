@@ -93,13 +93,15 @@ Route::name('ptApplication.')->group(function () {
     Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/approve', [App\Http\Controllers\PtApplicationController::class, 'approve_certificate'])->name('approve_certificate')->middleware(['role:head']);
 });
 
-Route::prefix('facility')->group(function () {
-    Route::name('proficiency-testing.facility.')->group(function () {
-        Route::get('/proficiency-testing', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'index'])->name('index');
-        Route::get('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'apply'])->name('apply');
-        Route::post('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveApplication'])->name('saveApplication');
-        Route::put('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveReceipt'])->name('saveReceipt');
-        Route::put('/proficiency-testing/{id}/receiveSpecimen', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'receiveSpecimen'])->name('receiveSpecimen');
-        Route::put('/proficiency-testing/{id}/saveResult', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveResult'])->name('saveResult');
+Route::group(['middleware' => ['role:Facility']], function () {
+    Route::prefix('facility')->group(function () {
+        Route::name('proficiency-testing.facility.')->group(function () {
+            Route::get('/proficiency-testing', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'index'])->name('index');
+            Route::get('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'apply'])->name('apply');
+            Route::post('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveApplication'])->name('saveApplication');
+            Route::put('/proficiency-testing/{id}', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveReceipt'])->name('saveReceipt');
+            Route::put('/proficiency-testing/{id}/receiveSpecimen', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'receiveSpecimen'])->name('receiveSpecimen');
+            Route::put('/proficiency-testing/{id}/saveResult', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveResult'])->name('saveResult');
+        });
     });
 });

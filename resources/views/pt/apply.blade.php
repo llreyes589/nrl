@@ -8,7 +8,11 @@ NRL - Proficiency Testing Program Application
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800"> @role('admin'){{$application->user->name}} <br>@endrole PT Application <u>(SDTL-{{$pt->sdtl}} | Cycle-{{$pt->cycle}})</u></h1>
+    @role('Facility')
     <a href="{{route('proficiency-testing.facility.index')}}" class="btn btn-danger">Cancel</a>
+    @else
+    <a href="{{route('proficiency-testing.applicants', $pt->id)}}" class="btn btn-danger">Cancel</a>
+    @endrole
 
 </div>
 @if(Session::has('message'))
@@ -221,10 +225,8 @@ if ($application)
                 </div>
                 @endif
                 @else
+
                 @if($application->certificate)
-                @if(!$application->certificate->prepared_by)
-                <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
-                @endif
 
                 @can('verify')
                 @if(!$application->certificate->verified_by)
@@ -248,6 +250,8 @@ if ($application)
                 @if($application->certificate->approved_by)
                 <button class="btn btn-success" id="btn-view-certificate-modal" type="submit" data-target="#view-cert-frame">View Certificate</button>
                 @endif
+                @else
+                <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
                 @endif
                 @endrole
             </div>

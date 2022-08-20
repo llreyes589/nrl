@@ -128,7 +128,7 @@ NRL - Proficiency Testing Applications List
                                         <button class="dropdown-item btn btn-info" type="submit"><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
                                     </form>
                                     @else
-                                    @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && !$app->score)
+                                    @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && !$app->score)
 
                                     <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score</button>
                                     @endif
