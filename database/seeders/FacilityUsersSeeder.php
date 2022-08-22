@@ -45,7 +45,7 @@ class FacilityUsersSeeder extends Seeder
             if (!$exists) {
 
                 $user = User::create([
-                    'name' => $value->name,
+                    'name' => utf8_decode($value->name),
                     'email' => $faker->email(),
                     'username' => $username,
                     'password' => bcrypt('facility1234')
