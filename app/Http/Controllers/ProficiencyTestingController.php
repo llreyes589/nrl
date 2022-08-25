@@ -94,7 +94,7 @@ class ProficiencyTestingController extends Controller
     public function verifyPayment($id, $application_id)
     {
         $application = ProficiencyTestingApplication::find($application_id);
-        $application->update(['verified_payment' => 1]);
+        $application->update(['verified_payment' => 1, 'verified_payment_at' => \Carbon\Carbon::now()]);
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment verified successfully', 'classname' => 'alert-success']);
     }
 

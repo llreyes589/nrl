@@ -58,7 +58,8 @@ if ($application)
                     </div>
                 </form>
 
-
+                @if($application)
+                @if(count($application->specimens) > 0)
                 <!-- receive-specimen-form -->
                 <form method="POST" action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" enctype="multipart/form-data" id="receive-specimen-form" style="display:none;">
                     @csrf
@@ -103,6 +104,8 @@ if ($application)
 
 
                 </form>
+                @endif
+                @endif
 
                 <!-- send-result-form -->
                 <form method="POST" action="{{route('proficiency-testing.facility.saveResult', $pt->id)}}" enctype="multipart/form-data" id="send-result-form" style="display:none;" enctype="multipart/form-data">
@@ -126,6 +129,7 @@ if ($application)
 
 
                 @if($application)
+                @role('admin')
                 <!-- Prepare certificate -->
 
                 <form method="post" action="{{route('ptApplication.create_certificate', ['id' => $pt->id, 'application_id' => $application->id])}}" id="prepare-certificate-form" style="display:none;">
@@ -155,6 +159,7 @@ if ($application)
                     <button class="btn btn-primary btn-sm" type="submit">Add</button>
 
                 </form>
+                @endrole
 
                 @if($application->certificate)
                 <!-- View certificate -->
@@ -177,23 +182,7 @@ if ($application)
         <div class="card">
             <div class="card-body">
                 <h4 for="cycle">PT Details</h4>
-                @if($application)
-                <span class="badge badge-pill badge-success">Applied</span>
-                @if($application->receipt_path)
-                <span class="badge badge-pill badge-primary">Receipt Uploaded</span>
-                @endif
-                @if($application->specimens()->latest('created_at')->first())
-                <span class="badge badge-pill badge-info">Specimen Sent</span>
-                @endif
-                @if(count($application->specimens) > 0)
-                @if($application->specimens()->latest('created_at')->first()->unboxing_video_path)
-                <span class="badge badge-pill badge-secondary">Specimen Received : {{$application->specimens()->latest('created_at')->first()->unboxing_video_path == 'accepted' ? 'Accepted' : 'Rejected'}}</span>
-                @endif
-                @endif
-                @if($application->result_path)
-                <span class="badge badge-pill badge-warning">Result sent</span>
-                @endif
-                @endif
+
                 <hr>
                 <div class="form-group">
                     <label for="sdtl">SDTL</label>
@@ -267,7 +256,9 @@ if ($application)
                 <button class="btn btn-success" id="btn-view-certificate-modal" type="submit" data-target="#view-cert-frame">View Certificate</button>
                 @endif
                 @else
+                @role('admin')
                 <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
+                @endrole
                 @endif
                 @endrole
             </div>
@@ -294,6 +285,88 @@ if ($application)
     <div class="col-md col-sm-12">
         <div class="card">
             <div class="card-body">
+                @if($application)
+                <!-- Timeline -->
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-8 col-sm-12 ">
+                        <h4>Application History</h4>
+                        <hr>
+                        <ul class="timeline">
+                            @if($application->certificate)
+                            @if($application->certificate->approved_by)
+                            <li class="text-info">
+                                <u>Certificate Approved</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->certificate->approved_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Certificate was approved on {{\Carbon\Carbon::parse($application->certificate->approved_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            @if($application->certificate->verified_by)
+                            <li class="text-info">
+                                <u>Certificate Verified</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->certificate->verified_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Certificate was verified on {{\Carbon\Carbon::parse($application->certificate->verified_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            <li class="text-info">
+                                <u>Certificate Created</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->certificate->prepared_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Certificate was created on {{\Carbon\Carbon::parse($application->certificate->prepared_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            @if($application->score)
+                            <li class="text-info">
+                                <u>Added Score</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->scored_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Scored {{$application->score}} on {{\Carbon\Carbon::parse($application->scored_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            @if($application->result_path)
+                            <li class="text-info">
+                                <u>Result sent</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->result_uploaded_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Result was uploaded on {{\Carbon\Carbon::parse($application->result_uploaded_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            @if(count($application->specimens) > 0)
+                            <?php
+                            $specimens = $application->specimens()->orderBy('created_at', 'desc')->get();
+                            $firstSpecimen = $application->specimens()->first();
+                            ?>
+                            @foreach($specimens as $specimen)
+                            @if($specimen->unboxing_video_path)
+                            <li class="text-info">
+                                <u>@if($specimen->id != $firstSpecimen->id) Resent @endif Specimen Received</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($specimen->updated_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">@if($specimen->id != $firstSpecimen->id) Resent @endif Specimen was {{$specimen->unboxing_video_path == 'accepted' ? 'Accepted' : 'Rejected'}} on {{\Carbon\Carbon::parse($specimen->created_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            <li class="text-info">
+                                <u>Specimen @if($specimen->id != $firstSpecimen->id) Resent @else Sent @endif</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($specimen->created_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Specimen was @if($specimen->id != $firstSpecimen->id) Resent @else Sent @endif on {{\Carbon\Carbon::parse($specimen->created_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endforeach
+
+                            @endif
+
+                            @if($application->receipt_path)
+                            <li class="text-info">
+                                <u>Receipt Uploaded</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->receipt_uploaded_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Receipt was uploaded on {{\Carbon\Carbon::parse($application->receipt_uploaded_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            <li class="text-info">
+                                <u>Applied</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->created_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Applied on {{\Carbon\Carbon::parse($application->created_at)->toDayDateTimeString()}}</p>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+                @endif
                 <form method="post" id='form' action="">
                     @csrf
                     <h4 for="cycle">Test Method Used</h4>

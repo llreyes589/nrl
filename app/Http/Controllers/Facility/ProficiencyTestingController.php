@@ -47,7 +47,7 @@ class ProficiencyTestingController extends Controller
             $path = '';
         }
 
-        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['receipt_path' => $path]);
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['receipt_path' => $path, 'receipt_uploaded_at' => \Carbon\Carbon::now()]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Receipt successfully submitted', 'classname' => 'alert-success']);
     }
 
@@ -73,7 +73,7 @@ class ProficiencyTestingController extends Controller
             $path = null;
         }
 
-        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['result_path' => $path]);
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['result_path' => $path, 'result_uploaded_at' => \Carbon\Carbon::now()]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Result sent successfully ', 'classname' => 'alert-success']);
     }
 }

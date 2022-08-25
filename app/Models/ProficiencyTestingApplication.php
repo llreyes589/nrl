@@ -23,7 +23,10 @@ class ProficiencyTestingApplication extends Model
         'result_path',
         'score',
         'scored_by',
-        'scored_at'
+        'scored_at',
+        'receipt_uploaded_at',
+        'result_uploaded_at',
+        'verified_payment_at'
     ];
 
     public function users()
