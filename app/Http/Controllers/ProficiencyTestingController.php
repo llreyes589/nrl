@@ -87,7 +87,7 @@ class ProficiencyTestingController extends Controller
     {
 
         $application = ProficiencyTestingApplication::find($application_id);
-        $application->specimens()->create(['sent_by' => auth()->id()]);
+        $application->specimens()->create(['sent_by' => auth()->id(), 'courier' => \request()->courier, 'tracking_number' => \request()->tracking_number]);
         // $application->update(['specimen_sent' => 1]);
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Specimen sent successfully', 'classname' => 'alert-success']);
     }

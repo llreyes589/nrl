@@ -18,10 +18,16 @@ NRL - Proficiency Testing Applications List
 
 <!-- Modal -->
 <div id="custom-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog " role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal_title"></h3>
+                <button class="close" id="close_form_modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row" id="score_form_container" style="display: none;">
 
                     <div class="col-md-10 col-sm-12">
                         <h3>Result submitted:</h3>
@@ -45,7 +51,23 @@ NRL - Proficiency Testing Applications List
                         </form>
                     </div>
                 </div>
+                <div id="specimen_form_container" style="display: none;">
 
+                    <form action="" method="post" id="specimen_form">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="form-group">
+                            <label for="courier">Courier:</label>
+                            <input id="courier" class="form-control" type="text" name="courier" placeholder="Enter courier" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="courier">Tracking number:</label>
+                            <input id="courier" class="form-control" type="text" name="tracking_number" placeholder="Enter tracking number" required />
+                        </div>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -113,20 +135,12 @@ NRL - Proficiency Testing Applications List
                                     @endif
                                     <a href="/storage/{{$app->receipt_path}}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
                                     @if( $app->verified_payment != 0)
-                                    @if(!$app->specimens()->latest('created_at')->first() ) <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
-                                        @csrf
-                                        @method('PUT')
-
-                                        <button class="dropdown-item btn btn-info" type="submit"><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
-                                    </form>
+                                    @if(!$app->specimens()->latest('created_at')->first() )
+                                    <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
                                     @else
                                     @if($app->specimens()->latest('created_at')->first()->unboxing_video_path != 'accepted' && $app->specimens()->latest('created_at')->first()->unboxing_video_path != null)
-                                    <form action="{{route('proficiency-testing.applicants.sendSpecimen', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
-                                        @csrf
-                                        @method('PUT')
+                                    <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
 
-                                        <button class="dropdown-item btn btn-info" type="submit"><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
-                                    </form>
                                     @else
                                     @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && !$app->score)
 
@@ -158,13 +172,38 @@ NRL - Proficiency Testing Applications List
 @section('javascript')
 <script>
     const add_score_form = $('#add_score_form')
+    const specimen_form = $('#specimen_form')
+    const score_form_container = $('#score_form_container')
+    const specimen_form_container = $('#specimen_form_container')
     const result_path = $('#result_path')
+    const close_form_modal = $('#close_form_modal')
+    const modal_title = $('#modal_title')
+    const modal_dialog = $('#modal-dialog')
+    let formShowed
     $('#pt_table').DataTable()
     const modal = $('#custom-modal');
     const handleAddScore = function(pt_id, id, app_result_path) {
         modal.modal()
+        modal_dialog.addClass('modal-xl')
+        score_form_container.show()
+        formShowed = score_form_container
         add_score_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}/saveScore`);
         result_path.attr('src', `/storage/${app_result_path}`)
     }
+    const handleSendSpecimen = function(pt_id, id) {
+        modal.modal()
+        modal_dialog.addClass('modal-sm')
+        modal_title.text('Send Specimen')
+        specimen_form_container.show()
+        formShowed = specimen_form_container
+        specimen_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}`);
+    }
+
+    close_form_modal.click(function(e) {
+        modal_title.text('')
+        modal.modal('toggle')
+        formShowed.hide()
+        $('.modal-backdrop').hide();
+    })
 </script>
 @endsection

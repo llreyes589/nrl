@@ -72,6 +72,11 @@
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Proficiency Testings</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('settings.index')}}">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Settings</span></a>
+            </li>
             @else
             <!-- Divider -->
             <hr class="sidebar-divider">

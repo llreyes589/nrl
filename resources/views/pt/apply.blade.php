@@ -63,29 +63,45 @@ if ($application)
                 <form method="POST" action="{{route('proficiency-testing.facility.receiveSpecimen', $pt->id)}}" enctype="multipart/form-data" id="receive-specimen-form" style="display:none;">
                     @csrf
                     @method("PUT")
-                    <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="accept" name="status" value="accept" required>
-                        <label class="custom-control-label" for="accept">Accept</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="reject" name="status" value="reject" required>
-                        <label class="custom-control-label" for="reject">Reject</label>
-                    </div>
-                    <hr>
-                    <div class="form-group row" id="unboxing_video_path_container" style="display: none;">
-                        <label for="unboxing_video_path" class="col-md-4 col-form-label text-md-right">{{ __('Attach Video/Image') }}</label>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                                <label for="courier">Courier:</label>
+                                <div id="courier" class="form-control"> {{$application->specimens()->latest('created_at')->first()->courier}}</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="tracking_number">Tracking Number:</label>
+                                <div id="tracking_number" class="form-control"> {{$application->specimens()->latest('created_at')->first()->tracking_number}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md col-sm-12">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="accept" name="status" value="accept" required>
+                                <label class="custom-control-label" for="accept">Accept</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="reject" name="status" value="reject" required>
+                                <label class="custom-control-label" for="reject">Reject</label>
+                            </div>
+                            <hr>
+                            <div class="form-group row" id="unboxing_video_path_container" style="display: none;">
+                                <label for="unboxing_video_path" class="col-md-4 col-form-label text-md-right">{{ __('Attach Video/Image') }}</label>
 
-                        <div class="col-md-6">
-                            <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path">
+                                <div class="col-md-6">
+                                    <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path">
+                                </div>
+                            </div>
+                            <div class="form-group row mb-0">
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row mb-0">
-                        <div class="col-md-6 offset-md-4">
-                            <button type="submit" class="btn btn-primary">
-                                Submit
-                            </button>
-                        </div>
-                    </div>
+
+
                 </form>
 
                 <!-- send-result-form -->
@@ -208,11 +224,11 @@ if ($application)
                         <!-- specimen -->
                         @if($application->specimens()->latest('created_at')->first())
                         @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
-                        <button class="dropdown-item btn btn-info" id="btn-receive-specimen-modal" type="button" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> Receive specimen</button>
+                        <button class="dropdown-item btn btn-info" id="btn-receive-specimen-modal" type="button" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> View/Receive specimen</button>
                         @else
 
                         @if($application->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && !$application->result_path)
-                        <button class="dropdown-item btn btn-info" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Send result</button>
+                        <button class="dropdown-item btn btn-info" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Submit result</button>
                         @endif
                         @endif
                         @if($application->certificate)
@@ -436,7 +452,6 @@ if ($application)
             formShowed = $(`${$(this).data('target')}`)
 
             formShowed.show()
-            console.log(formShowed)
 
         })
         close_form_modal.click(function(e) {

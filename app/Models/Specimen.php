@@ -12,6 +12,8 @@ class Specimen extends Model
     protected $fillable = [
         'proficiency_testing_application_id',
         'unboxing_video_path',
-        'sent_by'
+        'sent_by',
+        'courier',
+        'tracking_number'
     ];
 }
