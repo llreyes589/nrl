@@ -102,7 +102,7 @@ class ProficiencyTestingController extends Controller
     {
         $application = ProficiencyTestingApplication::find($application_id);
         $validated = \request()->validate([
-            'score' => 'required | numeric ',
+            'score' => 'required | numeric | between: 0,20',
         ]);
         $application->update(['score' => \request()->score, 'scored_by' => \auth()->id(), 'scored_at' => \Carbon\Carbon::now()]);
         return redirect(route('proficiency-testing.applicants', $id))->with(['message' => 'Score saved successfully ', 'classname' => 'alert-success']);

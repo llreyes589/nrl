@@ -131,7 +131,10 @@ if ($application)
                 @if($application)
                 @role('admin')
                 <!-- Prepare certificate -->
+                <?php
+                $score = new \App\Library\Scoring($application->score);
 
+                ?>
                 <form method="post" action="{{route('ptApplication.create_certificate', ['id' => $pt->id, 'application_id' => $application->id])}}" id="prepare-certificate-form" style="display:none;">
                     @csrf
                     <div class="form-group">
@@ -148,13 +151,10 @@ if ($application)
                         <input id="validity" class="form-control" type="date" name="validity" required>
                     </div>
                     <div class="form-group">
-                        <label for="performance">Performance</label>
-                        <select id="performance" class="custom-select" name="performance" required>
-                            <option value="">--Please select performance here--</option>
-                            <option value="A">Acceptable</option>
-                            <option value="E">Excellent</option>
-                            <option value="HS">Highly Satisfactory</option>
-                        </select>
+                        <label for="performance">Performance (Score: {{$score->get_wrong_answers()}}):</label>
+
+                        <p class="form-control">{{$score->get_performance()[1]}}</p>
+
                     </div>
                     <button class="btn btn-primary btn-sm" type="submit">Add</button>
 
@@ -257,10 +257,11 @@ if ($application)
                 @endif
                 @else
                 @role('admin')
-                <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
-                @endrole
-                @endif
-                @endrole
+                @if($application->score < 9) <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
+                    @endif
+                    @endrole
+                    @endif
+                    @endrole
             </div>
         </div>
 
@@ -313,11 +314,11 @@ if ($application)
                                 <p class="text-secondary">Certificate was created on {{\Carbon\Carbon::parse($application->certificate->prepared_at)->toDayDateTimeString()}}</p>
                             </li>
                             @endif
-                            @if($application->score)
-                            <li class="text-info">
+                            @if($application->score !== null)
+                            <li class="@if($application->score > 8) text-danger @else text-info @endif">
                                 <u>Added Score</u>
                                 <span class="float-right">{{\Carbon\Carbon::parse($application->scored_at)->diffForHumans()}}</span>
-                                <p class="text-secondary">Scored {{$application->score}} on {{\Carbon\Carbon::parse($application->scored_at)->toDayDateTimeString()}}</p>
+                                <p class="@if($application->score > 8) text-danger @else text-secondary @endif">Wrong Answers: {{$application->score}} ({{$score->get_performance()[1]}}) on {{\Carbon\Carbon::parse($application->scored_at)->toDayDateTimeString()}}</p>
                             </li>
                             @endif
                             @if($application->result_path)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProficiencyTestingApplication;
 use App\Models\User;
 use Illuminate\Http\Request;
+use \App\Library\Scoring;
 
 class PtApplicationController extends Controller
 {
@@ -12,6 +13,9 @@ class PtApplicationController extends Controller
     {
         $application = ProficiencyTestingApplication::find($application_id);
         // dd($application->user->id);
+        if ($application->score > 8)
+            return redirect()->route('proficiency-testing.applicants.showApplication', ['id' => $id, 'application_id' => $application_id])->with('message', 'Invalid action.')->with('classname', 'alert-danger');
+
         \request()->merge([
             'facility_id' => $application->user->id,
             'proficiency_testing_application_id' => $application_id,
@@ -22,6 +26,8 @@ class PtApplicationController extends Controller
             'key' => md5(microtime())
         ]);
         try {
+            $score = new Scoring($application->score);
+            \request()->merge(['performance' => $score->get_performance()[0]]);
             $application->certificate()->insert(\request()->except('_token'));
         } catch (\Throwable $th) {
             dd($th->getMessage());

@@ -16,6 +16,14 @@ NRL - Proficiency Testing Applications List
 </div>
 @endif
 
+@if($errors->any())
+
+<div class="alert alert-danger" role="alert">
+    {!! implode('', $errors->all('<div>:message</div>')) !!}
+</div>
+@endif
+
+
 <!-- Modal -->
 <div id="custom-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog " role="document">
@@ -39,7 +47,7 @@ NRL - Proficiency Testing Applications List
                             @method('PUT')
                             <div class="form-group">
                                 <label for="my-input">Add Score:</label>
-                                <input id="my-input" class="form-control @error('total_amount') is-invalid @enderror" type="text" name="score" required />
+                                <input id="my-input" class="form-control @error('score') is-invalid @enderror" type="text" name="score" required />
                                 @error('score')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -182,6 +190,8 @@ NRL - Proficiency Testing Applications List
     let formShowed
     $('#pt_table').DataTable()
     const modal = $('#custom-modal');
+
+
     const handleAddScore = function(pt_id, id, app_result_path) {
         modal.modal()
         modal_dialog.addClass('modal-xl')
