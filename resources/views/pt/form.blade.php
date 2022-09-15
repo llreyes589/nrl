@@ -46,6 +46,10 @@ NRL - New Proficiency Testing Program
                         </span>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label for="cert_validity">Certificate Validity</label>
+                        <input id="cert_validity" class="form-control" type="date" name="cert_validity" value="{{  isset($pt->id) ? $pt->cert_validity : old('cert_validity') }}">
+                    </div>
                     <p for="total_amount">Total Amount</p>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -58,6 +62,7 @@ NRL - New Proficiency Testing Program
                         </span>
                         @enderror
                     </div>
+
                     <p></p>
                     <div class="form-group">
                         <label for="my-input">Instruction file</label>

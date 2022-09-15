@@ -15,6 +15,7 @@ class ProficiencyTesting extends Model
         'method_used',
         'instruction_file_path',
         'total_amount',
+        'cert_validity'
     ];
 
     public function applications()

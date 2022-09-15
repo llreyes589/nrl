@@ -146,10 +146,7 @@ if ($application)
                         <label for="or_no">Certificate Number:</label>
                         <input id="or_no" class="form-control" type="text" name="certificate_no" placeholder="Certificate Number" required>
                     </div>
-                    <div class="form-group">
-                        <label for="validity">Validity</label>
-                        <input id="validity" class="form-control" type="date" name="validity" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="performance">Performance (Score: {{$score->get_wrong_answers()}}):</label>
 
@@ -311,10 +308,15 @@ if ($application)
                             <li class="text-info">
                                 <u>Certificate Created</u>
                                 <span class="float-right">{{\Carbon\Carbon::parse($application->certificate->prepared_at)->diffForHumans()}}</span>
-                                <p class="text-secondary">Certificate was created on {{\Carbon\Carbon::parse($application->certificate->prepared_at)->toDayDateTimeString()}}</p>
+                                <p class="text-secondary p-0 m-0">Certificate was created on {{\Carbon\Carbon::parse($application->certificate->prepared_at)->toDayDateTimeString()}}</p>
+                                <p class="text-secondary"><strong>Validity: {{$application->pt->cert_validity}}</strong></p>
                             </li>
                             @endif
-                            @if($application->score !== null)
+                            @if(gettype($application->score) == 'integer')
+                            <?php
+                            $score = new \App\Library\Scoring($application->score);
+
+                            ?>
                             <li class="@if($application->score > 8) text-danger @else text-info @endif">
                                 <u>Added Score</u>
                                 <span class="float-right">{{\Carbon\Carbon::parse($application->scored_at)->diffForHumans()}}</span>
@@ -381,7 +383,7 @@ if ($application)
                         @if($application)
                         <div class="form-control">{{$test_method[0]['immunoassay_brand']}} </div>
                         @else
-                        <input class="form-control" type="text" name="immunoassay_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon">
+                        <input class="form-control" type="text" name="immunoassay_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon" required />
                         @endif
                     </div>
                     <br>
@@ -393,7 +395,7 @@ if ($application)
                         @if($application)
                         <div class="form-control">{{$test_method[1]['instrument_type']}} </div>
                         @else
-                        <input class="form-control" type="text" name="instrument_type" placeholder="Enter Type of Instrument here" aria-label="Recipient's " aria-describedby="my-addon">
+                        <input class="form-control" type="text" name="instrument_type" placeholder="Enter Type of Instrument here" aria-label="Recipient's " aria-describedby="my-addon" required />
                         @endif
                     </div>
                     <br>
@@ -404,7 +406,7 @@ if ($application)
                         @if($application)
                         <div class="form-control">{{$test_method[1]['instrument_brand']}} </div>
                         @else
-                        <input class="form-control" type="text" name="instrument_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon">
+                        <input class="form-control" type="text" name="instrument_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon" required />
                         @endif
                     </div>
                     <br>
@@ -414,7 +416,7 @@ if ($application)
                         @if($application)
                         <textarea id="cutoff" class="form-control" name="cutoff_value" rows="3" readonly>{{$application->cutoff_value}}</textarea>
                         @else
-                        <textarea id="cutoff" class="form-control" name="cutoff_value" rows="3"></textarea>
+                        <textarea id="cutoff" class="form-control" name="cutoff_value" rows="3"></textarea required >
                         @endif
                     </div>
                     <div class="form-group">
@@ -422,7 +424,7 @@ if ($application)
                         @if($application)
                         <textarea id="methamphetamine" class="form-control" name="methamphetamine" rows="3" readonly>{{$application->methamphetamine}}</textarea>
                         @else
-                        <textarea id="methamphetamine" class="form-control" name="methamphetamine" rows="3"></textarea>
+                        <textarea id="methamphetamine" class="form-control" name="methamphetamine" rows="3" required></textarea>
                         @endif
                     </div>
                     <div class="form-group">
@@ -430,7 +432,7 @@ if ($application)
                         @if($application)
                         <textarea id="tetrahydrocannabinol" class="form-control" name="tetrahydrocannabinol" rows="3" readonly>{{$application->tetrahydrocannabinol}}</textarea>
                         @else
-                        <textarea id="tetrahydrocannabinol" class="form-control" name="tetrahydrocannabinol" rows="3"></textarea>
+                        <textarea id="tetrahydrocannabinol" class="form-control" name="tetrahydrocannabinol" rows="3" required></textarea>
                         @endif
                     </div>
                     <div class="alert alert-primary" role="alert">

@@ -121,7 +121,7 @@ NRL - Proficiency Testing Applications List
                             @if($app->result_path)
                             <span class="badge badge-pill badge-warning">Result sent</span>
                             @endif
-                            @if($app->score)
+                            @if(gettype($app->score) == 'integer')
                             <span class="badge badge-pill badge-success">Score: {{$app->score}}</span>
                             @endif
                         </td>
@@ -150,9 +150,9 @@ NRL - Proficiency Testing Applications List
                                     <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
 
                                     @else
-                                    @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && !$app->score)
+                                    @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && gettype($app->score) != 'integer')
 
-                                    <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score</button>
+                                    <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score </button>
                                     @endif
                                     @endif
                                     @endif

@@ -27,7 +27,7 @@ class PtApplicationController extends Controller
         ]);
         try {
             $score = new Scoring($application->score);
-            \request()->merge(['performance' => $score->get_performance()[0]]);
+            \request()->merge(['performance' => $score->get_performance()[0], 'validity' => '']);
             $application->certificate()->insert(\request()->except('_token'));
         } catch (\Throwable $th) {
             dd($th->getMessage());
