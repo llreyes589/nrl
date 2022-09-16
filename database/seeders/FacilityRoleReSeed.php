@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Database\Seeder;
 use Spatie\Permission\PermissionRegistrar;
 
-class FacilityRoleSeeder extends Seeder
+class FacilityRoleReSeed extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,12 +18,7 @@ class FacilityRoleSeeder extends Seeder
     {
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
-        Permission::create(['name' => 'apply pt']);
-        Permission::create(['name' => 'send video']);
-
-        $facilityRole = Role::create(['name' => 'Facility']);
-        $facilityRole->givePermissionTo('apply pt');
-        $facilityRole->givePermissionTo('send video');
+        $facilityRole = Role::findByName('Facility');
         $users = \App\Models\User::where('username', '!=', null)->get();
         foreach ($users as $key => $value) {
             if ($value->username) {
