@@ -34,18 +34,19 @@ class FacilityUsersSeeder extends Seeder
         // $table->string('password');
         $facilities = Facility::with('region_details')->get();
         foreach ($facilities as $key => $value) {
-            $nameArr = explode(' ', $value->name);
-            $removedPeriod = str_replace(array('.'), '', $nameArr);
-            $parsedName = strtolower(implode('_', $removedPeriod));
+            $parsedId = sprintf('%05d', $value->id);
             $regionNameArr = explode(' ', $value->region_details->name);
-            $parsedRegionName = implode('_', $regionNameArr);
-            $username = $parsedRegionName . '_' . utf8_decode($parsedName);
-            $exists = User::where('username', $username)->first();
+            if (count($regionNameArr) > 1)
+                $parsedRegionName = $regionNameArr[0][0] . $regionNameArr[1];
+            else
+                $parsedRegionName = implode('_', $regionNameArr);
+            $username = $parsedRegionName . '_' . $parsedId;
+            $exists = User::where('username', $username)->orWhere('email', $value->email)->first();
             // $existLast = $exists ? substr($exists->username, -1) : '';
             if (!$exists) {
 
                 $user = User::create([
-                    'name' => utf8_decode($value->name),
+                    'name' => utf8_encode($value->name),
                     'email' => $faker->email(),
                     'username' => $username,
                     'password' => bcrypt('facility1234')
