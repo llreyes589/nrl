@@ -17,18 +17,29 @@ class FacilityRoleSeeder extends Seeder
     public function run()
     {
         // Reset cached roles and permissions
-        app()[PermissionRegistrar::class]->forgetCachedPermissions();
-        Permission::create(['name' => 'apply pt']);
-        Permission::create(['name' => 'send video']);
+        if (self::isRoleExist('Facility')) {
 
-        $facility = Role::create(['name' => 'Facility']);
-        $facility->givePermissionTo('apply pt');
-        $facility->givePermissionTo('send video');
+            $facilityRole = Role::findByName('Facility');
+        } else {
+
+            app()[PermissionRegistrar::class]->forgetCachedPermissions();
+            Permission::create(['name' => 'apply pt']);
+            Permission::create(['name' => 'send video']);
+
+            $facilityRole = Role::create(['name' => 'Facility']);
+            $facilityRole->givePermissionTo('apply pt');
+            $facilityRole->givePermissionTo('send video');
+        }
         $users = \App\Models\User::where('username', '!=', null)->get();
         foreach ($users as $key => $value) {
             if ($value->username) {
-                $users[$key]->assignRole($facility);
+                $users[$key]->assignRole($facilityRole);
             }
         }
+    }
+
+    function isRoleExist($role_name)
+    {
+        return Count(Role::findByName($role_name)->get()) > 0;
     }
 }
