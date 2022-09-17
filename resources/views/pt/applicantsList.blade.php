@@ -132,6 +132,7 @@ NRL - Proficiency Testing Applications List
                                     Actions
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    @role('admin')
                                     @if($app->receipt_path )
                                     @if($app->verified_payment != 1)
                                     <form action="{{route('proficiency-testing.applicants.verifyPayment', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
@@ -153,11 +154,14 @@ NRL - Proficiency Testing Applications List
                                     @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && gettype($app->score) != 'integer')
 
                                     <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score </button>
+
                                     @endif
                                     @endif
                                     @endif
                                     @endif
                                     @endif
+                                    @endrole
+
 
                                     <a href="{{route('proficiency-testing.applicants.showApplication', ['id' => $app->pt->id, 'application_id' => $app->id])}}" class="dropdown-item btn btn-danger" type="button"><i class="fa fa-search fa-sm"></i> View</a>
 

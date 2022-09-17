@@ -254,7 +254,7 @@ if ($application)
                 @endif
                 @else
                 @role('admin')
-                @if($application->score < 9) <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
+                @if($application->score < 9 && gettype($application->score) == 'integer') <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
                     @endif
                     @endrole
                     @endif
