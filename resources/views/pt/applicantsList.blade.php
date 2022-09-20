@@ -76,6 +76,56 @@ NRL - Proficiency Testing Applications List
                         <button class="btn btn-primary" type="submit">Save</button>
                     </form>
                 </div>
+                @role('admin')
+                <!-- Prepare certificate -->
+                <form method="post" action="" id="prepare-certificate-form" style="display:none;">
+                    @csrf
+                    <div class="form-group">
+                        <label for="or_no">OR Number:</label>
+
+                        <input id="or_no" class="form-control" type="text" name="or_no" placeholder="OR Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="certificate_no">Certificate Number:</label>
+                        <input id="certificate_no" class="form-control" type="text" name="certificate_no" placeholder="Certificate Number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="performance">Performance:</label>
+
+                        <p class="form-control" id="performance"></p>
+
+                    </div>
+                    <button class="btn btn-primary btn-sm" type="submit">Add</button>
+
+                </form>
+
+                <!-- Update certificate -->
+                <form method="post" action="" id="edit-certificate-form" style="display:none;">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                        <label for="edit_or_no">OR Number:</label>
+
+                        <input id="edit_or_no" class="form-control" type="text" name="edit_or_no" placeholder="OR Number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_certificate_no">Certificate Number:</label>
+                        <input id="edit_certificate_no" class="form-control" type="text" name="edit_certificate_no" placeholder="Certificate Number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_performance">Performance:</label>
+
+                        <p class="form-control" id="edit_performance"></p>
+
+                    </div>
+                    <button class="btn btn-primary btn-sm" type="submit">Update</button>
+
+                </form>
+
+
+                @endrole
             </div>
         </div>
     </div>
@@ -92,7 +142,6 @@ NRL - Proficiency Testing Applications List
                         <th>Facility</th>
                         <th>SDTL</th>
                         <th>Cycle</th>
-                        <th>Status</th>
                         <th>Date Added</th>
                         <th>Manage</th>
                     </tr>
@@ -103,67 +152,91 @@ NRL - Proficiency Testing Applications List
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>
-                        <td>
-                            <!-- verified payment -->
-                            @if($app->verified_payment === 1)
-                            <span class="badge badge-pill badge-success">Payment verified</span>
-                            @endif
-                            <!-- specimen sent -->
-                            @if($app->specimens()->latest('created_at')->first())
-                            <span class="badge badge-pill badge-info">Specimen sent</span>
-                            @endif
-
-                            @if(count($app->specimens) > 0)
-                            @if($app->specimens()->latest('created_at')->first()->unboxing_video_path)
-                            <span class="badge badge-pill badge-secondary">Specimen Received : {{$app->specimens()->latest('created_at')->first()->unboxing_video_path === 'accepted' ? 'Accepted' : 'Rejected'}}</span>
-                            @endif
-                            @endif
-                            @if($app->result_path)
-                            <span class="badge badge-pill badge-warning">Result sent</span>
-                            @endif
-                            @if(gettype($app->score) == 'integer')
-                            <span class="badge badge-pill badge-success">Score: {{$app->score}}</span>
-                            @endif
-                        </td>
                         <td>{{$app->created_at}}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Actions
                                 </button>
+
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <!-- certificate buttons -->
+
+                                    <!-- admin role -->
                                     @role('admin')
-                                    @if($app->receipt_path )
-                                    @if($app->verified_payment != 1)
-                                    <form action="{{route('proficiency-testing.applicants.verifyPayment', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
-                                        @csrf
-                                        @method('PUT')
-
-                                        <button class="dropdown-item btn btn-primary" type="submit"><i class="fa fa-check fa-sm"></i> Verify payment</button>
-                                    </form>
+                                    <!-- update cert button -->
+                                    @if($app->certificate)
+                                    @if(!$app->certificate->verified_by)
+                                    <button class="dropdown-item btn btn-info" id="btn-edit-certificate-modal" data-item="{{$app}}" type="button"><i class="fa fa-edit fa-sm"></i> Edit Certificate</button>
                                     @endif
-                                    <a href="/storage/{{$app->receipt_path}}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
-                                    @if( $app->verified_payment != 0)
-                                    @if(!$app->specimens()->latest('created_at')->first() )
-                                    <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
                                     @else
-                                    @if($app->specimens()->latest('created_at')->first()->unboxing_video_path != 'accepted' && $app->specimens()->latest('created_at')->first()->unboxing_video_path != null)
-                                    <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
+                                    <!-- Prepare cert button -->
+                                    @if($app->score < 9 && gettype($app->score) == 'integer')
+                                        <button class="dropdown-item btn btn-primary" id="btn-prepare-certificate-modal" data-item="{{$app}}" type="button"><i class="fa fa-certificate"></i> Prepare Certificate</button>
+                                        @endif
+                                        <!-- /Prepare cert button -->
+                                        @endif
+                                        <!-- /update cert button -->
 
-                                    @else
-                                    @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && gettype($app->score) != 'integer')
+                                        @if($app->receipt_path )
+                                        @if($app->verified_payment != 1)
+                                        <form action="{{route('proficiency-testing.applicants.verifyPayment', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
+                                            @csrf
+                                            @method('PUT')
 
-                                    <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score </button>
+                                            <button class="dropdown-item btn btn-primary" type="submit"><i class="fa fa-check fa-sm"></i> Verify payment</button>
+                                        </form>
+                                        @endif
+                                        <a href="/storage/{{$app->receipt_path}}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
+                                        @if( $app->verified_payment != 0)
+                                        @if(!$app->specimens()->latest('created_at')->first() )
+                                        <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
+                                        @else
+                                        @if($app->specimens()->latest('created_at')->first()->unboxing_video_path != 'accepted' && $app->specimens()->latest('created_at')->first()->unboxing_video_path != null)
+                                        <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
 
-                                    @endif
-                                    @endif
-                                    @endif
-                                    @endif
-                                    @endif
-                                    @endrole
+                                        @else
+                                        @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && gettype($app->score) != 'integer')
+
+                                        <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score </button>
+
+                                        @endif
+                                        @endif
+                                        @endif
+                                        @endif
+                                        @endif
+                                        @endrole
+
+                                        <!-- /admin role -->
+                                        @if($app->certificate)
+                                        @if(!$app->certificate->verified_by)
+                                        <!-- verifier -->
+                                        @can('verify')
+                                        <form method="post" action="{{route('ptApplication.verify_certificate',['id' => $app->pt->id, 'application_id' => $app->id])}}">
+                                            @csrf
+                                            @method('PUT')
+                                            <button class=" dropdown-item btn btn-secondary" id="btn-verify-certificate-modal" type="submit" data-target="#verify-certificate-form"><i class="fa fa-check fa-sm"></i> Verify Certificate</button>
+                                        </form>
+                                        @endcan
+                                        <!-- /verifier -->
+                                        @else
+                                        <!-- approve -->
+                                        @can('approve')
+                                        @if(!$app->certificate->approved_by)
+                                        <form method="post" action="{{route('ptApplication.approve_certificate',['id' => $app->pt->id, 'application_id' => $app->id])}}">
+                                            @csrf
+                                            @method('PUT')
+                                            <button class="dropdown-item btn btn-success" id="btn-approve-certificate-modal" type="submit" data-target="#approve-certificate-form"><i class="fa fa-bookmark fa-sm"></i> Approve Certificate</button>
+                                        </form>
+                                        @endif
+                                        @endcan
+                                        <!-- /approve -->
+                                        @endif
+                                        @endif
 
 
-                                    <a href="{{route('proficiency-testing.applicants.showApplication', ['id' => $app->pt->id, 'application_id' => $app->id])}}" class="dropdown-item btn btn-danger" type="button"><i class="fa fa-search fa-sm"></i> View</a>
+
+                                        <a href="{{route('proficiency-testing.applicants.showApplication', ['id' => $app->pt->id, 'application_id' => $app->id])}}" class="dropdown-item btn btn-danger" type="button"><i class="fa fa-search fa-sm"></i> View</a>
 
 
                                 </div>
@@ -183,6 +256,10 @@ NRL - Proficiency Testing Applications List
 
 @section('javascript')
 <script>
+    const btn_prepare_certificate_modal = $('#btn-prepare-certificate-modal')
+    const btn_edit_certificate_modal = $('#btn-edit-certificate-modal')
+    const prepare_certificate_form = $('#prepare-certificate-form')
+    const edit_certificate_form = $('#edit-certificate-form')
     const add_score_form = $('#add_score_form')
     const specimen_form = $('#specimen_form')
     const score_form_container = $('#score_form_container')
@@ -194,7 +271,10 @@ NRL - Proficiency Testing Applications List
     let formShowed
     $('#pt_table').DataTable()
     const modal = $('#custom-modal');
-
+    let or_no = $('[name=edit_or_no]')
+    let certificate_no = $('[name=edit_certificate_no]')
+    let performance = $('#performance')
+    let edit_performance = $('#edit_performance')
 
     const handleAddScore = function(pt_id, id, app_result_path) {
         modal.modal()
@@ -212,6 +292,43 @@ NRL - Proficiency Testing Applications List
         formShowed = specimen_form_container
         specimen_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}`);
     }
+
+    btn_prepare_certificate_modal.click(function() {
+        modal.modal()
+        const item = $(this).data('item')
+        const [key, value] = item.scoring
+        const fd = new FormData();
+        // fd.append('or_no', or_no)
+        // fd.append('certificate_no', certificate_no)
+        // fd.append('performance', performance)
+
+        const api = `/proficiency-testing/${item.pt.id}/applicants/${item.id}/certificate/create`
+        prepare_certificate_form.attr('action', api)
+        modal_title.text('Prepare Certificate')
+        performance.text(`${value} (Score: ${item.score})`)
+        prepare_certificate_form.show()
+        formShowed = prepare_certificate_form
+    })
+    btn_edit_certificate_modal.click(function() {
+        modal.modal()
+        const item = $(this).data('item')
+        const [key, value] = item.scoring
+        const fd = new FormData();
+        // fd.append('or_no', or_no)
+        // fd.append('certificate_no', certificate_no)
+        // fd.append('performance', performance)
+
+        or_no.val(item.certificate.or_no)
+        certificate_no.val(item.certificate.certificate_no)
+
+        const api = `/proficiency-testing/${item.pt.id}/applicants/${item.id}/certificate/${item.certificate.id}`
+        edit_certificate_form.attr('action', api)
+        modal_title.text('Edit Certificate')
+        edit_performance.text(`${value} (Score: ${item.score})`)
+
+        edit_certificate_form.show()
+        formShowed = edit_certificate_form
+    })
 
     close_form_modal.click(function(e) {
         modal_title.text('')

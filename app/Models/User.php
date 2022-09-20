@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Region', 'id', 'region_id');
     }
+
+    function profile()
+    {
+        return $this->hasOne('App\Models\Facility', 'user_id', 'id');
+    }
 }

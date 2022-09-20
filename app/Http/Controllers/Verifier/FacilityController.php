@@ -155,6 +155,7 @@ class FacilityController extends Controller
             $pdf::Image(asset('storage/' . $certificate->approved_by_details->signature), 35, 255, 40, 10, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
             $pdf::Image(asset('images/lutero.png'), 137, 253, 40, 10, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
         }
+        // dd($certificate->ptApplication->user->profile->accreditation_no);
         // $pdf::SetCellPadding(0);
         // $pdf::SetFont('helvetica', '', 12);
         $head_html = '
@@ -255,7 +256,7 @@ class FacilityController extends Controller
                             Certificate No. ' . $certificate->certificate_no . '
                         </p>
                         <p style="font-size: 14pt;">
-                            Accreditation No. ' . $certificate->ptApplication->user->accreditation_no . '
+                            Accreditation No. ' . $certificate->ptApplication->user->profile->accreditation_no . '
                         </p>
                         <br>
                         <p class="cursive">for successful participation, passing and achieving</p>

@@ -31,7 +31,7 @@ class Certificate extends Model
 
     function facility()
     {
-        return $this->belongsTo(Facility::class);
+        return $this->belongsTo('App\Models\Facility', 'id', 'facility_id');
     }
 
     function prepared_by_details()

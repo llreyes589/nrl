@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\Scoring;
 use Illuminate\Http\Request;
 use App\Models\ProficiencyTesting;
 use App\Models\ProficiencyTestingApplication;
@@ -79,6 +80,10 @@ class ProficiencyTestingController extends Controller
     {
         $pt = ProficiencyTesting::find($id);
         $applications = $pt->applications;
+        foreach ($applications as $key => $value) {
+            $score = new Scoring($value->score);
+            $applications[$key]->scoring = $score->get_performance();
+        }
         // dd($applications);
         return view('pt.applicantsList', compact('applications'));
     }

@@ -91,6 +91,7 @@ Route::name('ptApplication.')->group(function () {
     Route::post('/proficiency-testing/{id}/applicants/{application_id}/certificate/create', [App\Http\Controllers\PtApplicationController::class, 'create_certificate'])->name('create_certificate')->middleware(['role:admin']);
     Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/verify', [App\Http\Controllers\PtApplicationController::class, 'verify_certificate'])->name('verify_certificate')->middleware(['role:verifier']);
     Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/approve', [App\Http\Controllers\PtApplicationController::class, 'approve_certificate'])->name('approve_certificate')->middleware(['role:head']);
+    Route::put('/proficiency-testing/{id}/applicants/{application_id}/certificate/{cert_id}', [App\Http\Controllers\PtApplicationController::class, 'update_certificate'])->name('update_certificate')->middleware(['role:admin']);
 });
 
 Route::group(['middleware' => ['role:Facility']], function () {
