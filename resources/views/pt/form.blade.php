@@ -20,13 +20,13 @@ NRL - New Proficiency Testing Program
 <div class="card">
 
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <form method="post" id='form' action="{{isset($pt->id) ? route('proficiency-testing.update', $pt) :route('proficiency-testing.store')}}" enctype="multipart/form-data">
-                    @csrf
-                    @if(isset($pt->id))
-                    @method('PUT')
-                    @endif
+        <form method="post" id='form' action="{{isset($pt->id) ? route('proficiency-testing.update', $pt) :route('proficiency-testing.store')}}" enctype="multipart/form-data">
+            @csrf
+            @if(isset($pt->id))
+            @method('PUT')
+            @endif
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="sdtl">SDTL</label>
                         <input id="sdtl" class="form-control @error('sdtl') is-invalid @enderror" type="text" value="{{ isset($pt->id) ? $pt->sdtl : old('sdtl') }}" name="sdtl" placeholder="Enter SDTL">
@@ -46,10 +46,7 @@ NRL - New Proficiency Testing Program
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="cert_validity">Certificate Validity</label>
-                        <input id="cert_validity" class="form-control" type="date" name="cert_validity" value="{{  isset($pt->id) ? $pt->cert_validity : old('cert_validity') }}">
-                    </div>
+
                     <p for="total_amount">Total Amount</p>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -70,16 +67,31 @@ NRL - New Proficiency Testing Program
                     </div>
 
 
-                    <button class="btn btn-primary" id="submit" type="submit">{{isset($pt->id) ? "Update" : 'Save'}}</button>
-                </form>
+                </div>
+                <div class="col-md-6">
+                    @if($pt->instruction_file_path)
+                    <h4>Uploaded instruction file:</h4>
+                    <img class="img-fluid" src="/storage/{{$pt->instruction_file_path}}" alt="">
+                    <hr>
+                    @endif
+                    <h3>Certificate Setting</h3>
+                    <hr>
+                    <div class="form-group">
+                        <label for="certificate_theme">Certificate Theme</label>
+                        <textarea id="certificate_theme" class="form-control" name="certificate_theme" rows="3" placeholder="Enter theme here"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="certificate_given_at">Certificate Given at</label>
+                        <input id="certificate_given_at" class="form-control" type="date" name="certificate_given_at">
+                    </div>
+                    <div class=" form-group">
+                        <label for="cert_validity">Certificate Validity</label>
+                        <input id="cert_validity" class="form-control" type="date" name="cert_validity" value="{{  isset($pt->id) ? $pt->cert_validity : old('cert_validity') }}">
+                    </div>
+                </div>
             </div>
-            @if($pt->instruction_file_path)
-            <div class="col-md-6">
-                <h4>Uploaded instruction file:</h4>
-                <img class="img-fluid" src="/storage/{{$pt->instruction_file_path}}" alt="">
-            </div>
-            @endif
-        </div>
+            <button class="btn btn-primary" id="submit" type="submit">{{isset($pt->id) ? "Update" : 'Save'}}</button>
+        </form>
     </div>
 </div>
 

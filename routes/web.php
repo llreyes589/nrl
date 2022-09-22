@@ -35,7 +35,8 @@ Route::name('settings.')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('index');
-        Route::put('/settings/certificate', [App\Http\Controllers\SettingController::class, 'storeCertSettings'])->name('storeCertSettings');
+        Route::get('/settings/{id}', [App\Http\Controllers\SettingController::class, 'show'])->name('show');
+        Route::put('/settings/{id}/certificate', [App\Http\Controllers\SettingController::class, 'storeCertSettings'])->name('storeCertSettings');
     });
 });
 

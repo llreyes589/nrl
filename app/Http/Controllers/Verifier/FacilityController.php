@@ -94,13 +94,14 @@ class FacilityController extends Controller
 
     function certificate(Request $request, $key)
     {
-        $settings = Setting::find(1);
-        $given = \Carbon\Carbon::parse($settings->certificate_given_at);
         \Carbon\Carbon::setToStringFormat('jS \d\a\y \o\f F Y');
         // Image method signature:
         // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
         $certificate = Certificate::where('key', $key)->first();
         // dd($certificate->ptApplication->user->name);
+        // dd($certificate->ptApplication->pt->cert_setting);
+        $settings = Setting::find(1);
+        $given = \Carbon\Carbon::parse($certificate->ptApplication->pt->cert_setting->certificate_given_at);
         $name = $certificate->ptApplication->user->name;
         $performace  = '';
         switch ($certificate->performance) {
@@ -270,7 +271,7 @@ class FacilityController extends Controller
                     <td style="width:5%"></td>
                     <td style="width:90%">
                         <p class="cursive">performance in the</p>
-                        <p style="font-size: 20pt; font-weight: bold;">"' . $settings->certificate_theme . '" </p>
+                        <p style="font-size: 20pt; font-weight: bold;">"' . $certificate->ptApplication->pt->cert_setting->certificate_theme . '" </p>
                         <br>
                         <p class="cursive">
                             Given this ' . $given . '

@@ -47,7 +47,9 @@ class ProficiencyTestingController extends Controller
             'total_amount' => 'required | numeric ',
         ]);
         $request->merge(['instruction_file_path' => $path]);
-        ProficiencyTesting::create($request->except('_token'));
+        $pt = ProficiencyTesting::create($request->except('_token'));
+        $pt->cert_setting()->create(['certificate_theme' => \request()->certificate_theme, 'certificate_given_at' => \request()->certificate_given_at, 'updated_by' => auth()->id(), 'pt_id' => $pt->id]);
+
         return redirect(\route('proficiency-testing.index'))->with(['message' => 'PT sucessfully saved', 'classname' => 'alert-success']);
     }
 

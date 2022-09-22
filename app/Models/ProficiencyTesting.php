@@ -22,4 +22,9 @@ class ProficiencyTesting extends Model
     {
         return $this->hasMany('\App\Models\ProficiencyTestingApplication', 'proficiency_testing_id', 'id');
     }
+
+    public function cert_setting()
+    {
+        return $this->hasOne('\App\Models\Setting', 'pt_id', 'id');
+    }
 }
