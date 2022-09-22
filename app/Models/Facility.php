@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class Facility extends Model
 {
     use HasFactory, SoftDeletes;
@@ -25,6 +26,7 @@ class Facility extends Model
         'updated_by',
         'deleted_by',
         'deleted_at',
+        'user_id'
     ];
 
     function certificate()
@@ -39,6 +41,6 @@ class Facility extends Model
 
     function credential()
     {
-        return $this->hasOne('App\Models\User', 'user_id', 'id');
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
 }

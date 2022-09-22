@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\UserCredential;
 use Illuminate\Http\Request;
 use App\Models\Facility;
 use App\Models\Region;
@@ -51,13 +52,18 @@ class FacilityController extends Controller
 
     function createOrUpdate(Facility $facility, Request $request)
     {
-        $req = isset($request->id) ? $request->merge(['updated_by' => auth()->id()])->except('id') : $request->merge(['created_by' => auth()->id()])->except('id');
+
+        $req = isset($request->id) ? $request->merge(['updated_by' => auth()->id()])->except('id') : $request->merge(['created_by' => auth()->id(), 'user_id' => -1])->except('id');
         $facility = Facility::updateOrCreate(
             [
                 'id' => $request->id,
             ],
             $req
         );
+        if ($facility->wasRecentlyCreated) {
+            $user_credential = new UserCredential($facility->id);
+            $user_credential->createUser();
+        }
         return redirect()->route('facilities.index')->with('message', 'Facility updated successfully.')->with('classname', 'alert-success');
     }
 }
