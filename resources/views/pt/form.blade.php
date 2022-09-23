@@ -76,6 +76,7 @@ NRL - New Proficiency Testing Program
                     @endif
                     <h3>Certificate Setting</h3>
                     <hr>
+                    @if(!$pt->cert_setting)
                     <div class="form-group">
                         <label for="certificate_theme">Certificate Theme</label>
                         <textarea id="certificate_theme" class="form-control" name="certificate_theme" rows="3" placeholder="Enter theme here"></textarea>
@@ -84,6 +85,10 @@ NRL - New Proficiency Testing Program
                         <label for="certificate_given_at">Certificate Given at</label>
                         <input id="certificate_given_at" class="form-control" type="date" name="certificate_given_at">
                     </div>
+                    @else
+                    <a href="{{route('settings.show', $pt->cert_setting->id)}}" class="btn btn-primary ">View Certificate Setting</a>
+                    <p></p>
+                    @endif
                     <div class=" form-group">
                         <label for="cert_validity">Certificate Validity</label>
                         <input id="cert_validity" class="form-control" type="date" name="cert_validity" value="{{  isset($pt->id) ? $pt->cert_validity : old('cert_validity') }}">

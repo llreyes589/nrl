@@ -72,6 +72,7 @@ class ProficiencyTestingController extends Controller
         try {
 
             $pt->update(\request()->except('_token'));
+            $pt->cert_setting()->create(['certificate_theme' => \request()->certificate_theme, 'certificate_given_at' => \request()->certificate_given_at, 'updated_by' => auth()->id(), 'pt_id' => $pt->id]);
         } catch (Exception $e) {
             return redirect(\route('proficiency-testing.edit', $id))->with(['message' => $e->errorInfo[1] === 1062 ? 'PT already exists' : $e->errorInfo[2], 'classname' => 'alert-danger']);
         }
