@@ -41,20 +41,20 @@ NRL - Proficiency Testing Applications List
                         <h3>Result submitted:</h3>
                         <img class="img-thumbnail" id="result_path" src="" alt="">
                     </div>
-                    <div class="col-md col-sm-12">
+
+                    <div class="col-md col-sm-12 mt-3">
                         <form method="post" action="" id="add_score_form">
                             @csrf
                             @method('PUT')
                             <div class="form-group">
-                                <label for="my-input">Add Score:</label>
-                                <input id="my-input" class="form-control @error('score') is-invalid @enderror" type="text" name="score" required />
+                                <input id="my-input" class="form-control @error('score') is-invalid @enderror" type="text" name="score" required placeholder="Enter number of wrong answer/s (0-20)" />
                                 @error('score')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
                             </div>
-                            <button class="btn btn-primary" type="submit">Save</button>
+                            <button class="btn btn-primary" id="save-score">Save</button>
 
                         </form>
                     </div>
@@ -142,6 +142,7 @@ NRL - Proficiency Testing Applications List
                         <th>Facility</th>
                         <th>SDTL</th>
                         <th>Cycle</th>
+                        <th>Rejected Specimen</th>
                         <th>Date Added</th>
                         <th>Manage</th>
                     </tr>
@@ -152,6 +153,13 @@ NRL - Proficiency Testing Applications List
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>
+                        <td>
+                            @foreach($app->specimens as $specimen)
+                            @if($specimen->unboxing_video_path != 'accepted' &&$specimen->unboxing_video_path != null)
+                            <a href="/storage/{{$specimen->unboxing_video_path}}" class="btn btn-danger btn-sm m-1" target="_blank">{{$specimen->created_at}}</a>
+                            @endif
+                            @endforeach
+                        </td>
                         <td>{{$app->created_at}}</td>
                         <td>
                             <div class="dropdown">
@@ -335,6 +343,12 @@ NRL - Proficiency Testing Applications List
         modal.modal('toggle')
         formShowed.hide()
         $('.modal-backdrop').hide();
+    })
+
+    $('#save-score').click(function(e) {
+        e.preventDefault()
+        const conf = window.confirm('Confirm number of wrong answers?')
+        if (conf) add_score_form.submit()
     })
 </script>
 @endsection

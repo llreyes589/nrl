@@ -77,7 +77,11 @@ NRL - Proficiency Testing Program
                             @can('edit user')
                             <a href="{{route('proficiency-testing.edit', $pt->id)}}" class="btn btn-info">Edit</a>
                             @endcan
-                            <a href="{{route('proficiency-testing.applicants', $pt->id)}}" class="btn btn-primary">Applicants</a>
+                            @if(count($pt->applications) > 0)
+                            <a href="{{route('proficiency-testing.applicants', $pt->id)}}" class="btn btn-primary">Applicants
+                                <span class="badge badge-light">{{count($pt->applications)}}</span>
+                            </a>
+                            @endif
                             @endrole
 
                             <!-- facility role -->

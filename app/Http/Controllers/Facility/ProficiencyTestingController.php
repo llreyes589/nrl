@@ -40,6 +40,7 @@ class ProficiencyTestingController extends Controller
 
     public function saveReceipt($id)
     {
+
         if (\request()->file('receipt')) {
 
             $path = \request()->file('receipt')->store('receipts');
@@ -53,6 +54,13 @@ class ProficiencyTestingController extends Controller
 
     public function receiveSpecimen($id)
     {
+
+        if (\request()->status === 'reject') {
+
+            $validated = \request()->validate([
+                'unboxing_video_path' => 'required',
+            ], ['unboxing_video_path.required' => 'Reject file is required.']);
+        }
         if (\request()->file('unboxing_video_path')) {
 
             $path = \request()->file('unboxing_video_path')->store('unboxing_videos');

@@ -21,6 +21,14 @@ NRL - Proficiency Testing Program Application
 </div>
 @endif
 
+
+@if($errors->any())
+
+<div class="alert alert-danger" role="alert">
+    {!! implode('', $errors->all('<div>:message</div>')) !!}
+</div>
+@endif
+
 <?php
 if ($application)
     $test_method = json_decode($application->test_method_used, true);
@@ -94,7 +102,7 @@ if ($application)
                             </div>
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button id="submit-receive-specimen" class="btn btn-primary">
                                         Submit
                                     </button>
                                 </div>
@@ -479,6 +487,8 @@ if ($application)
         const my_modal_title = $('#my-modal-title')
         const upload_receipt_form = $('#upload-receipt-form')
 
+        const submit_receive_specimen = $('#submit-receive-specimen')
+
         let formShowed;
         btn_upload_receipt_modal.click(function(e) {
             my_modal_title.text('Upload Receipt')
@@ -534,6 +544,21 @@ if ($application)
             formShowed.hide()
             form_modal.modal('toggle')
             $('.modal-backdrop').hide();
+        })
+
+        submit_receive_specimen.click(function(e) {
+            e.preventDefault()
+            const statusVal = $('[name="status"]:checked').val();
+            // console.log(statusVal)
+
+            if (statusVal === 'accept') {
+                const conf = window.confirm('Confirm specimen acceptance?')
+                if (conf) $('#receive-specimen-form').submit()
+            } else {
+                $('#receive-specimen-form').submit()
+            }
+
+
         })
     })
 </script>

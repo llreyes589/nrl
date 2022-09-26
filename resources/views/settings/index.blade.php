@@ -39,7 +39,7 @@ NRL - Facilities
                     @csrf
                     @method('PUT')
                     <div class="form-group">
-                        <label for="theme">Theme</label>
+                        <label for="theme">Title</label>
                         <textarea id="theme" class="form-control @error('certificate_theme') is-invalid @enderror" name="certificate_theme" rows="3">{{$settings->certificate_theme}}</textarea>
                         @error('certificate_theme')
                         <span class="invalid-feedback" role="alert">

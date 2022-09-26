@@ -78,8 +78,8 @@ NRL - New Proficiency Testing Program
                     <hr>
                     @if(!$pt->cert_setting)
                     <div class="form-group">
-                        <label for="certificate_theme">Certificate Theme</label>
-                        <textarea id="certificate_theme" class="form-control" name="certificate_theme" rows="3" placeholder="Enter theme here"></textarea>
+                        <label for="certificate_theme">Certificate Title</label>
+                        <textarea id="certificate_theme" class="form-control" name="certificate_theme" rows="3" placeholder="Enter title here"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="certificate_given_at">Certificate Given at</label>
