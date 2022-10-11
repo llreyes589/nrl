@@ -26,7 +26,8 @@ class ProficiencyTestingApplication extends Model
         'scored_at',
         'receipt_uploaded_at',
         'result_uploaded_at',
-        'verified_payment_at'
+        'verified_payment_at',
+        'mode_of_payment'
     ];
 
     public function users()

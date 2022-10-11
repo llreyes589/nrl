@@ -359,6 +359,13 @@ if ($application)
                             @endforeach
 
                             @endif
+                            @if($application->verified_payment_at)
+                            <li class="text-info">
+                                <u>Payment Verified</u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->verified_payment_at)->diffForHumans()}}</span>
+                                <p class="text-secondary">Payment was verified on {{\Carbon\Carbon::parse($application->verified_payment_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
 
                             @if($application->receipt_path)
                             <li class="text-info">
@@ -382,6 +389,49 @@ if ($application)
                     @csrf
                     <h4 for="cycle">Test Method Used</h4>
                     <hr>
+                    @if(!$application)
+                    <div class="form-group">
+                        <select class="custom-select-lg form-control" name="test_method_used" id="test_method_used">
+                            <option value="itk">Immunoassay Test Kit</option>
+                            <option value="inst">Instrumented</option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="itk_fields">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="my-addon">Brand</span>
+                        </div>
+                        @if($application)
+                        <div class="form-control">{{$test_method[0]['immunoassay_brand']}} </div>
+                        @else
+                        <input class="form-control" type="text" name="immunoassay_brand" placeholder="Enter brand here" aria-label="Brand" aria-describedby="my-addon" required />
+                        @endif
+                    </div>
+                    <div id="inst_fields" style="display: none;">
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="my-addon">Type of Instrument used</span>
+                            </div>
+                            @if($application)
+                            <div class="form-control">{{$test_method[1]['instrument_type']}} </div>
+                            @else
+                            <input class="form-control" type="text" name="instrument_type" placeholder="Enter Type of Instrument here" aria-label="Recipient's " aria-describedby="my-addon" />
+                            @endif
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="my-addon">Brand</span>
+                            </div>
+                            @if($application)
+                            <div class="form-control">{{$test_method[1]['instrument_brand']}} </div>
+                            @else
+                            <input class="form-control" type="text" name="instrument_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon" />
+                            @endif
+                        </div>
+                    </div>
+                    @else
+                    @if($test_method[0]['immunoassay_brand'])
                     <p class="lead">Immunoassay Test Kit</p>
 
                     <div class="input-group">
@@ -391,42 +441,41 @@ if ($application)
                         @if($application)
                         <div class="form-control">{{$test_method[0]['immunoassay_brand']}} </div>
                         @else
-                        <input class="form-control" type="text" name="immunoassay_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon" required />
+                        <input class="form-control" type="text" name="immunoassay_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon" />
                         @endif
                     </div>
-                    <br>
-                    <p class="lead">Instrumented</p>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="my-addon">Type of Instrument used</span>
-                        </div>
-                        @if($application)
-                        <div class="form-control">{{$test_method[1]['instrument_type']}} </div>
-                        @else
-                        <input class="form-control" type="text" name="instrument_type" placeholder="Enter Type of Instrument here" aria-label="Recipient's " aria-describedby="my-addon" required />
-                        @endif
-                    </div>
-                    <br>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="my-addon">Brand</span>
-                        </div>
-                        @if($application)
-                        <div class="form-control">{{$test_method[1]['instrument_brand']}} </div>
-                        @else
-                        <input class="form-control" type="text" name="instrument_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon" required />
-                        @endif
-                    </div>
-                    <br>
+                    @else
+                    <p class="lead">Intrumented</p>
+                    <div>
 
-                    <div class="form-group">
-                        <label for="cutoff">Cut Off Value for Method </label>
-                        @if($application)
-                        <textarea id="cutoff" class="form-control" name="cutoff_value" rows="3" readonly>{{$application->cutoff_value}}</textarea>
-                        @else
-                        <textarea id="cutoff" class="form-control" name="cutoff_value" rows="3"></textarea required >
-                        @endif
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="my-addon">Type of Instrument used</span>
+                            </div>
+                            @if($application)
+                            <div class="form-control">{{$test_method[1]['instrument_type']}} </div>
+                            @else
+                            <input class="form-control" type="text" name="instrument_type" placeholder="Enter Type of Instrument here" aria-label="Recipient's " aria-describedby="my-addon" />
+                            @endif
+                        </div>
+                        <br>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="my-addon">Brand</span>
+                            </div>
+                            @if($application)
+                            <div class="form-control">{{$test_method[1]['instrument_brand']}} </div>
+                            @else
+                            <input class="form-control" type="text" name="instrument_brand" placeholder="Enter brand here" aria-label="Recipient's " aria-describedby="my-addon" />
+                            @endif
+                        </div>
                     </div>
+                    @endif
+                    @endif
+
+                    <br>
+                    <h4 for="cycle">Cut Off Value for Method/s (ng/ml)</h4>
+                    <hr>
                     <div class="form-group">
                         <label for="cutoff">Methamphetamine (METH) </label>
                         @if($application)
@@ -446,6 +495,18 @@ if ($application)
                     <div class="alert alert-primary" role="alert">
                         <p class="lead p-0 m-0">Total amount: <span class="font-weight-bold">P{{$pt->total_amount}}</span></p>
                     </div>
+                    @if(!$application)
+                    <div class="form-group">
+                        <label for="mode_of_payment">Mode of Payment</label>
+                        <select id="mode_of_payment" class="custom-select" name="mode_of_payment">
+                            <option value="bt">Bank Transfer</option>
+                            <option value="ccp">Cash/Check Padala</option>
+                        </select>
+                    </div>
+                    @else
+                    <h4>Mode of Payment:</h4>
+                    <p class="lead">-@if($application->mode_of_payment === 'bt') Bank Transfer @else Cash/Check Padala @endif</p>
+                    @endif
                     <hr />
                     @if(!$application)
                     <button class="btn btn-primary" id="submit" type="submit">Apply/Checkout</button>
@@ -559,6 +620,30 @@ if ($application)
             }
 
 
+        })
+
+        const immunoassay_brand = $('[name="immunoassay_brand"]')
+        const instrument_type = $('[name="instrument_type"]')
+        const instrument_brand = $('[name="instrument_brand"]')
+
+        $('#test_method_used').change(function(e) {
+            e.preventDefault()
+            immunoassay_brand.removeAttr('required')
+            instrument_type.removeAttr('required')
+            instrument_brand.removeAttr('required')
+            // alert(e.target.value)
+            const val = e.target.value
+            if (val === 'itk') {
+                immunoassay_brand.attr('required', 'required')
+                $('#itk_fields').toggle()
+                $('#inst_fields').toggle()
+            } else {
+                instrument_type.attr('required', 'required')
+                instrument_brand.attr('required', 'required')
+                $('#itk_fields').toggle()
+                $('#inst_fields').toggle()
+
+            }
         })
     })
 </script>

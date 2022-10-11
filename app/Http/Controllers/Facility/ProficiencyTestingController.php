@@ -25,15 +25,17 @@ class ProficiencyTestingController extends Controller
     {
 
         // dd(\request()->user()->id);
-        $test_method = [['immunoassay_brand' => \request()->immunoassay_brand], ['instrument_type' => \request()->instrument_type, 'instrument_brand' => \request()->instrument_brand,]];
+
+        $test_method = [['immunoassay_brand' => \request()->test_method_used == 'itk' ? \request()->immunoassay_brand : null], ['instrument_type' => \request()->test_method_used == 'inst' ? \request()->instrument_type : null, 'instrument_brand' => \request()->test_method_used == 'inst' ?  \request()->instrument_brand : null,]];
         // dd(json_encode($test_method));
         ProficiencyTestingApplication::create([
             'user_id' => \request()->user()->id,
             'proficiency_testing_id' => $id,
             'test_method_used' => json_encode($test_method),
-            'cutoff_value' => \request()->cutoff_value,
+            // 'cutoff_value' => \request()->cutoff_value,
             'methamphetamine' => \request()->methamphetamine,
             'tetrahydrocannabinol' => \request()->tetrahydrocannabinol,
+            'mode_of_payment' => \request()->mode_of_payment
         ]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Application successfully sent', 'classname' => 'alert-success']);
     }
