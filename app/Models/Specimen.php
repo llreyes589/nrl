@@ -14,6 +14,7 @@ class Specimen extends Model
         'unboxing_video_path',
         'sent_by',
         'courier',
-        'tracking_number'
+        'tracking_number',
+        'accepted_bottles'
     ];
 }

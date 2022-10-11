@@ -142,6 +142,7 @@ NRL - Proficiency Testing Applications List
                         <th>Facility</th>
                         <th>SDTL</th>
                         <th>Cycle</th>
+                        <th>Accepted Bottles</th>
                         <th>Rejected Specimen</th>
                         <th>Date Added</th>
                         <th>Manage</th>
@@ -153,6 +154,7 @@ NRL - Proficiency Testing Applications List
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>
+                        <td>{{$app->specimens()->latest('created_at')->first()->accepted_bottles}}</td>
                         <td>
                             @foreach($app->specimens as $specimen)
                             @if($specimen->unboxing_video_path != 'accepted' &&$specimen->unboxing_video_path != null)
@@ -160,6 +162,7 @@ NRL - Proficiency Testing Applications List
                             @endif
                             @endforeach
                         </td>
+
                         <td>{{$app->created_at}}</td>
                         <td>
                             <div class="dropdown">
@@ -179,8 +182,8 @@ NRL - Proficiency Testing Applications List
                                     @endif
                                     @else
                                     <!-- Prepare cert button -->
-                                    @if($app->score < 9 && gettype($app->score) == 'integer')
-                                        <button class="dropdown-item btn btn-primary" id="btn-prepare-certificate-modal" data-item="{{$app}}" type="button"><i class="fa fa-certificate"></i> Prepare Certificate</button>
+                                    <!-- cert: {{$app->specimens()->latest('created_at')->first()->accepted_bottles}} -->
+                                    @if($app->score < 9 && gettype($app->score) == 'integer' && $app->specimens()->latest('created_at')->first()->accepted_bottles > 18) <button class="dropdown-item btn btn-primary" id="btn-prepare-certificate-modal" data-item="{{$app}}" type="button"><i class="fa fa-certificate"></i> Prepare Certificate</button>
                                         @endif
                                         <!-- /Prepare cert button -->
                                         @endif

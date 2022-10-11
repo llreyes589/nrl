@@ -88,6 +88,9 @@ if ($application)
                                 <input type="radio" class="custom-control-input" id="accept" name="status" value="accept" required>
                                 <label class="custom-control-label" for="accept">Accept</label>
                             </div>
+                            <div class="form-group" id="accepted_bottles_container" style="display: none;">
+                                <input id="accepted_bottles" class="form-control" type="number" name="accepted_bottles" placeholder="Enter number of accepted bottles (optional)" min="0" max="20">
+                            </div>
                             <div class="custom-control custom-radio">
                                 <input type="radio" class="custom-control-input" id="reject" name="status" value="reject" required>
                                 <label class="custom-control-label" for="reject">Reject</label>
@@ -276,13 +279,13 @@ if ($application)
                 <h5 class="card-title">Uploaded File/s:</h5>
                 <hr>
                 @if($application->receipt_path)
-                <p>Receipt</p>
-                <img src="/storage/{{$application->receipt_path}}" class="img-fluid" alt="">
+                <a href="/storage/{{$application->receipt_path}}" target="_blank" class="btn btn-success btn-sm">Receipt</a>
+
                 <hr>
                 @endif
                 @if($application->result_path)
-                <p>Result:</p>
-                <img src="/storage/{{$application->result_path}}" class="img-fluid" alt="">
+                <a href="/storage/{{$application->result_path}}" target="_blank" class="btn btn-primary btn-sm">Result</a>
+
                 @endif
             </div>
         </div>
@@ -530,8 +533,10 @@ if ($application)
             if (e.target.value === 'reject') {
                 unboxing_video_path_container.show()
                 unboxing_video_path_input.attr('required', 'required');
+                $('#accepted_bottles_container').hide()
             } else {
                 unboxing_video_path_container.hide()
+                $('#accepted_bottles_container').show()
                 unboxing_video_path_input.removeAttr('required')
             }
         })

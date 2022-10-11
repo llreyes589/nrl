@@ -60,8 +60,13 @@ class ProficiencyTestingController extends Controller
         if (\request()->status === 'reject') {
 
             $validated = \request()->validate([
+                // 'accepted_bottles' => 'numeric|nullable',
                 'unboxing_video_path' => 'required',
             ], ['unboxing_video_path.required' => 'Reject file is required.']);
+        } else {
+            $validated = \request()->validate([
+                'accepted_bottles' => 'numeric|nullable',
+            ]);
         }
         if (\request()->file('unboxing_video_path')) {
 
@@ -70,7 +75,7 @@ class ProficiencyTestingController extends Controller
             $path = 'accepted';
         }
         // dd(\request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens);
-        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens()->latest('created_at')->first()->update(['unboxing_video_path' => $path]);
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens()->latest('created_at')->first()->update(['unboxing_video_path' => $path, 'accepted_bottles' => \request()->accepted_bottles ? \request()->accepted_bottles : null]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Specimen successfully received', 'classname' => 'alert-success']);
     }
 
