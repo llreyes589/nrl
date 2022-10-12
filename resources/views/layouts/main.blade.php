@@ -112,6 +112,12 @@
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Proficiency Testings</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('facility.profile')}}">
+                    <i class="fa fa-address-card" aria-hidden="true"></i>
+
+                    <span>Profile</span></a>
+            </li>
             @endrole
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

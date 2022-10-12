@@ -127,7 +127,7 @@ if ($application)
                 @endif
 
                 <!-- send-result-form -->
-                <form method="POST" action="{{route('proficiency-testing.facility.saveResult', $pt->id)}}" enctype="multipart/form-data" id="send-result-form" style="display:none;" enctype="multipart/form-data">
+                <form method="POST" action="{{route('proficiency-testing.facility.saveResult', $pt->id)}}" id="send-result-form" style="display:none;" enctype="multipart/form-data">
                     <div class="alert alert-info" role="alert">
                         <i class="fa fa-info-circle"></i> Take picture of test result.
                     </div>

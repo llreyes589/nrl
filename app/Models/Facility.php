@@ -26,7 +26,11 @@ class Facility extends Model
         'updated_by',
         'deleted_by',
         'deleted_at',
-        'user_id'
+        'user_id',
+        'analyst_name',
+        'analyst_certificate_no',
+        'analyst_certificate_file',
+        'lto_file'
     ];
 
     function certificate()

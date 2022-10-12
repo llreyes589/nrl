@@ -105,5 +105,9 @@ Route::group(['middleware' => ['role:Facility']], function () {
             Route::put('/proficiency-testing/{id}/receiveSpecimen', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'receiveSpecimen'])->name('receiveSpecimen');
             Route::put('/proficiency-testing/{id}/saveResult', [App\Http\Controllers\Facility\ProficiencyTestingController::class, 'saveResult'])->name('saveResult');
         });
+        Route::name('facility.')->group(function () {
+            Route::get('/profile', [App\Http\Controllers\Facility\FacilityController::class, 'profile'])->name('profile');
+            Route::put('/profile/update', [App\Http\Controllers\Facility\FacilityController::class, 'profileUpdate'])->name('profile.update');
+        });
     });
 });
