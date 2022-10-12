@@ -140,40 +140,15 @@ if ($application)
 
 
                 @if($application)
-                @role('admin')
-                <!-- Prepare certificate -->
-                <?php
-                $score = new \App\Library\Scoring($application->score);
 
-                ?>
-                <form method="post" action="{{route('ptApplication.create_certificate', ['id' => $pt->id, 'application_id' => $application->id])}}" id="prepare-certificate-form" style="display:none;">
-                    @csrf
-                    <div class="form-group">
-                        <label for="or_no">OR Number:</label>
-
-                        <input id="or_no" class="form-control" type="text" name="or_no" placeholder="OR Number" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="or_no">Certificate Number:</label>
-                        <input id="or_no" class="form-control" type="text" name="certificate_no" placeholder="Certificate Number" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="performance">Performance (Score: {{$score->get_wrong_answers()}}):</label>
-
-                        <p class="form-control">{{$score->get_performance()[1]}}</p>
-
-                    </div>
-                    <button class="btn btn-primary btn-sm" type="submit">Add</button>
-
-                </form>
-                @endrole
 
                 @if($application->certificate)
+                @if($application->certificate->approved_by)
                 <!-- View certificate -->
                 <div class="embed-responsive embed-responsive-16by9" id="view-cert-frame" style="display:none;">
                     <iframe class="embed-responsive-item" allowfullscreen src="{{route('certificate', $application->certificate->key)}}"></iframe>
                 </div>
+                @endif
                 @endif
                 @endif
             </div>
@@ -241,35 +216,14 @@ if ($application)
 
                 @if($application->certificate)
 
-                @can('verify')
-                @if(!$application->certificate->verified_by)
-                <form method="post" action="{{route('ptApplication.verify_certificate',['id' => $pt->id, 'application_id' => $application->id])}}">
-                    @csrf
-                    @method('PUT')
-                    <button class="btn btn-secondary" id="btn-verify-certificate-modal" type="submit" data-target="#verify-certificate-form">Verify Certificate</button>
-                </form>
-                @endif
-                @endcan
 
-                @can('approve')
-                @if(!$application->certificate->approved_by)
-                <form method="post" action="{{route('ptApplication.approve_certificate',['id' => $pt->id, 'application_id' => $application->id])}}">
-                    @csrf
-                    @method('PUT')
-                    <button class="btn btn-success" id="btn-approve-certificate-modal" type="submit" data-target="#approve-certificate-form">Approve Certificate</button>
-                </form>
-                @endif
-                @endcan
+
                 @if($application->certificate->approved_by)
                 <button class="btn btn-success" id="btn-view-certificate-modal" type="submit" data-target="#view-cert-frame">View Certificate</button>
                 @endif
-                @else
-                @role('admin')
-                @if($application->score < 9 && gettype($application->score) == 'integer') <button class="btn btn-primary" id="btn-prepare-certificate-modal" type="button" data-target="#prepare-certificate-form">Prepare Certificate</button>
-                    @endif
-                    @endrole
-                    @endif
-                    @endrole
+
+                @endif
+                @endrole
             </div>
         </div>
 
