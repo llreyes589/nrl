@@ -96,11 +96,19 @@ if ($application)
                                 <label class="custom-control-label" for="reject">Reject</label>
                             </div>
                             <hr>
-                            <div class="form-group row" id="unboxing_video_path_container" style="display: none;">
-                                <label for="unboxing_video_path" class="col-md-4 col-form-label text-md-right">{{ __('Attach Video/Image') }}</label>
+                            <div id="unboxing_video_path_container" style="display: none;">
+                                <div class="form-group row">
+                                    <label for="unboxing_video_path" class="col-md-4 col-form-label text-md-right">{{ __('Attach Video/Image') }}</label>
 
-                                <div class="col-md-6">
-                                    <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path">
+                                    <div class="col-md-6">
+                                        <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
+                                    <div class="col-md-6">
+                                        <textarea id="description" class="form-control" name="reject_description" rows="3" required></textarea>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row mb-0">
@@ -120,6 +128,9 @@ if ($application)
 
                 <!-- send-result-form -->
                 <form method="POST" action="{{route('proficiency-testing.facility.saveResult', $pt->id)}}" enctype="multipart/form-data" id="send-result-form" style="display:none;" enctype="multipart/form-data">
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle"></i> Take picture of test result.
+                    </div>
                     @csrf
                     @method("PUT")
                     <div class="form-group row">
@@ -305,7 +316,17 @@ if ($application)
                             <li class="text-info">
                                 <u>@if($specimen->id != $firstSpecimen->id) Resent @endif Specimen Received</u>
                                 <span class="float-right">{{\Carbon\Carbon::parse($specimen->updated_at)->diffForHumans()}}</span>
-                                <p class="text-secondary">@if($specimen->id != $firstSpecimen->id) Resent @endif Specimen was {{$specimen->unboxing_video_path == 'accepted' ? 'Accepted' : 'Rejected'}} on {{\Carbon\Carbon::parse($specimen->created_at)->toDayDateTimeString()}}</p>
+                                <p class="text-secondary m-0">@if($specimen->id != $firstSpecimen->id) Resent @endif Specimen was
+                                    @if($specimen->unboxing_video_path == 'accepted')
+                                    <span class="text-success">Accepted</span>
+                                    @else
+                                    <span class="text-danger">Rejected</span>
+                                    @endif
+                                    on {{\Carbon\Carbon::parse($specimen->created_at)->toDayDateTimeString()}}
+                                </p>
+                                @if($specimen->reject_description)
+                                <p class="m-0 p-0 text-danger"><small>-{{$specimen->reject_description}}</small></p>
+                                @endif
                             </li>
                             @endif
                             <li class="text-info">
@@ -569,7 +590,10 @@ if ($application)
         submit_receive_specimen.click(function(e) {
             e.preventDefault()
             const statusVal = $('[name="status"]:checked').val();
-            // console.log(statusVal)
+            if (statusVal === undefined) {
+                alert('Please select Accept or Reject.')
+                return
+            }
 
             if (statusVal === 'accept') {
                 const conf = window.confirm('Confirm specimen acceptance?')
