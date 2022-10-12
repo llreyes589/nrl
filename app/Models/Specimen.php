@@ -15,6 +15,6 @@ class Specimen extends Model
         'sent_by',
         'courier',
         'tracking_number',
-        'accepted_bottles'
+        'accepted_bottles', 'reject_description'
     ];
 }

@@ -154,7 +154,11 @@ NRL - Proficiency Testing Applications List
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>
-                        <td>{{$app->specimens()->latest('created_at')->first()->accepted_bottles}}</td>
+                        <td>
+                            @if($app->specimens()->latest('created_at')->first())
+                            {{$app->specimens()->latest('created_at')->first()->accepted_bottles}}
+                            @endif
+                        </td>
                         <td>
                             @foreach($app->specimens as $specimen)
                             @if($specimen->unboxing_video_path != 'accepted' &&$specimen->unboxing_video_path != null)
@@ -178,14 +182,15 @@ NRL - Proficiency Testing Applications List
                                     <!-- update cert button -->
                                     @if($app->certificate)
                                     @if(!$app->certificate->verified_by)
-                                    <button class="dropdown-item btn btn-info" id="btn-edit-certificate-modal" data-item="{{$app}}" type="button"><i class="fa fa-edit fa-sm"></i> Edit Certificate</button>
+                                    <button class="dropdown-item btn btn-info" id="btn-edit-certificate-modal" onclick="editCert(this)" data-item="{{$app}}" type="button"><i class="fa fa-edit fa-sm"></i> Edit Certificate</button>
                                     @endif
                                     @else
                                     <!-- Prepare cert button -->
-                                    <!-- cert: {{$app->specimens()->latest('created_at')->first()->accepted_bottles}} -->
-                                    @if($app->score < 9 && gettype($app->score) == 'integer' && $app->specimens()->latest('created_at')->first()->accepted_bottles > 18) <button class="dropdown-item btn btn-primary" id="btn-prepare-certificate-modal" data-item="{{$app}}" type="button"><i class="fa fa-certificate"></i> Prepare Certificate</button>
+                                    @if($app->specimens()->latest('created_at')->first())
+                                    @if($app->score < 9 && gettype($app->score) == 'integer' && gettype($app->specimens()->latest('created_at')->first()->accepted_bottles) != NULL || $app->specimens()->latest('created_at')->first()->accepted_bottles > 18) <button class="dropdown-item btn btn-primary" type="button" onclick="prepareCert(this)" data-item="{{$app}}"><i class="fa fa-certificate"></i> Prepare Certificate</button>
                                         @endif
                                         <!-- /Prepare cert button -->
+                                        @endif
                                         @endif
                                         <!-- /update cert button -->
 
@@ -304,9 +309,61 @@ NRL - Proficiency Testing Applications List
         specimen_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}`);
     }
 
-    btn_prepare_certificate_modal.click(function() {
+    // btn_prepare_certificate_modal.click(function() {
+    //     modal.modal()
+    //     const item = $(this).data('item')
+    //     const [key, value] = item.scoring
+    //     const fd = new FormData();
+    //     // fd.append('or_no', or_no)
+    //     // fd.append('certificate_no', certificate_no)
+    //     // fd.append('performance', performance)
+
+    //     const api = `/proficiency-testing/${item.pt.id}/applicants/${item.id}/certificate/create`
+    //     prepare_certificate_form.attr('action', api)
+    //     modal_title.text('Prepare Certificate')
+    //     performance.text(`${value} (Score: ${item.score})`)
+    //     prepare_certificate_form.show()
+    //     formShowed = prepare_certificate_form
+    // })
+    // btn_edit_certificate_modal.click(function() {
+    //     modal.modal()
+    //     const item = $(this).data('item')
+    //     const [key, value] = item.scoring
+    //     const fd = new FormData();
+    //     // fd.append('or_no', or_no)
+    //     // fd.append('certificate_no', certificate_no)
+    //     // fd.append('performance', performance)
+
+    //     or_no.val(item.certificate.or_no)
+    //     certificate_no.val(item.certificate.certificate_no)
+
+    //     const api = `/proficiency-testing/${item.pt.id}/applicants/${item.id}/certificate/${item.certificate.id}`
+    //     edit_certificate_form.attr('action', api)
+    //     modal_title.text('Edit Certificate')
+    //     edit_performance.text(`${value} (Score: ${item.score})`)
+
+    //     edit_certificate_form.show()
+    //     formShowed = edit_certificate_form
+    // })
+
+    close_form_modal.click(function(e) {
+        modal_title.text('')
+        modal.modal('toggle')
+        formShowed.hide()
+        $('.modal-backdrop').hide();
+    })
+
+    $('#save-score').click(function(e) {
+        e.preventDefault()
+        const conf = window.confirm('Confirm number of wrong answers?')
+        if (conf) add_score_form.submit()
+    })
+
+    const prepareCert = (el) => {
         modal.modal()
-        const item = $(this).data('item')
+
+        const dataItem = el.getAttribute('data-item')
+        const item = JSON.parse(dataItem)
         const [key, value] = item.scoring
         const fd = new FormData();
         // fd.append('or_no', or_no)
@@ -319,10 +376,13 @@ NRL - Proficiency Testing Applications List
         performance.text(`${value} (Score: ${item.score})`)
         prepare_certificate_form.show()
         formShowed = prepare_certificate_form
-    })
-    btn_edit_certificate_modal.click(function() {
+
+    }
+    const editCert = (el) => {
         modal.modal()
-        const item = $(this).data('item')
+
+        const dataItem = el.getAttribute('data-item')
+        const item = JSON.parse(dataItem)
         const [key, value] = item.scoring
         const fd = new FormData();
         // fd.append('or_no', or_no)
@@ -338,20 +398,9 @@ NRL - Proficiency Testing Applications List
         edit_performance.text(`${value} (Score: ${item.score})`)
 
         edit_certificate_form.show()
-        formShowed = edit_certificate_form
-    })
+        formShowed = edit_certificate_formconst[key, value] = item.scoring
 
-    close_form_modal.click(function(e) {
-        modal_title.text('')
-        modal.modal('toggle')
-        formShowed.hide()
-        $('.modal-backdrop').hide();
-    })
 
-    $('#save-score').click(function(e) {
-        e.preventDefault()
-        const conf = window.confirm('Confirm number of wrong answers?')
-        if (conf) add_score_form.submit()
-    })
+    }
 </script>
 @endsection
