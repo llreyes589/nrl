@@ -78,6 +78,11 @@
                     <span>Proficiency Testings</span></a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{{route('announcements.index')}}">
+                    <i class="fa fa-bullhorn"></i>
+                    <span>Announcements</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{route('settings.index')}}">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Settings</span></a>
