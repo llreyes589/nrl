@@ -34,7 +34,10 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center " href="index.html">
+                <div class="sidebar-brand-icon ">
+                    <img class="img-fluid" style="width: 10vh;" src="{{asset('images/nrl_logo.png')}}" alt="">
+                </div>
                 <div class="sidebar-brand-text mx-3">NRL</div>
             </a>
 
@@ -145,6 +148,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->name}}</span>
+                                <span class="mr-2 d-block d-sm-none text-gray-600 small">{{Auth::user()->username}}</span>
 
                             </a>
                             <!-- Dropdown - User Information -->
