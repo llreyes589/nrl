@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CertificateTemplateController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('testmail', function(){
@@ -34,9 +35,15 @@ Route::group(['middleware' => ['role_or_permission:admin|create user', 'auth']],
 Route::name('settings.')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
 
+        Route::resource('certificate-templates', CertificateTemplateController::class);
+
         Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('index');
         Route::put('/settings/certificate', [App\Http\Controllers\SettingController::class, 'storeCertSettings'])->name('storeCertSettings');
     });
+});
+Route::group(['middleware' => ['auth']], function () {
+
+    Route::resource('certificate-templates', CertificateTemplateController::class);
 });
 
 
