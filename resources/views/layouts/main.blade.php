@@ -93,11 +93,6 @@
 
             @endrole
             <li class="nav-item">
-                <a class="nav-link" href="{{route('settings.index')}}">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Settings</span></a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{{route('certificate-templates.index')}}">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Certificate Templates</span></a>
