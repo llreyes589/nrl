@@ -49,10 +49,11 @@ class FacilityController extends Controller
         $facility = Facility::with(['certificate' => function ($q) {
             $q->max('created_at');
         }])->find($id);
+        $templates = CertificateTemplate::all();
         // dd($facility);
         $certificates = Certificate::with('prepared_by_details')->with('verified_by_details')->with('approved_by_details')->where('facility_id', $id)->where('facility_verified_at', '!=', null)->get();
         // dd($certificates);
-        return view('verifiers.facilities.show', compact('facility', 'certificates'));
+        return view('verifiers.facilities.show', compact('facility', 'certificates', 'templates'));
     }
 
     function updatePrepared($id, $cert_id)
