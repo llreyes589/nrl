@@ -548,7 +548,8 @@ NFL - Facility
 
 @section('javascript')
 <script>
-    const facility = JSON.parse('{!!json_encode($facility) !!}')
+    const certificate = JSON.parse('{!! json_encode($facility->certificate) !!}')
+
     window.onload = function() {
         $('#generate_certificate_btn').click(function() {
             $('#certificate_modal').modal('show')
@@ -561,7 +562,7 @@ NFL - Facility
 
 
 
-        if (facility.certificate) {
+        if (certificate) {
 
             $('#certificate_modal').on('show.bs.modal', function() {
                 $('#certificate_container').attr('src', '{{route("certificate", ["key" => $facility->certificate->key])}}')
