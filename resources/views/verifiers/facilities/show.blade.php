@@ -533,6 +533,7 @@ NFL - Facility
 @section('javascript')
 <script>
     window.onload = function() {
+        const facility = JSON.parse('{!!json_encode($facility) !!}')
         $('#generate_certificate_btn').click(function() {
             $('#certificate_modal').modal('show')
         })
@@ -541,11 +542,12 @@ NFL - Facility
             $('#certificate_container').attr('src', '')
         })
 
-        @if(isset($facility -> certificate))
-        $('#certificate_modal').on('show.bs.modal', function() {
-            $('#certificate_container').attr('src', '{{route("certificate", ["key" => $facility->certificate->key])}}')
-        })
-        @endif
+        if (facility.certificate) {
+
+            $('#certificate_modal').on('show.bs.modal', function() {
+                $('#certificate_container').attr('src', '{{route("certificate", ["key" => $facility->certificate->key])}}')
+            })
+        }
 
         $('#add_certificate_btn').click(function() {
             $('#encoder_modal').modal('show')

@@ -47,4 +47,10 @@ class Certificate extends Model
     {
         return $this->belongsTo('\App\Models\User', 'approved_by', 'id');
     }
+
+
+    function cert_template()
+    {
+        return $this->hasOne('\App\Models\CertificateTemplate', 'id', 'certificate_template_id');
+    }
 }
