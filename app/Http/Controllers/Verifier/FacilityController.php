@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Facility;
 use App\Models\Certificate;
+use App\Models\CertificateTemplate;
 use App\Models\Region;
 use App\Models\Setting;
 use Carbon\Carbon;
@@ -92,12 +93,12 @@ class FacilityController extends Controller
 
     function certificate(Request $request, $key)
     {
-        $settings = Setting::find(1);
+        $certificate = Certificate::where('key', $key)->first();
+        $settings = CertificateTemplate::find($certificate->certificate_template_id);
         $given = \Carbon\Carbon::parse($settings->certificate_given_at);
         \Carbon\Carbon::setToStringFormat('jS \d\a\y \o\f F Y');
         // Image method signature:
         // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
-        $certificate = Certificate::where('key', $key)->first();
         // dd($certificate->prepared_by_details->signature);
         $name = $certificate->facility->name;
         $performance  = '';
@@ -277,9 +278,9 @@ class FacilityController extends Controller
                 <tr>
                     <td style="width:40%">    
                     </td>
-                    <td style="width:40%">  
+                    <td style="width:35%">  
                     </td>
-                    <td style="width:20%">   
+                    <td style="width:25%">   
                          
                         <img src="@' . $imgdata . '" />
                     </td>

@@ -26,7 +26,8 @@ class Certificate extends Model
         'facility_verified_by',
         'facility_verified_at',
         'issued_by',
-        'issued_at'
+        'issued_at',
+        'certificate_template_id'
     ];
 
     function facility()
