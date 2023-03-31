@@ -146,6 +146,15 @@ NFL - Facility
                             <option value="HS" {{$facility->certificate->performance == 'HS' ? 'selected' : ''}}>Highly Satisfactory</option>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="template">Certificate Template</label>
+                        <select id="template" class="custom-select" name="certificate_template_id" required>
+                            @foreach($templates as $t)
+                            <option value="{{$t->id}}" @if($facility->certificate->certificate_template_id == $t->id) selected @endif}}>{{$t->year}} </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <button class="btn btn-primary btn-sm" type="submit">Update</button>
                     <button class="btn btn-secondary btn-sm" type="button" id="cancel_btn">Cancel</button>
                 </form>
