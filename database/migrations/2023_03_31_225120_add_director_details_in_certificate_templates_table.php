@@ -14,10 +14,10 @@ class AddDirectorDetailsInCertificateTemplatesTable extends Migration
     public function up()
     {
         Schema::table('certificate_templates', function (Blueprint $table) {
-            $table->string('director_name');
-            $table->string('director_position');
-            $table->text('director_designation');
-            $table->text('director_signature_path');
+            $table->string('director_name')->nullable();
+            $table->string('director_position')->nullable();
+            $table->text('director_designation')->nullable();
+            $table->text('director_signature_path')->nullable();
         });
     }
 

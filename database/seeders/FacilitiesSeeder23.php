@@ -16,8 +16,8 @@ class FacilitiesSeeder23 extends Seeder
      */
     public function run()
     {
-        Facility::truncate();
-        Certificate::truncate();
+        // Facility::truncate();
+        // Certificate::truncate();
         $csvFile = fopen(base_path("database/seeders/wtl23.csv"), "r");
 
         $firstline = true;
@@ -34,7 +34,7 @@ class FacilitiesSeeder23 extends Seeder
                 $facility->certificate()->create([
                     'facility_id' => $facility->id,
                     "or_no" => Certificate::where('or_no', $data['8'])->exists() ? Str::random(12) : $data[8],
-                    "certificate_no" => Str::random(12),
+                    "certificate_no" => Certificate::where('or_no', $data['11'])->exists() ? Str::random(12) : $data['11'],
                     "performance" => $data['13'],
                     "validity" => '2023-12-31',
                     'key' => md5(microtime()),
