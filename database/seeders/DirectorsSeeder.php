@@ -24,7 +24,7 @@ class DirectorsSeeder extends Seeder
             [
                 'director_name' => 'Atty. CHARADE B. MERCADO-GRANDE, MPSA',
                 'director_position' => 'Assistant Secretary / Director IV',
-                'director_designation' => 'Health Facility Services & Regulatory Bureau',
+                'director_designation' => 'Health Facilities and Services Regulatory Bureau',
                 'director_signature_path' => 'images/grande.png'
             ],
         ];
