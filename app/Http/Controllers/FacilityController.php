@@ -44,7 +44,7 @@ class FacilityController extends Controller
     {
         $req = isset($request->id) ? $request->merge(['updated_by' => auth()->id()])->except('id') : $request->merge(['created_by' => auth()->id()])->except('id');
         // dd($request->accreditation_no);
-        $validated = $request->validate(['accreditation_no' => 'required|unique:facilities,accreditation_no,' . $request->id], ['accreditation_no.unique' => 'The accreditation number has already been taken.']);
+        // $validated = $request->validate(['accreditation_no' => 'required|unique:facilities,accreditation_no,' . $request->id], ['accreditation_no.unique' => 'The accreditation number has already been taken.']);
         $facility = Facility::updateOrCreate(
             [
                 'id' => $request->id,
