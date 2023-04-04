@@ -17,15 +17,7 @@ WTL | Facilities
                 </button>
             </div>
             <div class="modal-body">
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
+
                 <form action="{{route('facilities.createOrUpdate')}}" method="POST">
                     @csrf
                     <input type="hidden" name="id">
