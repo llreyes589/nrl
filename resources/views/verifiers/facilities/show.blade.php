@@ -559,13 +559,10 @@ NFL - Facility
             $('#certificate_container').attr('src', '')
         })
 
-
-
-
         if (certificate) {
 
             $('#certificate_modal').on('show.bs.modal', function() {
-                $('#certificate_container').attr('src', '{{route("certificate", ["key" => $facility->certificate->key])}}')
+                $('#certificate_container').attr('src', `/certificate/${certificate.key}`)
             })
         }
 
