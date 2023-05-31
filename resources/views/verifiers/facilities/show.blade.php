@@ -224,6 +224,14 @@ NFL - Facility
                             <option value="A">Acceptable</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="template">Certificate Template</label>
+                        <select id="template" class="custom-select" name="certificate_template_id" required>
+                            @foreach($templates as $t)
+                            <option value="{{$t->id}}" @if($facility->certificate->certificate_template_id == $t->id) selected @endif}}>{{$t->year}} </option>
+                            @endforeach
+                        </select>
+                    </div>
                     <button class="btn btn-primary btn-sm" type="submit">Save</button>
                     <button class="btn btn-secondary btn-sm" type="button" id="cancel_btn">Cancel</button>
                 </form>
