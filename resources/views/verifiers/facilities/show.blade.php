@@ -228,7 +228,7 @@ NFL - Facility
                         <label for="template">Certificate Template</label>
                         <select id="template" class="custom-select" name="certificate_template_id" required>
                             @foreach($templates as $t)
-                            <option value="{{$t->id}}" @if($facility->certificate->certificate_template_id == $t->id) selected @endif}}>{{$t->year}} </option>
+                            <option value="{{$t->id}}" @if($facility->certificate && $facility->certificate->certificate_template_id == $t->id) selected @endif}}>{{$t->year}} </option>
                             @endforeach
                         </select>
                     </div>
@@ -526,7 +526,7 @@ NFL - Facility
                                 Issued Certificates</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 @forelse($certificates as $certificate)
-                                <button onclick="viewCert({{$certificate}})" class="btn btn-primary btn-icon-split btn-sm">
+                                <button onclick="viewCert('{{$certificate}}')" class="btn btn-primary btn-icon-split btn-sm">
                                     <span class="icon text-white-50">
                                         <i class="fa fa-search"></i>
                                     </span>
