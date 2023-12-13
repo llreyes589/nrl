@@ -120,7 +120,7 @@ class FacilityController extends Controller
                 break;
         }
         $pdf = new PDF();
-        $qr = QrCode::format('png')->size(300)->merge('http://1.bp.blogspot.com/-YSy27PtRhnM/TVOIUvjmCsI/AAAAAAAAAKE/dyvKbvJxN4M/s1600/nrl+eamc+logo.jpg', .14, true)->generate(\route('verifyCertificate', ['key' => $key]));
+        $qr = QrCode::format('png')->size(300)->merge(asset('/images/logo-cert.jpg'), .14, true)->generate(\route('verifyCertificate', ['key' => $key]));
         $pdf::SetTitle($name . ' Certificate');
         $pdf::AddPage();
         $imgdata = base64_encode($qr);
@@ -215,7 +215,7 @@ class FacilityController extends Controller
                         <p class="header">Republic of the Philippines Department of Health <br>Manila </p>
                     </td>
                     <td style="width:30%">    
-                        <img src="http://1.bp.blogspot.com/-YSy27PtRhnM/TVOIUvjmCsI/AAAAAAAAAKE/dyvKbvJxN4M/s1600/nrl+eamc+logo.jpg" width="100"/>
+                        <img src="/images/logo-cert.jpg" width="100"/>
                     </td>
                 </tr>
                 <tr>
