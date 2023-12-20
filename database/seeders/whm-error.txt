@@ -1,0 +1,94 @@
+Failed to connect to “/var/lib/mysql/mysql.sock”; will fall back to TCP/IP. (Cpanel::Exception::IO::SocketConnectError/(XID jevwm3) The system failed to connect a UNIX domain socket to “/var/lib/mysql/mysql.sock” because of an error: Connection refused
+ at /usr/local/cpanel/Cpanel/Autodie/CORE/connect.pm line 29.
+	Cpanel::Autodie::connect(GLOB(0x318df88), "\x{1}\x{0}/var/lib/mysql/mysql.sock\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}\x{0}"...) called at /usr/local/cpanel/Cpanel/MysqlUtils/Unprivileged.pm line 179
+	Cpanel::MysqlUtils::Unprivileged::__ANON__() called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 100
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 91
+	Try::Tiny::try(CODE(0x318dd00), Try::Tiny::Catch=REF(0x31189c8)) called at /usr/local/cpanel/Cpanel/MysqlUtils/Unprivileged.pm line 184
+	Cpanel::MysqlUtils::Unprivileged::_get_socket("localhost", undef) called at /usr/local/cpanel/Cpanel/MysqlUtils/Unprivileged.pm line 88
+	Cpanel::MysqlUtils::Unprivileged::get_version_from_host("localhost") called at /usr/local/cpanel/Cpanel/MysqlUtils/Version.pm line 150
+	Cpanel::MysqlUtils::Version::__ANON__() called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 100
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 91
+	Try::Tiny::try(CODE(0x2f8ad70), Try::Tiny::Catch=REF(0x29ed290)) called at /usr/local/cpanel/Cpanel/MysqlUtils/Version.pm line 160
+	Cpanel::MysqlUtils::Version::current_mysql_version() called at /usr/local/cpanel/Cpanel/MysqlUtils/Version.pm line 90
+	Cpanel::MysqlUtils::Version::mysqlversion() called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 234
+	Cpanel::Template::Plugin::Mysql::_mysqlversion_as_root() called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 106
+	Cpanel::Template::Plugin::Mysql::__ANON__() called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 98
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 91
+	Try::Tiny::try(CODE(0x110b370), Try::Tiny::Catch=REF(0x2935328)) called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 110
+	Cpanel::Template::Plugin::Mysql::mysqlversion() called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 157
+	Cpanel::Template::Plugin::Mysql::is_version_going_eol_soon() called at /usr/local/cpanel/Cpanel/Template/Plugin/Whostmgr.pm line 137
+	Cpanel::Template::Plugin::Whostmgr::_get_mysql_eol_warning() called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/_defheader.tmpl line 38
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/_defheader.tmpl line 38
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/_defheader.tmpl line 9
+	Cpanel::Template::Shared::__ANON__(Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 165
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 163
+	Template::Document::process(Template::Document=HASH(0x286e7c0), Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 352
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 322
+	Template::Context::process(Template::Context=HASH(0x2656168), "master_templates/_defheader.tmpl") called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/master.tmpl line 1
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/master.tmpl line 2
+	Cpanel::Template::Shared::__ANON__(Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 165
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 163
+	Template::Document::process(Template::Document=HASH(0x2805ea0), Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 352
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 322
+	Template::Context::process(Template::Context=HASH(0x2656168), "master_templates/master.tmpl", HASH(0x27e95f8), "localize me!") called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 410
+	Template::Context::include(Template::Context=HASH(0x2656168), "master_templates/master.tmpl", HASH(0x27e95f8)) called at /usr/local/cpanel/whostmgr/docroot/templates/initial-setup-wizard/index.html.tt line 69
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/initial-setup-wizard/index.html.tt line 16
+	Cpanel::Template::Shared::__ANON__(Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 165
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 163
+	Template::Document::process(Template::Document=HASH(0x27e9490), Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 352
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 322
+	Template::Context::process(Template::Context=HASH(0x2656168), Template::Document=HASH(0x27e9490)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Service.pm line 94
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Service.pm line 91
+	Template::Service::process(Template::Service=HASH(0x2655d48), "initial-setup-wizard/index.html.tt", HASH(0x264baa8)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template.pm line 66
+	Template::process(Template=HASH(0x26559a0), "initial-setup-wizard/index.html.tt", HASH(0x264baa8)) called at /usr/local/cpanel/Cpanel/Template.pm line 473
+	Cpanel::Template::process_template("whostmgr", HASH(0x264baa8)) called at whostmgr/bin/whostmgr3.pl line 211
+	main::initial_setup_wizard1() called at whostmgr/bin/whostmgr3.pl line 150
+	main::__ANON__(__CPANEL_HIDDEN__) called at /usr/local/cpanel/Whostmgr/Dispatch.pm line 364
+	Whostmgr::Dispatch::_do_call("initial_setup_wizard1", HASH(0x2621990), HASH(0x2621b58)) called at /usr/local/cpanel/Whostmgr/Dispatch.pm line 176
+	Whostmgr::Dispatch::dispatch("initial_setup_wizard1", 14337, ARRAY(0x2621c18)) called at whostmgr/bin/whostmgr3.pl line 153
+) at /usr/local/cpanel/Cpanel/MysqlUtils/Unprivileged.pm line 182.
+ at /usr/local/cpanel/Cpanel/MysqlUtils/Unprivileged.pm line 182.
+	Cpanel::MysqlUtils::Unprivileged::__ANON__(Cpanel::Exception::IO::SocketConnectError=HASH(0x31ae558)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 121
+	Try::Tiny::try(CODE(0x318dd00), Try::Tiny::Catch=REF(0x31189c8)) called at /usr/local/cpanel/Cpanel/MysqlUtils/Unprivileged.pm line 184
+	Cpanel::MysqlUtils::Unprivileged::_get_socket("localhost", undef) called at /usr/local/cpanel/Cpanel/MysqlUtils/Unprivileged.pm line 88
+	Cpanel::MysqlUtils::Unprivileged::get_version_from_host("localhost") called at /usr/local/cpanel/Cpanel/MysqlUtils/Version.pm line 150
+	Cpanel::MysqlUtils::Version::__ANON__() called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 100
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 91
+	Try::Tiny::try(CODE(0x2f8ad70), Try::Tiny::Catch=REF(0x29ed290)) called at /usr/local/cpanel/Cpanel/MysqlUtils/Version.pm line 160
+	Cpanel::MysqlUtils::Version::current_mysql_version() called at /usr/local/cpanel/Cpanel/MysqlUtils/Version.pm line 90
+	Cpanel::MysqlUtils::Version::mysqlversion() called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 234
+	Cpanel::Template::Plugin::Mysql::_mysqlversion_as_root() called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 106
+	Cpanel::Template::Plugin::Mysql::__ANON__() called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 98
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/Try/Tiny.pm line 91
+	Try::Tiny::try(CODE(0x110b370), Try::Tiny::Catch=REF(0x2935328)) called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 110
+	Cpanel::Template::Plugin::Mysql::mysqlversion() called at /usr/local/cpanel/Cpanel/Template/Plugin/Mysql.pm line 157
+	Cpanel::Template::Plugin::Mysql::is_version_going_eol_soon() called at /usr/local/cpanel/Cpanel/Template/Plugin/Whostmgr.pm line 137
+	Cpanel::Template::Plugin::Whostmgr::_get_mysql_eol_warning() called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/_defheader.tmpl line 38
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/_defheader.tmpl line 38
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/_defheader.tmpl line 9
+	Cpanel::Template::Shared::__ANON__(Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 165
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 163
+	Template::Document::process(Template::Document=HASH(0x286e7c0), Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 352
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 322
+	Template::Context::process(Template::Context=HASH(0x2656168), "master_templates/_defheader.tmpl") called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/master.tmpl line 1
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/master_templates/master.tmpl line 2
+	Cpanel::Template::Shared::__ANON__(Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 165
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 163
+	Template::Document::process(Template::Document=HASH(0x2805ea0), Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 352
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 322
+	Template::Context::process(Template::Context=HASH(0x2656168), "master_templates/master.tmpl", HASH(0x27e95f8), "localize me!") called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 410
+	Template::Context::include(Template::Context=HASH(0x2656168), "master_templates/master.tmpl", HASH(0x27e95f8)) called at /usr/local/cpanel/whostmgr/docroot/templates/initial-setup-wizard/index.html.tt line 69
+	eval {...} called at /usr/local/cpanel/whostmgr/docroot/templates/initial-setup-wizard/index.html.tt line 16
+	Cpanel::Template::Shared::__ANON__(Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 165
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Document.pm line 163
+	Template::Document::process(Template::Document=HASH(0x27e9490), Template::Context=HASH(0x2656168)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 352
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Context.pm line 322
+	Template::Context::process(Template::Context=HASH(0x2656168), Template::Document=HASH(0x27e9490)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Service.pm line 94
+	eval {...} called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template/Service.pm line 91
+	Template::Service::process(Template::Service=HASH(0x2655d48), "initial-setup-wizard/index.html.tt", HASH(0x264baa8)) called at /usr/local/cpanel/3rdparty/perl/536/cpanel-lib/x86_64-linux/Template.pm line 66
+	Template::process(Template=HASH(0x26559a0), "initial-setup-wizard/index.html.tt", HASH(0x264baa8)) called at /usr/local/cpanel/Cpanel/Template.pm line 473
+	Cpanel::Template::process_template("whostmgr", HASH(0x264baa8)) called at whostmgr/bin/whostmgr3.pl line 211
+	main::initial_setup_wizard1() called at whostmgr/bin/whostmgr3.pl line 150
+	main::__ANON__(__CPANEL_HIDDEN__) called at /usr/local/cpanel/Whostmgr/Dispatch.pm line 364
+	Whostmgr::Dispatch::_do_call("initial_setup_wizard1", HASH(0x2621990), HASH(0x2621b58)) called at /usr/local/cpanel/Whostmgr/Dispatch.pm line 176
+	Whostmgr::Dispatch::dispatch("initial_setup_wizard1", 14337, ARRAY(0x2621c18)) called at whostmgr/bin/whostmgr3.pl line 153
