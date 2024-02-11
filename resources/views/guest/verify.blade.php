@@ -15,10 +15,10 @@ NRL - Verify my certificate
 <div class="card {{!isset($cert_details->facility_verified_by) ? 'border-primary' : 'border-success'}}">
     <div class="card-header">
         @if(!isset($cert_details->facility_verified_by))
-        <h5 class="text-primary">Verify Certificate to DTL Proficiency Certificate Verification</h5>
+        <h5 class="text-primary">Verify DTL proficiency certificate at the National Reference Laboratory for Environmental, Occupational Health, Toxicology, Micornutrients Assay</h5>
         @else
-        <h5 class="text-success">This is a VALID Certificate until {{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->validity))->toDayDateTimeString()}}
-        @endif
+        <h5 class="text-success">This is a VALID DTL proficiency certificate until {{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->validity))->toDayDateTimeString()}}
+            @endif
     </div>
     <div class="card-body">
         @if(!isset($cert_details->facility_verified_by))
@@ -37,46 +37,46 @@ NRL - Verify my certificate
             </button>
         </form>
         @else
-            <div class="row">
-                <div class="col-md-2 col-sm-12">
-                    Laboratory:
-                </div>
-                <div class="col-md col-sm-12">
-                    <strong>{{$cert_details->facility->name}}</strong>
-                </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                Laboratory:
             </div>
-            <div class="row">
-                <div class="col-md-2 col-sm-12">
-                    Address:
-                </div>
-                <div class="col-md col-sm-12">
-                    <strong>{{$cert_details->facility->address}}</strong>
-                </div>
+            <div class="col-md col-sm-12">
+                <strong>{{$cert_details->facility->name}}</strong>
             </div>
-            <div class="row">
-                <div class="col-md-2 col-sm-12">
-                    Issued on:
-                </div>
-                <div class="col-md col-sm-12">
-                    <strong>{{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->facility_verified_at))->toDayDateTimeString()}}</strong>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                Address:
             </div>
-            <div class="row">
-                <div class="col-md-2 col-sm-12">
-                    Accreditation Number:
-                </div>
-                <div class="col-md col-sm-12">
-                    <strong>{{$cert_details->facility->accreditation_no}}</strong>
-                </div>
+            <div class="col-md col-sm-12">
+                <strong>{{$cert_details->facility->address}}</strong>
             </div>
-            <div class="row">
-                <div class="col-md-2 col-sm-12">
-                    Certificate Number:
-                </div>
-                <div class="col-md col-sm-12">
-                    <strong>{{$cert_details->certificate_no}}</strong>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                Issued on:
             </div>
+            <div class="col-md col-sm-12">
+                <strong>{{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->facility_verified_at))->toDayDateTimeString()}}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                Accreditation Number:
+            </div>
+            <div class="col-md col-sm-12">
+                <strong>{{$cert_details->facility->accreditation_no}}</strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-12">
+                Certificate Number:
+            </div>
+            <div class="col-md col-sm-12">
+                <strong>{{$cert_details->certificate_no}}</strong>
+            </div>
+        </div>
         @endif
     </div>
     @if(isset($cert_details->facility_verified_by))
