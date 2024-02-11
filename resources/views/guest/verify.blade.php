@@ -17,7 +17,7 @@ NRL - Verify my certificate
         @if(!isset($cert_details->facility_verified_by))
         <h5 class="text-primary">Verify WTL proficiency certificate at the National Reference Laboratory for Environmental, Occupational Health, Toxicology, Micornutrients Assay</h5>
         @else
-        <h5 class="text-success">This is a VALID WTL proficiency certificate until {{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->validity))->toDayDateTimeString()}}
+        <h5 class="text-success">This is a VALID WTL proficiency certificate until {{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->validity))->subMinute()->addDay()->toDayDateTimeString()}}
             @endif
     </div>
     <div class="card-body">
