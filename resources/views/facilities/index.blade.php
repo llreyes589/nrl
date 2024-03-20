@@ -23,23 +23,23 @@ WTL | Facilities
                     <input type="hidden" name="id">
                     <div class="form-group">
                         <label for="" class="text-uppercase">Accreditation Number:</label>
-                        <input class="form-control" type="text" name="accreditation_no" placeholder="Enter accreditation number">
+                        <input class="form-control" type="text" name="accreditation_no" placeholder="Enter accreditation number" required>
                     </div>
                     <div class="form-group">
                         <label for="" class="text-uppercase">Name:</label>
-                        <input class="form-control" type="text" name="name" placeholder="Enter name">
+                        <input class="form-control" type="text" name="name" placeholder="Enter name" required>
                     </div>
                     <div class="form-group">
                         <label for="" class="text-uppercase">Address:</label>
-                        <input class="form-control" type="text" name="address" placeholder="Enter address">
+                        <input class="form-control" type="text" name="address" placeholder="Enter address" required>
                     </div>
                     <div class="form-group">
                         <label for="" class="text-uppercase">City:</label>
-                        <input class="form-control" type="text" name="city" placeholder="Enter city">
+                        <input class="form-control" type="text" name="city" placeholder="Enter city" required>
                     </div>
                     <div class="form-group">
                         <label for="region" class="text-uppercase">Region</label>
-                        <select id="region" class="custom-select" name="region_id">
+                        <select id="region" class="custom-select" name="region_id" required>
                             @foreach($regions as $region)
                             <option value="{{$region->id}}">{{$region->name}}</option>
                             @endforeach
@@ -47,15 +47,15 @@ WTL | Facilities
                     </div>
                     <div class="form-group">
                         <label for="region" class="text-uppercase">Head of Laboratory</label>
-                        <input class="form-control" type="text" name="head_of_lab" placeholder="Enter Head of Laboratory">
+                        <input class="form-control" type="text" name="head_of_lab" placeholder="Enter Head of Laboratory" required>
                     </div>
                     <div class="form-group">
                         <label for="" class="text-uppercase">contact number:</label>
-                        <input class="form-control" type="text" name="contact_no" placeholder="Enter contact number">
+                        <input class="form-control" type="text" name="contact_no" placeholder="Enter contact number" required>
                     </div>
                     <div class="form-group">
                         <label for="" class="text-uppercase">email address:</label>
-                        <input class="form-control" type="email" name="email" placeholder="Enter email address">
+                        <input class="form-control" type="email" name="email" placeholder="Enter email address" required>
                     </div>
                     <div class="form-group">
                         <label for="" class="text-uppercase">lab email address:</label>
