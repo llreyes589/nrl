@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 use App\Models\Facility;
 use App\Models\Certificate;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
+
 
 class FacilitiesSeeder extends Seeder
 {
@@ -16,6 +18,8 @@ class FacilitiesSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker::create();
+
         Facility::truncate();
         Certificate::truncate();
         $csvFile = fopen(base_path("database/seeders/dtl.csv"), "r");
@@ -27,6 +31,8 @@ class FacilitiesSeeder extends Seeder
             //     continue;
             // print_r(in_array($data[1],) ?  $data[1] : Str::random(12));
             // $accred_no = in_array($data[1], Facility::select('accreditation_no')->get()->toArray()) ? Str::random(12) : $data[1];
+            $emailExists = Facility::where('email', utf8_encode($data['8']))->exists();
+            $labEmailExists = Facility::where('lab_email', utf8_encode($data['9']))->exists();
             if (!$firstline) {
                 $facility = Facility::create([
                     "region_id" => $data['0'],
@@ -36,8 +42,8 @@ class FacilitiesSeeder extends Seeder
                     "city" => utf8_encode($data['5']),
                     "contact_no" => $data['6'],
                     "head_of_lab" => utf8_encode($data['7']),
-                    "email" => utf8_encode($data['8']),
-                    "lab_email" => utf8_encode($data['9']),
+                    "email" => utf8_encode($data['8']) === '' || $emailExists ?  $data[0] . $faker->email() : utf8_encode($data['8']),
+                    "lab_email" => utf8_encode($data['9']) === '' || $labEmailExists ?  $data[0] . $faker->email() : utf8_encode($data['9']),
                 ]);
                 $facility->certificate()->create([
                     'facility_id' => $facility->id,
@@ -47,7 +53,7 @@ class FacilitiesSeeder extends Seeder
                     'performance' =>  $data['20'],
                     'key' => md5(microtime())
                 ]);
-                echo 'done ' . $facility->id . PHP_EOL;
+                echo 'Facility added:' . $facility->id . PHP_EOL;
             }
             $firstline = false;
         }

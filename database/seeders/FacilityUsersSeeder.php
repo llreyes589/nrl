@@ -47,11 +47,13 @@ class FacilityUsersSeeder extends Seeder
 
                 $user = User::create([
                     'name' => utf8_encode($value->name),
-                    'email' => $faker->email(),
+                    'email' => utf8_encode($value->email),
                     'username' => $username,
                     'password' => bcrypt('facility1234')
                 ]);
                 Facility::find($value->id)->update(['user_id' => $user->id]);
+                echo 'User added:' . $user->id . PHP_EOL;
+
                 // $user->assignRole($facility);
             }
         }

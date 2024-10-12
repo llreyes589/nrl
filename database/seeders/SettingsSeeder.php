@@ -16,7 +16,8 @@ class SettingsSeeder extends Seeder
         \App\Models\Setting::create([
             'certificate_theme' => 'CY 2021 PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING',
             'certificate_given_at' => '2021-11-26',
-            'updated_by' => 1
+            'updated_by' => 1,
+            'pt_id' => 1
         ]);
     }
 }
