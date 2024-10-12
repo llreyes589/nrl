@@ -16,7 +16,7 @@ class AddAccreditationNoUniqueToFacilitiesTable extends Migration
     {
         Schema::table('facilities', function (Blueprint $table) {
             Facility::truncate();
-            $table->unique('accreditation_no');
+            // $table->unique('accreditation_no');
         });
     }
 
