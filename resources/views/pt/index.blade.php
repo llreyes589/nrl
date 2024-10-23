@@ -32,6 +32,8 @@ NRL - Proficiency Testing Program
                         @role('Facility')
                         <th>Status</th>
                         @endrole
+                        <th>Limit</th>
+                        <th>Remaining Slot</th>
                         <th>Date Added</th>
                         <th>Manage</th>
                     </tr>
@@ -70,6 +72,8 @@ NRL - Proficiency Testing Program
                         </td>
 
                         @endrole
+                        <td>{{$pt->application_limit}}</td>
+                        <td>{{$pt->application_limit - count($pt->applications)}}</td>
                         <td>{{$pt->created_at}}</td>
                         <td>
                             <!-- admin role -->
