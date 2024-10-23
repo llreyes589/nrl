@@ -45,6 +45,7 @@ class ProficiencyTestingController extends Controller
             'sdtl' => 'required | numeric ',
             'cycle' => 'required | numeric ',
             'total_amount' => 'required | numeric ',
+            'application_limit' => 'numeric ',
         ]);
         $request->merge(['instruction_file_path' => $path]);
         $pt = ProficiencyTesting::create($request->except('_token'));
@@ -72,7 +73,6 @@ class ProficiencyTestingController extends Controller
         try {
 
             $pt->update(\request()->except('_token'));
-            $pt->cert_setting()->create(['certificate_theme' => \request()->certificate_theme, 'certificate_given_at' => \request()->certificate_given_at, 'updated_by' => auth()->id(), 'pt_id' => $pt->id]);
         } catch (Exception $e) {
             return redirect(\route('proficiency-testing.edit', $id))->with(['message' => $e->errorInfo[1] === 1062 ? 'PT already exists' : $e->errorInfo[2], 'classname' => 'alert-danger']);
         }

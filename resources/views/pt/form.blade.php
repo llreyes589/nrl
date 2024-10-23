@@ -1,13 +1,13 @@
 @extends('layouts.main')
 
 @section('title')
-NRL - New Proficiency Testing Program
+NRL - Create Proficiency Testing Program
 @endsection
 
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"> {{isset($pt->id) ? "Update" : 'New'}} Proficiency Testings</h1>
+    <h1 class="h3 mb-0 text-gray-800"> {{isset($pt->id) ? "Update" : 'Create'}} Proficiency Testings</h1>
     <a href="{{route('proficiency-testing.index')}}" class="btn btn-danger">Cancel</a>
 
 </div>
@@ -27,20 +27,33 @@ NRL - New Proficiency Testing Program
             @endif
             <div class="row">
                 <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="sdtl">SDTL</label>
-                        <input id="sdtl" class="form-control @error('sdtl') is-invalid @enderror" type="text" value="{{ isset($pt->id) ? $pt->sdtl : old('sdtl') }}" name="sdtl" placeholder="Enter SDTL">
 
+
+                    <p for="sdtl">Proficiency Testing Year</p>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="sdtl">PT - </span>
+                        </div>
+                        <input type="sdtl" name="sdtl" placeholder="YYYY" aria-label="sdtl" aria-describedby="sdtl" class="form-control @error('sdtl') is-invalid @enderror" value="{{  isset($pt->id) ? $pt->sdtl : old('sdtl') }}">
                         @error('sdtl')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-2">
                         <label for="cycle">Cycle</label>
                         <input id="cycle" class="form-control @error('cycle') is-invalid @enderror" type="text" value="{{  isset($pt->id) ? $pt->cycle : old('cycle') }}" name="cycle" placeholder="Enter Cycle">
                         @error('cycle')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="application_limit">Application limit</label>
+                        <input id="application_limit" class="form-control @error('application_limit') is-invalid @enderror" type="number" min="10" value="{{  isset($pt->id) ? $pt->application_limit : old('application_limit') }}" name="application_limit">
+                        @error('application_limit')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -50,7 +63,7 @@ NRL - New Proficiency Testing Program
                     <p for="total_amount">Total Amount</p>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="total_amount">P</span>
+                            <span class="input-group-text" id="total_amount">PHP</span>
                         </div>
                         <input type="total_amount" name="total_amount" placeholder="1500.00" aria-label="total_amount" aria-describedby="total_amount" class="form-control @error('total_amount') is-invalid @enderror" value="{{  isset($pt->id) ? $pt->total_amount : old('total_amount') }}">
                         @error('total_amount')
