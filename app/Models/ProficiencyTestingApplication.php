@@ -5,13 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use PDO;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class ProficiencyTestingApplication extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'proficiency_testing_id',
+        'user_id',
+        'proficiency_testing_id',
         'test_method_used',
         'cutoff_value',
         'methamphetamine',
@@ -27,7 +30,8 @@ class ProficiencyTestingApplication extends Model
         'receipt_uploaded_at',
         'result_uploaded_at',
         'verified_payment_at',
-        'mode_of_payment'
+        'mode_of_payment',
+        'deleted_at'
     ];
 
     public function users()

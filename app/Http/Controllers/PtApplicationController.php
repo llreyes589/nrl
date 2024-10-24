@@ -72,4 +72,11 @@ class PtApplicationController extends Controller
         ]);
         return redirect()->route('proficiency-testing.applicants', ['id' => $id, 'application_id' => $application_id])->with('message', 'Certificate approved successfully.')->with('classname', 'alert-success');
     }
+
+    function delete_application($id, $application_id)
+    {
+        $application = ProficiencyTestingApplication::find($application_id);
+        $application->delete();
+        return redirect()->route('proficiency-testing.applicants', ['id' => $id])->with('message', 'Application successfully deleted.')->with('classname', 'alert-danger');
+    }
 }

@@ -9,6 +9,7 @@ class ProficiencyTesting extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'sdtl',
         'cycle',

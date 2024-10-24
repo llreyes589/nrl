@@ -124,6 +124,16 @@ NRL - Proficiency Testing Applications List
 
                 </form>
 
+                <!-- Delete Application -->
+                <form method="post" action="" id="delete_application" style="display:none;">
+                    @csrf
+                    @method('DELETE')
+                    <p>Are you sure to delete this Application? This will permanently delete the Application. Proceed?</p>
+                    <button class="btn btn-danger btn-sm" type="submit">Yes</button>
+                    <button class="btn btn-secondary btn-sm" type="button" onclick="closeModal()">No</button>
+
+                </form>
+
 
                 @endrole
             </div>
@@ -139,6 +149,7 @@ NRL - Proficiency Testing Applications List
             <table class="table table-light" id="pt_table">
                 <thead class="thead-light">
                     <tr>
+                        <th>Remaining Slot/s</th>
                         <th>Facility</th>
                         <th>SDTL</th>
                         <th>Cycle</th>
@@ -149,8 +160,9 @@ NRL - Proficiency Testing Applications List
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($applications as $app)
+                    @forelse($applications as $app)
                     <tr>
+                        <td>{{$app->pt->application_limit - count($applications)}}</td>
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>
@@ -179,6 +191,11 @@ NRL - Proficiency Testing Applications List
 
                                     <!-- admin role -->
                                     @role('admin')
+                                    <!-- soft delete application -->
+                                    <button class="dropdown-item btn btn-danger" onclick='handleDeleteApplication("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-trash fa-sm" aria-hidden="true"></i>
+                                        Delete</button>
+
+
                                     <!-- update cert button -->
                                     @if($app->certificate)
                                     @if(!$app->certificate->verified_by)
@@ -260,7 +277,11 @@ NRL - Proficiency Testing Applications List
 
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td>No records found</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -278,6 +299,7 @@ NRL - Proficiency Testing Applications List
     const edit_certificate_form = $('#edit-certificate-form')
     const add_score_form = $('#add_score_form')
     const specimen_form = $('#specimen_form')
+    const delete_application = $('#delete_application')
     const score_form_container = $('#score_form_container')
     const specimen_form_container = $('#specimen_form_container')
     const result_path = $('#result_path')
@@ -307,6 +329,18 @@ NRL - Proficiency Testing Applications List
         specimen_form_container.show()
         formShowed = specimen_form_container
         specimen_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}`);
+    }
+
+
+
+    const handleDeleteApplication = function(pt_id, application_id) {
+
+        modal.modal()
+        modal_dialog.addClass('modal-sm')
+        modal_title.text('Delete this application?')
+        delete_application.show()
+        formShowed = delete_application
+        delete_application.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/delete`);
     }
 
     // btn_prepare_certificate_modal.click(function() {
@@ -401,6 +435,9 @@ NRL - Proficiency Testing Applications List
         formShowed = edit_certificate_formconst[key, value] = item.scoring
 
 
+    }
+    const closeModal = function() {
+        modal.modal('toggle')
     }
 </script>
 @endsection
