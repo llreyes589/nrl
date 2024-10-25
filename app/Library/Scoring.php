@@ -21,13 +21,13 @@ class Scoring
     {
 
         switch (true) {
-            case in_array($this->wrong_answers, range(0, 0)):
+            case in_array($this->wrong_answers, range(0, 2)):
                 return ['E', "Excellent"];
                 break;
-            case in_array($this->wrong_answers, range(1, 1)):
+            case in_array($this->wrong_answers, range(3, 5)):
                 return ['HS', "Highly Satisfactory"];
                 break;
-            case in_array($this->wrong_answers, range(2, 2)):
+            case in_array($this->wrong_answers, range(6, 8)):
                 return ['A', "Acceptable"];
                 break;
             default:
