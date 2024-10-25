@@ -322,10 +322,13 @@ if ($application)
                                     @else
                                     <span class="text-danger">Rejected</span>
                                     @endif
-                                    on {{\Carbon\Carbon::parse($specimen->created_at)->toDayDateTimeString()}}
+                                    on {{\Carbon\Carbon::parse($specimen->updated_at)->toDayDateTimeString()}}
                                 </p>
                                 @if($specimen->reject_description)
-                                <p class="m-0 p-0 text-danger"><small>-{{$specimen->reject_description}}</small></p>
+                                <p class="m-0 p-0 text-danger">Rejected Reason: <strong>{{$specimen->reject_description}}</strong></p>
+                                @endif
+                                @if($specimen->proceed_at)
+                                <p class="m-0 p-0 text-success">Proceed Reason: <strong>{{$specimen->proceed_text}}</strong></p>
                                 @endif
                             </li>
                             @endif

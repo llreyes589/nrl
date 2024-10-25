@@ -134,6 +134,19 @@ NRL - Proficiency Testing Applications List
 
                 </form>
 
+                <!-- Proceed Specimen -->
+                <form method="post" action="" id="proceed_specimen" style="display:none;">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <textarea placeholder="Indicate reason here" required class="form-control" name="proceed_text" id="proceed_text" rows="5"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-sm" type="submit">Proceed</button>
+                    <button class="btn btn-danger btn-sm" type="button" onclick="closeModal()">Cancel</button>
+
+                </form>
+
 
                 @endrole
             </div>
@@ -191,11 +204,11 @@ NRL - Proficiency Testing Applications List
 
                                     <!-- admin role -->
                                     @role('admin')
-                                    <!-- soft delete application -->
-                                    <button class="dropdown-item btn btn-danger" onclick='handleDeleteApplication("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-trash fa-sm" aria-hidden="true"></i>
-                                        Delete</button>
 
+                                    <!-- Proceed     -->
+                                    <button class="dropdown-item btn btn-danger" onclick='handleProceedApplication("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-step-forward fa-sm" aria-hidden="true"></i>
 
+                                        Proceed</button>
                                     <!-- update cert button -->
                                     @if($app->certificate)
                                     @if(!$app->certificate->verified_by)
@@ -238,6 +251,9 @@ NRL - Proficiency Testing Applications List
                                         @endif
                                         @endif
                                         @endif
+                                        <!-- soft delete application -->
+                                        <button class="dropdown-item btn btn-danger" onclick='handleDeleteApplication("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-trash fa-sm" aria-hidden="true"></i>
+                                            Delete</button>
                                         @endrole
 
                                         <!-- /admin role -->
@@ -300,6 +316,7 @@ NRL - Proficiency Testing Applications List
     const add_score_form = $('#add_score_form')
     const specimen_form = $('#specimen_form')
     const delete_application = $('#delete_application')
+    const proceed_specimen = $('#proceed_specimen')
     const score_form_container = $('#score_form_container')
     const specimen_form_container = $('#specimen_form_container')
     const result_path = $('#result_path')
@@ -341,6 +358,16 @@ NRL - Proficiency Testing Applications List
         delete_application.show()
         formShowed = delete_application
         delete_application.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/delete`);
+    }
+
+    const handleProceedApplication = function(pt_id, application_id) {
+
+        modal.modal()
+        modal_dialog.addClass('modal-sm')
+        modal_title.text('Proceed Specimen')
+        proceed_specimen.show()
+        formShowed = proceed_specimen
+        proceed_specimen.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/proceed_specimen`);
     }
 
     // btn_prepare_certificate_modal.click(function() {

@@ -31,7 +31,7 @@ class ProficiencyTestingApplication extends Model
         'result_uploaded_at',
         'verified_payment_at',
         'mode_of_payment',
-        'deleted_at'
+        'deleted_at',
     ];
 
     public function users()

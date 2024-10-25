@@ -126,8 +126,10 @@ class ProficiencyTestingController extends Controller
         // return redirect(route('proficiency-testing.applicants', $id))->with(['message' => 'Score saved successfully ', 'classname' => 'alert-success']);
     }
 
-    function destroy($id)
+    function proceed_specimen(Request $request, $id, $application_id)
     {
-        return $id;
+        $application = ProficiencyTestingApplication::find($application_id);
+        $application->specimens()->latest('created_at')->first()->update(['proceed_text' => $request->proceed_text, 'unboxing_video_path' => 'accepted', 'proceed_at' => \Carbon\Carbon::now()]);
+        return redirect()->route('proficiency-testing.applicants', ['id' => $id])->with('message', 'Specimen accepted.')->with('classname', 'alert-success');
     }
 }
