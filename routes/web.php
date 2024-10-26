@@ -120,3 +120,7 @@ Route::group(['middleware' => ['role:Facility']], function () {
         });
     });
 });
+
+
+// Director
+Route::resource('/directors', App\Http\Controllers\Admin\DirectorController::class);

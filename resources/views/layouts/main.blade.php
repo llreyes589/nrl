@@ -66,6 +66,11 @@
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('directors.index')}}">
+                    <i class="fas fa-briefcase-medical"></i>
+                    <span>Directors</span></a>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="{{route('facilities.index')}}">
