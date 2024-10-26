@@ -8,6 +8,11 @@ NRL - Announcements
 <!-- Page Heading -->
 <div class=" mb-4">
     <h1 class="h3 mb-0 text-gray-800">Directors</h1>
+    @if(Session::has('message'))
+    <div class=" alert {{session('classname')}}">
+        {{session('message')}}
+    </div>
+    @endif
 
     <div class="row">
         <div class="col-md-5 col-sm-12">
@@ -140,7 +145,7 @@ NRL - Announcements
                             <td>{{$director->created_at}}</td>
                             <td nowrap>
                                 <a class="btn btn-info btn-sm" href="{{route('directors.show', ['director' => $director])}}">Edit</a>
-                                <a class="btn btn-danger btn-sm">Delete</a>
+                                <button class="btn btn-danger btn-sm" onclick="handleDeleteDirector('{{$director->id}}')">Delete</button>
                             </td>
                         </tr>
                         @empty
@@ -158,8 +163,20 @@ NRL - Announcements
 
     @section('javascript')
     <script>
+        const deleteDirectorModalBody = $('#deleteDirectorModalBody')
+
         $('#directors_table').DataTable({
             responsive: true
         });
+
+        const handleDeleteDirector = function(id) {
+
+            gmodal.modal()
+            gmodalDialog.addClass('modal-md')
+            gmodalTitle.text('Confirm Delete?')
+            deleteDirectorModalBody.show()
+            deleteDirectorModalBody.attr('action', `/directors/${id}`);
+
+        }
     </script>
     @endsection

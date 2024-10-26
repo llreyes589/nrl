@@ -27,6 +27,23 @@
 
 <body id="page-top">
 
+    <!-- Modal -->
+    <div id="g-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" id="g-modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="g-modal_title"></h3>
+                    <button class="close" id="close_form_modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @include('includes.deleteDirector')
+
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -237,7 +254,24 @@
     <script src='{{asset("js/jquery.easing.min.js")}}'></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
     <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
+    <script>
+        const gmodal = $('#g-modal');
+        const gmodalDialog = $('#g-modal-dialog');
+        const gmodalTitle = $('#g-modal_title');
+        const close_form_modal = $('#close_form_modal')
+        close_form_modal.click(function(e) {
+            modal_title.text('')
+            modal.modal('toggle')
+            formShowed.hide()
+            $('.modal-backdrop').hide();
+        })
 
+        const handleCloseGModal = function() {
+            gmodalTitle.text('')
+            gmodal.modal('toggle')
+            $('.modal-backdrop').hide();
+        }
+    </script>
     @yield('javascript')
 
 </body>

@@ -113,6 +113,8 @@ class DirectorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $director = Director::find($id);
+        $director->delete();
+        return redirect()->back()->with(['message' => 'Director successfully deleted.', 'classname' => 'alert-danger']);
     }
 }

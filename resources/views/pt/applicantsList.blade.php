@@ -322,7 +322,6 @@ NRL - Proficiency Testing Applications List
     const score_form_container = $('#score_form_container')
     const specimen_form_container = $('#specimen_form_container')
     const result_path = $('#result_path')
-    const close_form_modal = $('#close_form_modal')
     const modal_title = $('#modal_title')
     const modal_dialog = $('#modal-dialog')
     let formShowed
@@ -413,12 +412,7 @@ NRL - Proficiency Testing Applications List
     //     formShowed = edit_certificate_form
     // })
 
-    close_form_modal.click(function(e) {
-        modal_title.text('')
-        modal.modal('toggle')
-        formShowed.hide()
-        $('.modal-backdrop').hide();
-    })
+
 
     $('#save-score').click(function(e) {
         e.preventDefault()
