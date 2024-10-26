@@ -205,10 +205,7 @@ NRL - Proficiency Testing Applications List
                                     <!-- admin role -->
                                     @role('admin')
 
-                                    <!-- Proceed     -->
-                                    <button class="dropdown-item btn btn-danger" onclick='handleProceedApplication("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-step-forward fa-sm" aria-hidden="true"></i>
 
-                                        Proceed</button>
                                     <!-- update cert button -->
                                     @if($app->certificate)
                                     @if(!$app->certificate->verified_by)
@@ -239,14 +236,20 @@ NRL - Proficiency Testing Applications List
                                         <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
                                         @else
                                         @if($app->specimens()->latest('created_at')->first()->unboxing_video_path != 'accepted' && $app->specimens()->latest('created_at')->first()->unboxing_video_path != null)
+                                        <!-- Proceed     -->
+                                        <button class="dropdown-item btn btn-danger" onclick='handleProceedApplication("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-step-forward fa-sm" aria-hidden="true"></i>
+
+                                            Proceed</button>
                                         <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
 
                                         @else
                                         @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted')
-                                        @if($app->result_path && gettype($app->score) != 'integer')
+                                        @if($app->result_path )
+                                        @if(gettype($app->score) != 'integer')
                                         <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score </button>
                                         @else
                                         <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}", "{{$app->score}}")'><i class="fas fa-edit fa-sm"></i> Edit Score </button>
+                                        @endif
                                         @endif
                                         @endif
                                         @endif
