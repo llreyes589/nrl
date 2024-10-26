@@ -33,7 +33,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="g-modal_title"></h3>
-                    <button class="close" id="close_form_modal" aria-label="Close">
+                    <button class="close" id="g-close_form_modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -258,8 +258,8 @@
         const gmodal = $('#g-modal');
         const gmodalDialog = $('#g-modal-dialog');
         const gmodalTitle = $('#g-modal_title');
-        const close_form_modal = $('#close_form_modal')
-        close_form_modal.click(function(e) {
+        const gcloseFormModal = $('#g-close_form_modal')
+        gcloseFormModal.click(function(e) {
             modal_title.text('')
             modal.modal('toggle')
             formShowed.hide()
