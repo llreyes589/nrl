@@ -51,6 +51,18 @@ NRL - Facilities
                         <label for="given_on">Given on</label>
                         <input id="given_on" class="form-control" value="{{$settings->certificate_given_at}}" name="certificate_given_at" type="date">
                     </div>
+                    <div class="form-group">
+                        <label for="director_id">Director</label>
+                        <select id="director_id" class="form-control" name="director_id" required>
+                            <option value="">--Please select director--</option>
+                            @foreach($directors as $director)
+                            <option value="{{$director->id}}">{{$director->name}}</option>
+                            @endforeach
+                        </select>
+                        @if(count($directors) <= 0)
+                            <small class="text-danger">No director/s found. Click here to <a href="{{route('directors.index')}}">add</a>? </small>
+                            @endif
+                    </div>
                     <!-- Divider -->
                     <hr class="sidebar-divider d-none d-md-block">
                     <button class="btn btn-primary" type="submit">Update</button>

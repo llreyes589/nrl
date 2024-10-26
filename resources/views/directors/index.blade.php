@@ -85,16 +85,19 @@ NRL - Announcements
                                 name="signature"
                                 id="signature"
                                 placeholder=""
-                                accept="image/*"
+                                accept="image/png"
                                 value="{{isset($director->id) ? $director->signature : old('signature')}}"
                                 aria-describedby="fileHelpId"
-                                required />
+                                @if(!isset($director->id))
+                            required
+                            @endif
+                            />
                             @error('signature')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
-                            <div id="fileHelpId" class="form-text">Image file must be uploaded. Maximum of 2mb.</div>
+                            <div id="fileHelpId" class="form-text">Maximum of image size must be 2mb with png extension.</div>
                             @if(isset($director->id))
 
                             <div class="card">

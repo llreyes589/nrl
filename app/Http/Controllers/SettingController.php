@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Director;
 use Illuminate\Http\Request;
 use App\Models\Setting;
 
@@ -10,13 +11,15 @@ class SettingController extends Controller
     function index()
     {
         $settings = Setting::all();
+
         return view('settings.cert_list', compact('settings'));
     }
 
     function show($id)
     {
         $settings = Setting::find($id);
-        return view('settings.index', compact('settings'));
+        $directors = Director::all();
+        return view('settings.index', compact('settings', 'directors'));
     }
 
     function storeCertSettings(Request $request, $id)

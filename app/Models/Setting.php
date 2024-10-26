@@ -10,12 +10,19 @@ class Setting extends Model
     use HasFactory;
 
     protected $fillable = [
-        'certificate_theme', 'certificate_given_at', 'updated_by',
-        'pt_id'
+        'certificate_theme',
+        'certificate_given_at',
+        'updated_by',
+        'pt_id',
+        'director_id'
     ];
 
     public function pt()
     {
         return $this->belongsTo('\App\Models\ProficiencyTesting', 'pt_id', 'id');
+    }
+    public function director()
+    {
+        return $this->belongsTo('\App\Models\Director', 'director_id', 'id');
     }
 }
