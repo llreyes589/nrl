@@ -217,7 +217,7 @@ NRL - Proficiency Testing Applications List
                                     @else
                                     <!-- Prepare cert button -->
                                     @if($app->specimens()->latest('created_at')->first())
-                                    @if($app->score < 9 && gettype($app->score) == 'integer' && gettype($app->specimens()->latest('created_at')->first()->accepted_bottles) != NULL || $app->specimens()->latest('created_at')->first()->accepted_bottles > 18) <button class="dropdown-item btn btn-primary" type="button" onclick="prepareCert(this)" data-item="{{$app}}"><i class="fa fa-certificate"></i> Prepare Certificate</button>
+                                    @if($app->score < 9 && gettype($app->score) == 'integer' && gettype($app->specimens()->latest('created_at')->first()->accepted_bottles) != NULL || $app->specimens()->latest('created_at')->first()->accepted_bottles > 18) <button class="dropdown-item btn btn-primary" type="button" onclick="prepareCert(this)" data-item="{{$app}}"><i class="fa fa-certificate fa-sm"></i> Prepare Certificate</button>
                                         @endif
                                         <!-- /Prepare cert button -->
                                         @endif
@@ -242,10 +242,12 @@ NRL - Proficiency Testing Applications List
                                         <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Resend Specimen</button>
 
                                         @else
-                                        @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && $app->result_path && gettype($app->score) != 'integer')
-
+                                        @if( $app->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted')
+                                        @if($app->result_path && gettype($app->score) != 'integer')
                                         <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}")'><i class="fas fa-tasks fa-sm"></i> View Result/Add Score </button>
-
+                                        @else
+                                        <button class="dropdown-item btn btn-danger" type="button" onclick='handleAddScore("{{$app->proficiency_testing_id}}", "{{$app->id}}", "{{$app->result_path}}", "{{$app->score}}")'><i class="fas fa-edit fa-sm"></i> Edit Score </button>
+                                        @endif
                                         @endif
                                         @endif
                                         @endif
@@ -330,13 +332,17 @@ NRL - Proficiency Testing Applications List
     let certificate_no = $('[name=edit_certificate_no]')
     let performance = $('#performance')
     let edit_performance = $('#edit_performance')
+    let scoreInput = $('[name=score]')
+    const save_score_btn = $('#save-score')
 
-    const handleAddScore = function(pt_id, id, app_result_path) {
+    const handleAddScore = function(pt_id, id, app_result_path, score) {
         modal.modal()
         modal_dialog.addClass('modal-xl')
         score_form_container.show()
         formShowed = score_form_container
+        scoreInput.val(score)
         add_score_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}/saveScore`);
+        save_score_btn.text(score ? 'Update' : 'Save')
         result_path.attr('src', `/storage/${app_result_path}`)
     }
     const handleSendSpecimen = function(pt_id, id) {

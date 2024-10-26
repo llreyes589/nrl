@@ -154,7 +154,7 @@ class FacilityController extends Controller
         // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
         if ($certificate->approved_by_details) {
             $pdf::Image(asset('storage/' . $certificate->approved_by_details->signature), 35, 255, 40, 10, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
-            $pdf::Image(asset('images/lutero.png'), 137, 253, 40, 10, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
+            $pdf::Image(asset($settings->director_signature_path), 137, 253, 40, 10, 'PNG', '', '', true, 300, '', false, false, 0, false, false, false);
         }
         // dd($certificate->ptApplication->user->profile->accreditation_no);
         // $pdf::SetCellPadding(0);
@@ -170,9 +170,9 @@ class FacilityController extends Controller
                     </p>
                     </td>
                 <td style="width:50%">
-                    <p class="name">ATTY. NICOLAS B. LUTERO III, CESO III</p>
-                    <p class="designation">Director IV</p>
-                    <p class="designation">Health Facilities and Services Regulatory Bureau</p>
+                    <p class="name">' . $settings->director_name . '</p>
+                    <p class="designation">' . $settings->director_position . '</p>
+                    <p class="designation">' . $settings->director_designation . '</p>
                 </td>
             </tr>            
         </table>            
