@@ -7,7 +7,7 @@ NRL - Announcements
 @section('content')
 <!-- Page Heading -->
 <div class=" mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Directors</h1>
+    <h1 class="h3 mb-0 text-gray-800 mb-3">Final Signatories</h1>
     @if(Session::has('message'))
     <div class=" alert {{session('classname')}}">
         {{session('message')}}
@@ -22,8 +22,6 @@ NRL - Announcements
                     enctype="multipart/form-data"
                     method="POST" action="{{ route('directors.store') }}">
                     <div class="card-body">
-                        <p class="card-text">Create new director</p>
-                        <hr>
                         @csrf
                         @if(isset($director->id))
                         <input type="hidden" name="id" value="{{$director->id}}" />

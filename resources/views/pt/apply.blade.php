@@ -328,7 +328,7 @@ if ($application)
                                 <p class="m-0 p-0 text-danger">Rejected Reason: <strong>{{$specimen->reject_description}}</strong></p>
                                 @endif
                                 @if($specimen->proceed_at)
-                                <p class="m-0 p-0 text-success">Proceed Reason: <strong>{{$specimen->proceed_text}}</strong></p>
+                                <p class="m-0 p-0 text-success">Proceed Instruction: <strong>{{$specimen->proceed_text}}</strong></p>
                                 @endif
                             </li>
                             @endif

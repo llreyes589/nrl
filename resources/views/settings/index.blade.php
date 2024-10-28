@@ -51,16 +51,16 @@ NRL - Facilities
                         <label for="given_on">Given on</label>
                         <input id="given_on" class="form-control" value="{{$settings->certificate_given_at}}" name="certificate_given_at" type="date">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group">Final Signatory
                         <label for="director_id">Director</label>
                         <select id="director_id" class="form-control" name="director_id" required>
-                            <option value="">--Please select director--</option>
+                            <option value="">--Please select Final Signatory--</option>
                             @foreach($directors as $director)
                             <option value="{{$director->id}}" @if($settings->director_id == $director->id) selected @endif>{{$director->name}}</option>
                             @endforeach
                         </select>
                         @if(count($directors) <= 0)
-                            <small class="text-danger">No director/s found. Click here to <a href="{{route('directors.index')}}">add</a>? </small>
+                            <small class="text-danger">No Final Signatory/s found. Click here to <a href="{{route('directors.index')}}">add</a>? </small>
                             @endif
                     </div>
                     <!-- Divider -->

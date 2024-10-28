@@ -40,7 +40,11 @@ NRL - Proficiency Testing Applications List
 
                     <div class="col-md-10 col-sm-12">
                         <h3>Result submitted:</h3>
-                        <img class="img-thumbnail" id="result_path" src="" alt="">
+                        <div class="d-flex flex-column ">
+
+                            <img class="img-thumbnail" id="result_path" src="" alt="">
+                            <a href="" class="btn btn-info btn-sm " type="button" id="download-result-btn" title="Download Result" download><i class="fas fa-download"></i> </a>
+                        </div>
                     </div>
 
                     <div class="col-md col-sm-12 mt-3">
@@ -140,7 +144,7 @@ NRL - Proficiency Testing Applications List
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
-                        <textarea placeholder="Indicate reason here" required class="form-control" name="proceed_text" id="proceed_text" rows="5"></textarea>
+                        <textarea placeholder="Indicate further instructions here" required class="form-control" name="proceed_text" id="proceed_text" rows="5"></textarea>
                     </div>
 
                     <button class="btn btn-primary btn-sm" type="submit">Proceed</button>
@@ -325,6 +329,7 @@ NRL - Proficiency Testing Applications List
     const score_form_container = $('#score_form_container')
     const specimen_form_container = $('#specimen_form_container')
     const result_path = $('#result_path')
+    const download_result_btn = $('#download-result-btn')
     const close_form_modal = $('#close_form_modal')
     const modal_title = $('#modal_title')
     const modal_dialog = $('#modal-dialog')
@@ -352,6 +357,7 @@ NRL - Proficiency Testing Applications List
         scoreInput.val(score)
         add_score_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}/saveScore`);
         save_score_btn.text(score ? 'Update' : 'Save')
+        download_result_btn.attr('href', `/storage/${app_result_path}`)
         result_path.attr('src', `/storage/${app_result_path}`)
     }
     const handleSendSpecimen = function(pt_id, id) {
