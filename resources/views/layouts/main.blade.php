@@ -41,6 +41,7 @@
                     @include('includes.deleteDirector')
                     @include('includes.deleteUser')
                     @include('includes.deleteFacility')
+                    @include('includes.changePassword')
 
                 </div>
             </div>

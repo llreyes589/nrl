@@ -19,6 +19,7 @@ NRL - Profile
                 <hr> -->
                 <h4>{{$user->name}}</h4>
                 <p><small>{{$user->username}}</small></p>
+                <button class="btn btn-info btn-sm" type="button" onclick="handleChangePassword('{{$user->id}}')">Change password</button>
             </div>
         </div>
 
@@ -136,4 +137,32 @@ NRL - Profile
 
     </div>
 </div>
+@endsection
+
+@section('javascript')
+<script>
+    const changePasswordForm = $('#changePasswordForm')
+    const new_password = $('[name=new_password]')
+    const showPasswordIcon = $('#showPasswordIcon')
+
+    function handleChangePassword(id) {
+
+        gmodal.modal()
+        gmodalDialog.addClass('modal-md')
+        gmodalTitle.text('Change password')
+        changePasswordForm.show()
+    }
+
+    function handleShowPassword() {
+        let type
+        if (new_password.attr('type') === 'password') {
+            type = 'text'
+            showPasswordIcon.removeClass('fa-eye').addClass('fa-eye-slash')
+        } else {
+            type = 'password'
+            showPasswordIcon.removeClass('fa-eye-slash').addClass('fa-eye')
+        }
+        new_password.attr('type', type)
+    }
+</script>
 @endsection

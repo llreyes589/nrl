@@ -117,6 +117,7 @@ Route::group(['middleware' => ['role:Facility']], function () {
         Route::name('facility.')->group(function () {
             Route::get('/profile', [App\Http\Controllers\Facility\FacilityController::class, 'profile'])->name('profile');
             Route::put('/profile/update', [App\Http\Controllers\Facility\FacilityController::class, 'profileUpdate'])->name('profile.update');
+            Route::put('/profile/update-password', [App\Http\Controllers\Facility\FacilityController::class, 'profileUpdatePassword'])->name('profile.updatePassword');
         });
     });
 });

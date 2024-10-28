@@ -36,4 +36,10 @@ class FacilityController extends Controller
         // dd(request()->all());
         // return view('facility.profile', compact('user'));
     }
+    function profileUpdatePassword(Request $request)
+    {
+        // dd(\auth()->user());
+        \auth()->user()->update(['password' => bcrypt($request->new_password)]);
+        return redirect()->back()->with(['message' => 'Password updated.', 'classname' => 'alert-success']);
+    }
 }
