@@ -34,19 +34,16 @@ class FacilityController extends Controller
         }
     }
 
-    function create()
-    {
-    }
+    function create() {}
 
-    function edit(Facility $facility)
-    {
-    }
+    function edit(Facility $facility) {}
 
     function destroy(Facility $facility)
     {
         Facility::destroy($facility->id);
         $facility->deleted_by = \auth()->id();
         $facility->save();
+        $facility->credential()->delete();
         return redirect()->route('facilities.index')->with('message', 'Facility deleted successfully.')->with('classname', 'alert-danger');
     }
 

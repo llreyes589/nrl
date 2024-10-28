@@ -7,8 +7,9 @@ NRL - Proficiency Testing Applications List
 @section('content')
 
 <!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
+<div class=" mb-4">
     <h1 class="h3 mb-0 text-gray-800"> PT Applications</h1>
+    <p class="lead"><strong>Remaining Slot/s: {{$applications[0]->pt->application_limit - count($applications)}}</strong> </p>
 </div>
 @if(Session::has('message'))
 <div class=" alert {{session('classname')}}">
@@ -162,7 +163,6 @@ NRL - Proficiency Testing Applications List
             <table class="table table-light" id="pt_table">
                 <thead class="thead-light">
                     <tr>
-                        <th>Remaining Slot/s</th>
                         <th>Facility</th>
                         <th>SDTL</th>
                         <th>Cycle</th>
@@ -175,7 +175,7 @@ NRL - Proficiency Testing Applications List
                 <tbody>
                     @forelse($applications as $app)
                     <tr>
-                        <td>{{$app->pt->application_limit - count($applications)}}</td>
+
                         <td>{{$app->user->name}}</td>
                         <td>{{$app->pt->sdtl}}</td>
                         <td>{{$app->pt->cycle}}</td>

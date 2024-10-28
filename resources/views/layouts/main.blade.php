@@ -39,6 +39,8 @@
                 </div>
                 <div class="modal-body">
                     @include('includes.deleteDirector')
+                    @include('includes.deleteUser')
+                    @include('includes.deleteFacility')
 
                 </div>
             </div>
@@ -260,9 +262,8 @@
         const gmodalTitle = $('#g-modal_title');
         const gcloseFormModal = $('#g-close_form_modal')
         gcloseFormModal.click(function(e) {
-            modal_title.text('')
-            modal.modal('toggle')
-            formShowed.hide()
+            gmodalTitle.text('')
+            gmodal.modal('toggle')
             $('.modal-backdrop').hide();
         })
 

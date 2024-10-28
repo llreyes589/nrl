@@ -147,6 +147,22 @@ NRL - Facilities
         });
     }
 
+
+    const deleteFacilityModalBody = $('#deleteFacilityModalBody')
+
+
+    function handleDeleteFacility(id) {
+        console.log({
+            deleteFacilityModalBody
+        })
+        gmodal.modal()
+        gmodalDialog.addClass('modal-md')
+        gmodalTitle.text('Confirm Delete?')
+        deleteFacilityModalBody.show()
+        deleteFacilityModalBody.attr('action', `/facilities/${id}`);
+
+    }
+
     function renderCertStatus(cert) {
         // console.log("{{ auth()->user()->can('prepare')}}" != 1)
         if (cert != null) {
@@ -239,15 +255,13 @@ NRL - Facilities
                 {
                     data: 'id',
                     render: (id) => {
-                        return `<form action="/facilities/` + id + `" method="POST">
+                        return `
                                 @role('verifier|encoder2')
                                 <a class="btn btn-success btn-sm" href="/verifier/facilities/` + id + `"><i class="fa fa-search"></i> View</a>
                                 @endrole
                                 <button class="btn btn-primary btn-sm" type="button" onclick="selectFacility(` + id + `)">EDIT</button>
-                                @csrf
-                                @method('delete')
-                                <button class="btn btn-sm btn-danger">DEL</button>
-                            </form>`
+                                <button class="btn btn-sm btn-danger" onclick="handleDeleteFacility(` + id + `)">DELETE</button>
+                            `
                     }
                 },
             ]
@@ -283,6 +297,7 @@ NRL - Facilities
             window.location.reload();
 
         })
+
     });
 </script>
 @endsection

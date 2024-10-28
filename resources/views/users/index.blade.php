@@ -39,12 +39,8 @@ NRL - Users
                         <!-- <td>{{$user->email}}</td> -->
                         <td>{{$user->created_at}}</td>
                         <td>
-                            <form action="{{ route('users.destroy', $user) }}" method="POST">
-                                <a class="btn btn-sm btn-primary" type="button" href="{{route('users.edit', $user)}}">EDIT</a>
-                                @csrf
-                                @method('delete')
-                                <button class="btn btn-sm btn-danger">DEL</button>
-                            </form>
+                            <a class="btn btn-sm btn-primary" type="button" href="{{route('users.edit', $user)}}">EDIT</a>
+                            <button class="btn btn-sm btn-danger" onclick="handleDeleteUser('{{$user->id}}')">DELETE</button>
                         </td>
                     </tr>
                     @endforeach
@@ -65,5 +61,18 @@ NRL - Users
             responsive: true
         });
     });
+
+    const deleteUserModalBody = $('#deleteUserModalBody')
+
+
+    const handleDeleteUser = function(id) {
+
+        gmodal.modal()
+        gmodalDialog.addClass('modal-md')
+        gmodalTitle.text('Confirm Delete?')
+        deleteUserModalBody.show()
+        deleteUserModalBody.attr('action', `/users/${id}`);
+
+    }
 </script>
 @endsection

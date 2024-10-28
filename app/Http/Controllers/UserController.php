@@ -17,7 +17,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with('roles')->whereHas("roles", function ($q) {
+            $q->whereNotIn("name", ['Facility']);
+        })->get();;
         return view('users.index', compact('users'));
     }
 
@@ -45,10 +47,10 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required'],
         ]);
-        if($request->file('signature')){
+        if ($request->file('signature')) {
 
             $path = $request->file('signature')->store('signatures');
-        }else{
+        } else {
             $path = '';
         }
         $user = User::create([
@@ -66,19 +68,19 @@ class UserController extends Controller
                 $user->assignRole('encoder');
                 break;
             case 'encoder2':
-                $user->assignRole(['encoder','encoder2']);
-                break;                
+                $user->assignRole(['encoder', 'encoder2']);
+                break;
             case 'verifier':
                 $user->assignRole('verifier');
                 break;
             case 'head':
                 $user->assignRole('head');
-                break;                
+                break;
             default:
                 $request->role;
                 break;
         }
-        
+
 
         return redirect()->route('users.index')->with('message', 'User added successfully.')->with('classname', 'alert-success');
     }
@@ -116,10 +118,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->syncRoles([]);
-        if($request->file('signature')){
+        if ($request->file('signature')) {
 
             $path = $request->file('signature')->store('signatures');
-        }else{
+        } else {
             $path = $user->signature;
         }
         $user->update([
@@ -137,14 +139,14 @@ class UserController extends Controller
                 $user->assignRole('encoder');
                 break;
             case 'encoder2':
-                $user->assignRole(['encoder','encoder2']);
-                break;                
+                $user->assignRole(['encoder', 'encoder2']);
+                break;
             case 'verifier':
                 $user->assignRole('verifier');
                 break;
             case 'head':
                 $user->assignRole('head');
-                break;                
+                break;
             default:
                 $request->role;
                 break;
@@ -160,7 +162,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if(auth()->id() === $user->id){
+        if (auth()->id() === $user->id) {
             return redirect()->route('users.index')->with('message', 'User deleted failed. You cannot delete your own profile.')->with('classname', 'alert-warning');
         }
         User::destroy($user->id);
