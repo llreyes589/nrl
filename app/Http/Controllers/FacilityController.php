@@ -44,6 +44,7 @@ class FacilityController extends Controller
         $facility->deleted_by = \auth()->id();
         $facility->save();
         $facility->credential()->delete();
+        $facility->credential->ptApplications()->delete();
         return redirect()->route('facilities.index')->with('message', 'Facility deleted successfully.')->with('classname', 'alert-danger');
     }
 
