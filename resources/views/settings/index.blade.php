@@ -56,7 +56,7 @@ NRL - Facilities
                         <select id="director_id" class="form-control" name="director_id" required>
                             <option value="">--Please select director--</option>
                             @foreach($directors as $director)
-                            <option value="{{$director->id}}">{{$director->name}}</option>
+                            <option value="{{$director->id}}" @if($settings->director_id == $director->id) selected @endif>{{$director->name}}</option>
                             @endforeach
                         </select>
                         @if(count($directors) <= 0)

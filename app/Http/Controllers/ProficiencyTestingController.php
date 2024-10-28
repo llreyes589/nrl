@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Library\Scoring;
+use App\Models\Director;
 use Illuminate\Http\Request;
 use App\Models\ProficiencyTesting;
 use App\Models\ProficiencyTestingApplication;
@@ -26,8 +27,8 @@ class ProficiencyTestingController extends Controller
 
     public function create(ProficiencyTesting $pt)
     {
-
-        return view('pt.form', compact('pt'));
+        $directors = Director::all();
+        return view('pt.form', compact('pt', 'directors'));
     }
 
     public function store(Request $request)
@@ -49,7 +50,7 @@ class ProficiencyTestingController extends Controller
         ]);
         $request->merge(['instruction_file_path' => $path]);
         $pt = ProficiencyTesting::create($request->except('_token'));
-        $pt->cert_setting()->create(['certificate_theme' => \request()->certificate_theme, 'certificate_given_at' => \request()->certificate_given_at, 'updated_by' => auth()->id(), 'pt_id' => $pt->id]);
+        $pt->cert_setting()->create(['certificate_theme' => \request()->certificate_theme, 'certificate_given_at' => \request()->certificate_given_at, 'updated_by' => auth()->id(), 'pt_id' => $pt->id, 'director_id' => \request()->director_id]);
 
         return redirect(\route('proficiency-testing.index'))->with(['message' => 'PT sucessfully saved', 'classname' => 'alert-success']);
     }
@@ -57,7 +58,9 @@ class ProficiencyTestingController extends Controller
     public function edit($id)
     {
         $pt = ProficiencyTesting::find($id);
-        return view('pt.form', compact('pt'));
+        $directors = Director::all();
+
+        return view('pt.form', compact('pt', 'directors'));
     }
 
     public function update($id)

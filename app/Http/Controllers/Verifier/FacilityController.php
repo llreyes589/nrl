@@ -100,7 +100,7 @@ class FacilityController extends Controller
         $certificate = Certificate::where('key', $key)->first();
         // dd($certificate->ptApplication->user->name);
         // dd($certificate->ptApplication->pt->cert_setting);
-        $settings = Setting::find(1);
+        $settings = $certificate->ptApplication->pt->cert_setting;
         $given = \Carbon\Carbon::parse($certificate->ptApplication->pt->cert_setting->certificate_given_at);
         $name = $certificate->ptApplication->user->name;
         $performace  = '';

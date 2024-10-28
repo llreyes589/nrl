@@ -98,6 +98,19 @@ NRL - Create Proficiency Testing Program
                         <label for="certificate_given_at">Certificate Given at</label>
                         <input id="certificate_given_at" class="form-control" type="date" name="certificate_given_at" required>
                     </div>
+
+                    <div class="form-group">
+                        <label for="director_id">Director</label>
+                        <select id="director_id" class="form-control" name="director_id" required>
+                            <option value="">--Please select director--</option>
+                            @foreach($directors as $director)
+                            <option value="{{$director->id}}">{{$director->name}}</option>
+                            @endforeach
+                        </select>
+                        @if(count($directors) <= 0)
+                            <small class="text-danger">No director/s found. Click here to <a href="{{route('directors.index')}}">add</a>? </small>
+                            @endif
+                    </div>
                     @else
                     <a href="{{route('settings.show', $pt->cert_setting->id)}}" class="btn btn-primary ">View Certificate Setting</a>
                     <p></p>
@@ -106,6 +119,7 @@ NRL - Create Proficiency Testing Program
                         <label for="cert_validity">Certificate Validity</label>
                         <input id="cert_validity" class="form-control" type="date" name="cert_validity" value="{{  isset($pt->id) ? $pt->cert_validity : old('cert_validity') }}" required>
                     </div>
+
                 </div>
             </div>
             <button class="btn btn-primary" id="submit" type="submit">{{isset($pt->id) ? "Update" : 'Save'}}</button>
