@@ -18,12 +18,14 @@ class ProficiencyTestingController extends Controller
     {
         $pt = ProficiencyTesting::find($id);
         $application = \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first();
-        // dd($application);
-        return view('pt.apply', compact('pt', 'application'));
+        $limit_reached = $pt->application_limit <= $pt->applications()->count();
+        return view('pt.apply', compact('pt', 'application', 'limit_reached'));
     }
     public function saveApplication($id)
     {
-
+        $pt = ProficiencyTesting::find($id);
+        $limit_reached = $pt->application_limit <= $pt->applications()->count();
+        if ($limit_reached) return 'Invalid Request. Application limit has been reached.';
         // dd(\request()->user()->id);
 
         $test_method = [['immunoassay_brand' => \request()->test_method_used == 'itk' ? \request()->immunoassay_brand : null], ['instrument_type' => \request()->test_method_used == 'inst' ? \request()->instrument_type : null, 'instrument_brand' => \request()->test_method_used == 'inst' ?  \request()->instrument_brand : null,]];

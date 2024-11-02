@@ -490,7 +490,7 @@ if ($application)
                     @endif
                     <hr />
                     @if(!$application)
-                    <button class="btn btn-primary" id="submit" type="submit">Apply/Checkout</button>
+                    <button class="btn btn-primary" id="submit" type="submit" @if($limit_reached) disabled @endif>Apply/Checkout</button>
                     @endif
                 </form>
             </div>
@@ -630,6 +630,31 @@ if ($application)
                 $('#inst_fields').toggle()
 
             }
+        })
+
+        // limit reached 
+        const limit_reached = '{{$limit_reached}}'
+        const limitReachedContent = $('#limitReachedContent')
+        if (limit_reached) {
+            limitReachedContent.show()
+            gmodalTitle.text('Attention!')
+            gmodal.modal()
+        }
+    })
+</script>
+@endsection
+
+@section('javascript')
+<script>
+    $(function() {
+
+        alert('test')
+        $(function() {
+
+            console.log({
+                modal
+            })
+            modal.modal()
         })
     })
 </script>

@@ -42,7 +42,7 @@
                     @include('includes.deleteUser')
                     @include('includes.deleteFacility')
                     @include('includes.changePassword')
-
+                    @include('includes.limitReachedContent')
                 </div>
             </div>
         </div>
