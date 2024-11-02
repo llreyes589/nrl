@@ -126,8 +126,9 @@ class ProficiencyTestingController extends Controller
     {
         $pt = ProficiencyTesting::find($id);
         $application = ProficiencyTestingApplication::find($application_id);
-
-        return view('pt.apply', compact('pt', 'application'));
+        // set to false if no facility role
+        $limit_reached = false;
+        return view('pt.apply', compact('pt', 'application', 'limit_reached'));
         // $application->update(['score' => \request()->score, 'scored_by' => \auth()->id(), 'scored_at' => \Carbon\Carbon::now()]);
         // return redirect(route('proficiency-testing.applicants', $id))->with(['message' => 'Score saved successfully ', 'classname' => 'alert-success']);
     }
