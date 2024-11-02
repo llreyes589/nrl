@@ -633,7 +633,7 @@ if ($application)
         })
 
         // limit reached 
-        const limit_reached = '{{$limit_reached ?? ``}}'
+        const limit_reached = '{{isset($limit_reached) ? $limit_reached : ``}}'
         const limitReachedContent = $('#limitReachedContent')
         if (limit_reached) {
             limitReachedContent.show()
