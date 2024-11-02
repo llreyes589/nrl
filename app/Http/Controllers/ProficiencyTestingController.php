@@ -73,6 +73,9 @@ class ProficiencyTestingController extends Controller
         }
         \request()->merge(['instruction_file_path' => $path]);
         $pt = ProficiencyTesting::find($id);
+        if (\request()->application_limit < $pt->application_limit) {
+            return redirect(\route('proficiency-testing.edit', $id))->with(['message' => 'Application limit must be greater than current limit.', 'classname' => 'alert-danger']);
+        }
         try {
 
             $pt->update(\request()->except('_token'));
