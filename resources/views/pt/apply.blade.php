@@ -293,10 +293,10 @@ if ($application)
                             $score = new \App\Library\Scoring($application->score);
 
                             ?>
-                            <li class="@if($application->score > 2) text-danger @else text-info @endif">
+                            <li class="@if($application->score > 8) text-danger @else text-info @endif">
                                 <u>Added Score</u>
                                 <span class="float-right">{{\Carbon\Carbon::parse($application->scored_at)->diffForHumans()}}</span>
-                                <p class="@if($application->score > 2) text-danger @else text-secondary @endif">Wrong Answers: {{$application->score}} ({{$score->get_performance()[1]}}) on {{\Carbon\Carbon::parse($application->scored_at)->toDayDateTimeString()}}</p>
+                                <p class="@if($application->score > 8) text-danger @else text-secondary @endif">Wrong Answers: {{$application->score}} ({{$score->get_performance()[1]}}) on {{\Carbon\Carbon::parse($application->scored_at)->toDayDateTimeString()}}</p>
                             </li>
                             @endif
                             @if($application->result_path)
