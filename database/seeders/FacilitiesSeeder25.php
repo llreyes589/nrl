@@ -43,7 +43,7 @@ class FacilitiesSeeder25 extends Seeder
                     "address" => utf8_encode($data['5']),
                     "contact_no" => $data['6'],
                     "email" => utf8_encode($data['7']),
-                    "lab_email" => utf8_encode($data['8']),
+                    "lab_email" => Facility::withTrashed()->where('accreditation_no', '=',  utf8_encode($data['8']))->exists() ? Str::random(12) :  utf8_encode($data['8']),
                     "head_of_lab" => utf8_encode($data['9']),
                 ]);
                 $facility->certificate()->create([
