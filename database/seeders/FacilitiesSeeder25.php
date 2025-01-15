@@ -42,14 +42,14 @@ class FacilitiesSeeder25 extends Seeder
                     "name" => utf8_encode($data['4']),
                     "address" => utf8_encode($data['5']),
                     "contact_no" => $data['6'],
-                    "email" => utf8_encode($data['7']),
-                    "lab_email" => Facility::withTrashed()->where('accreditation_no', '=',  utf8_encode($data['8']))->exists() ? Str::random(12) :  utf8_encode($data['8']),
+                    "email" => Facility::withTrashed()->where('email', '=',  utf8_encode($data['7']))->exists() ? Str::random(12) :  utf8_encode($data['7']),
+                    "lab_email" => Facility::withTrashed()->where('lab_email', '=',  utf8_encode($data['8']))->exists() ? Str::random(12) :  utf8_encode($data['8']),
                     "head_of_lab" => utf8_encode($data['9']),
                 ]);
                 $facility->certificate()->create([
                     'facility_id' => $facility->id,
                     "or_no" => Certificate::where('or_no', '=', $data['10'])->exists() ? Str::random(12) : $data[10],
-                    "certificate_no" => Certificate::where('or_no', '=', $data['13'])->exists() ? Str::random(12) : $data['13'],
+                    "certificate_no" => Certificate::where('certificate_no', '=', $data['13'])->exists() ? Str::random(12) : $data['13'],
                     "performance" => $data['15'],
                     "validity" => '2025-12-31',
                     'key' => md5(microtime()),
