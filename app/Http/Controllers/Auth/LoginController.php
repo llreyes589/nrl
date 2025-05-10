@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProficiencyTesting;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -58,5 +59,11 @@ class LoginController extends Controller
     public function username()
     {
         return $this->username;
+    }
+
+    public function showLoginForm()
+    {
+        $pt = ProficiencyTesting::orderBy('id','desc')->first();
+        return view('auth.login', compact('pt'));
     }
 }

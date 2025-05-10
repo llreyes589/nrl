@@ -1,6 +1,9 @@
 @extends('layouts.auth')
 
 @section('content')
+
+@include('includes.modals.newPtModal', $pt)
+
 <h3 class="text-center">National Reference Laboratory <br>East Avenue Medical Center (NRL-EAMC)</h3>
 <hr>
 <form class="user" method="POST" action="{{ route('login') }}">
@@ -50,7 +53,8 @@
 @section('javascript')
 <script>
     window.onload = function() {
-
+        const newPtModal = $('#new-pt-modal')
+        newPtModal.modal()
     }
 </script>
 @endsection

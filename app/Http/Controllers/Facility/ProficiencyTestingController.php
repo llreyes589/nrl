@@ -45,6 +45,14 @@ class ProficiencyTestingController extends Controller
     public function saveReceipt($id)
     {
 
+        $validator = \Validator::make(\request()->all(), [
+            'receipt' => 'max:2000|mimes:jpeg,png,pdf',               
+        ]);
+
+        if ($validator->fails()) {
+            return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Upload failed. Unknown file format uploaded. Must be jpg, png or pdf.', 'classname' => 'alert-danger']);
+
+        }
         if (\request()->file('receipt')) {
 
             $path = \request()->file('receipt')->store('receipts');
@@ -58,12 +66,11 @@ class ProficiencyTestingController extends Controller
 
     public function receiveSpecimen($id)
     {
-
         if (\request()->status === 'reject') {
 
             $validated = \request()->validate([
                 'reject_description' => 'required',
-                'unboxing_video_path' => 'required',
+                'unboxing_video_path' => 'required|mimes:mp4,mov,jpg,png',
             ], [
                 'unboxing_video_path.required' => 'Reject file is required.',
                 'reject_description.required' => 'Reject description is required.'

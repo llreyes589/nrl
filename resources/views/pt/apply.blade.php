@@ -55,6 +55,9 @@ if ($application)
 
                         <div class="col-md-6">
                             <input id="receipt" type="file" class="form-control-file" name="receipt">
+
+                            <small id="helpId" class="form-text text-info">Files accepted: jpg, png and pdf</small>
+
                         </div>
                     </div>
                     <div class="form-group row mb-0">
@@ -102,6 +105,7 @@ if ($application)
 
                                     <div class="col-md-6">
                                         <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path">
+
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -294,14 +298,14 @@ if ($application)
 
                             ?>
                             <li class="@if($application->score > 8) text-danger @else text-info @endif">
-                                <u>Added Score</u>
+                                <u>Result Checked</u>
                                 <span class="float-right">{{\Carbon\Carbon::parse($application->scored_at)->diffForHumans()}}</span>
                                 <p class="@if($application->score > 8) text-danger @else text-secondary @endif">Wrong Answers: {{$application->score}} ({{$score->get_performance()[1]}}) on {{\Carbon\Carbon::parse($application->scored_at)->toDayDateTimeString()}}</p>
                             </li>
                             @endif
                             @if($application->result_path)
                             <li class="text-info">
-                                <u>Result sent</u>
+                                <u>Result Sent / for checking</u>
                                 <span class="float-right">{{\Carbon\Carbon::parse($application->result_uploaded_at)->diffForHumans()}}</span>
                                 <p class="text-secondary">Result was uploaded on {{\Carbon\Carbon::parse($application->result_uploaded_at)->toDayDateTimeString()}}</p>
                             </li>

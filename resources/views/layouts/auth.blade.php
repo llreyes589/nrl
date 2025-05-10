@@ -27,7 +27,7 @@
     <div class="container">
         <!-- Outer Row -->
         <div class="row justify-content-center">
-            
+
             <div class="col-xl-10 col-lg-12 col-md-9">
 
                 <div class="card o-hidden border-0 shadow-lg my-5">
@@ -56,8 +56,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 
     @yield('javascript')
-
-
-
 
 </body></html>
