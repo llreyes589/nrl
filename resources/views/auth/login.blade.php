@@ -2,7 +2,9 @@
 
 @section('content')
 
-@include('includes.modals.newPtModal', $pt)
+@if($pt)
+    @include('includes.modals.newPtModal', $pt)
+@endif
 
 <h3 class="text-center">National Reference Laboratory <br>East Avenue Medical Center (NRL-EAMC)</h3>
 <hr>

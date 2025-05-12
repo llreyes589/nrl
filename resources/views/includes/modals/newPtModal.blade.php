@@ -12,7 +12,7 @@
                 <div class="mx-3 ">
                     <div class="card px-3">
                       <div class="card-body">
-                          <p class="d-flex justify-content-between ">
+                          <p class="d-flex justify-content-between">
                               <span>SDTL</span>
                               <strong>{{ $pt->sdtl }}</strong>
                           </p>

@@ -27,15 +27,30 @@ NRL - Profile
             <div class="card-body">
                 <div class="form-group">
                     <label for="accreditation_no">Accreditation No.:</label>
-                    <div class="form-control" readonly>{{$user->profile->accreditation_no}}</div>
+                    <textarea class="form-control" readonly>{{$user->profile->accreditation_no}}</textarea>
+                </div>
+                <div class="card">
+                  <div class="card-body bg-light">
+                  <div class="form-group">
+                        <label for="lto">LTO File</label>
+                        <input id="lto" class="form-control-file" type="file" name="lto">
+                    </div>
+                    @if($user->profile->lto_file)
+                    <hr>
+                    <a href="/storage/{{$user->profile->lto_file}}" target="_blank">View LTO File</a>
+                    @endif
+                  </div>
+                </div>
+                <div class="form-group">
+                    
                 </div>
                 <div class="form-group">
                     <label for="region">Region:</label>
-                    <div class="form-control" readonly>{{$user->profile->region_details->name}}</div>
+                    <textarea class="form-control" readonly>{{$user->profile->region_details->name}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="updated_at">Last Update at:</label>
-                    <div class="form-control" readonly>{{$user->profile->updated_at}}</div>
+                    <textarea class="form-control" readonly>{{$user->profile->updated_at}}</textarea>
                 </div>
             </div>
         </div>
@@ -73,17 +88,6 @@ NRL - Profile
                         <input id="certificate_file" class="form-control-file" type="file" name="certificate_file">
                     </div>
 
-                </div>
-                <div class="col-lg col-sm-12">
-                    @if($user->profile->lto_file)
-                    <hr>
-                    <a href="/storage/{{$user->profile->lto_file}}" target="_blank">Uploaded LTO File</a>
-                    <hr>
-                    @endif
-                    <div class="form-group">
-                        <label for="lto">Update LTO File</label>
-                        <input id="lto" class="form-control-file" type="file" name="lto">
-                    </div>
                 </div>
             </div>
             <hr>
