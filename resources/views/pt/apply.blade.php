@@ -160,9 +160,10 @@ if ($application)
                 @if($application->certificate)
                 @if($application->certificate->approved_by)
                 <!-- View certificate -->
-                <div class="embed-responsive embed-responsive-16by9" id="view-cert-frame" style="display:none;">
+                 @include('includes.viewCertificate', $application->certificate->key)
+                <!-- <div class="embed-responsive embed-responsive-16by9" id="view-cert-frame" style="display:none;">
                     <iframe class="embed-responsive-item" allowfullscreen src="{{route('certificate', $application->certificate->key)}}"></iframe>
-                </div>
+                </div> -->
                 @endif
                 @endif
                 @endif

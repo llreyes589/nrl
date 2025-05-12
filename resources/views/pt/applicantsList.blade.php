@@ -154,6 +154,26 @@ NRL - Proficiency Testing Applications List
 
 
                 @endrole
+                @can('verify')
+                <!-- View certificate -->
+                 <div class="card">
+                    <div class="card-body p-0">
+                        <div class="embed-responsive embed-responsive-16by9" id="view-cert-frame" style="display:none;">
+                            <p><i class="fa fa-spinner fa-spin" id="cert-container-loader" ></i></p>
+                            <iframe class="embed-responsive-item" allowfullscreen id="cert-container" style="display:none;"></iframe>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <form method="post" id="verify_certificate_form">
+                            @csrf
+                            @method('PUT')
+                            <button class="btn btn-sm btn-primary" disabled id="btn-verify-certificate-modal" type="submit" data-target="#verify-certificate-form" > Verify Certificate</button>
+                        </form>
+
+                    </div>
+                 </div>
+
+                @endcan
             </div>
         </div>
     </div>
@@ -270,11 +290,7 @@ NRL - Proficiency Testing Applications List
                                         @if(!$app->certificate->verified_by)
                                         <!-- verifier -->
                                         @can('verify')
-                                        <form method="post" action="{{route('ptApplication.verify_certificate',['id' => $app->pt->id, 'application_id' => $app->id])}}">
-                                            @csrf
-                                            @method('PUT')
-                                            <button class=" dropdown-item btn btn-secondary" id="btn-verify-certificate-modal" type="submit" data-target="#verify-certificate-form"><i class="fa fa-check fa-sm"></i> Verify Certificate</button>
-                                        </form>
+                                        <button class=" dropdown-item btn btn-secondary" id="btn-preview-certificate-modal" type="button" data-target="#preview-certificate" onclick="handlePreviewCertificate('{{$app->proficiency_testing_id}}', '{{$app->id}}', '{{ $app->certificate->key }}')"><i class="fa fa-certificate fa-sm"></i> Preview Certificate</button>
                                         @endcan
                                         <!-- /verifier -->
                                         @else
@@ -333,6 +349,11 @@ NRL - Proficiency Testing Applications List
     const close_form_modal = $('#close_form_modal')
     const modal_title = $('#modal_title')
     const modal_dialog = $('#modal-dialog')
+    const viewCertFrame = $('#view-cert-frame');
+    const certContainer = $('#cert-container');
+    const certContainerLoader = $('#cert-container-loader');
+    const verify_certificate_form = $('#verify_certificate_form');
+    const btn_verify_certificate_modal = $('#btn-verify-certificate-modal');
     let formShowed
     $('#pt_table').DataTable()
     const modal = $('#custom-modal');
@@ -389,6 +410,22 @@ NRL - Proficiency Testing Applications List
         proceed_specimen.show()
         formShowed = proceed_specimen
         proceed_specimen.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/proceed_specimen`);
+    }
+    
+    const handlePreviewCertificate = function(pt_id, application_id, key){
+        certContainer.hide()
+        modal.modal()
+        modal_dialog.addClass('modal-lg')
+        modal_title.text('Preview Certificate')
+        viewCertFrame.show()
+        formShowed = viewCertFrame
+        certContainer.attr('src', `/certificate/${key}`)
+        verify_certificate_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/certificate/verify`);
+        // /proficiency-testing/{id}/applicants/{application_id}/certificate/verify
+        certContainer.on('load', function(){
+            certContainer.show()
+            btn_verify_certificate_modal.prop("disabled", false)
+        })
     }
 
     // btn_prepare_certificate_modal.click(function() {

@@ -93,6 +93,9 @@ class ProficiencyTestingController extends Controller
 
     public function saveResult($id)
     {
+        $validated = \request()->validate([
+                'result' => 'required|mimes:jpg,png,pdf',
+            ]);
         if (\request()->file('result')) {
 
             $path = \request()->file('result')->store('results');
