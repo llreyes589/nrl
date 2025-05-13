@@ -160,10 +160,9 @@ if ($application)
                 @if($application->certificate)
                 @if($application->certificate->approved_by)
                 <!-- View certificate -->
-                 @include('includes.viewCertificate', $application->certificate->key)
-                <!-- <div class="embed-responsive embed-responsive-16by9" id="view-cert-frame" style="display:none;">
+                <div class="embed-responsive embed-responsive-16by9" id="view-cert-frame" style="display:none;">
                     <iframe class="embed-responsive-item" allowfullscreen src="{{route('certificate', $application->certificate->key)}}"></iframe>
-                </div> -->
+                </div>
                 @endif
                 @endif
                 @endif
@@ -244,14 +243,18 @@ if ($application)
         </div>
 
         @if($application )
+        <h5 class=" mt-4">Uploaded File/s:</h5>
         <div class="card mt-2">
             <div class="card-body">
-                <h5 class="card-title">Uploaded File/s:</h5>
-                <hr>
-                @if($application->receipt_path)
-                <a href="/storage/{{$application->receipt_path}}" target="_blank" class="btn btn-success btn-sm">Receipt</a>
+                <p class="card-title">Receipts</p>
+                @if($application->receipts)
+                <div class="d-flex justify-content-between">
+                    @foreach($application->receipts as $receipt)
+                    <a href="/storage/{{$receipt->file_path}}" title="{{\Carbon\Carbon::parse($receipt->created_at)->toTimeString()}}" target="_blank" class="btn btn-success btn-sm">{{\Carbon\Carbon::parse($receipt->created_at)->format('M d, Y')}}</a>
+                    <strong>{{ $receipt->status_details->status_name }}</strong>
+                    @endforeach
+                </div>
 
-                <hr>
                 @endif
                 @if($application->result_path)
                 <a href="/storage/{{$application->result_path}}" target="_blank" class="btn btn-primary btn-sm">Result</a>
@@ -353,11 +356,14 @@ if ($application)
                             </li>
                             @endif
 
-                            @if($application->receipt_path)
+                            @if(count($application->receipts) > 0)
                             <li class="text-info">
-                                <u>Receipt Uploaded</u>
-                                <span class="float-right">{{\Carbon\Carbon::parse($application->receipt_uploaded_at)->diffForHumans()}}</span>
-                                <p class="text-secondary">Receipt was uploaded on {{\Carbon\Carbon::parse($application->receipt_uploaded_at)->toDayDateTimeString()}}</p>
+                                <u>Receipt Uploaded</strong></u>
+                                <span class="float-right">{{\Carbon\Carbon::parse($application->receipt->created_at)->diffForHumans()}}</span>
+                                <p class="text-secondary m-0">Status: <strong>{{$application->receipt->status_details->status_name}}</strong>
+                                </p>
+
+                                <p class="text-secondary">Receipt was uploaded on {{\Carbon\Carbon::parse($application->receipt->created_at)->toDayDateTimeString()}}</p>
                             </li>
                             @endif
                             <li class="text-info">

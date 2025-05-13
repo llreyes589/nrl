@@ -29,4 +29,6 @@ class ProficiencyTesting extends Model
     {
         return $this->hasOne('\App\Models\Setting', 'pt_id', 'id');
     }
+
+    
 }

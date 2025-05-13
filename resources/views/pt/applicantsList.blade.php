@@ -245,8 +245,8 @@ NRL - Proficiency Testing Applications List
                                         @endif
                                         <!-- /update cert button -->
 
-                                        @if($app->receipt_path )
-                                        @if($app->verified_payment != 1)
+                                        @if($app->receipt )
+                                        @if($app->receipt->status_id != 1)
                                         <form action="{{route('proficiency-testing.applicants.verifyPayment', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
                                             @csrf
                                             @method('PUT')
@@ -254,8 +254,8 @@ NRL - Proficiency Testing Applications List
                                             <button class="dropdown-item btn btn-primary" type="submit"><i class="fa fa-check fa-sm"></i> Verify payment</button>
                                         </form>
                                         @endif
-                                        <a href="/storage/{{$app->receipt_path}}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
-                                        @if( $app->verified_payment != 0)
+                                        <a href="/storage/{{$app->receipt->file_path }}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
+                                        @if( $app->receipt->status_id == 1)
                                         @if(!$app->specimens()->latest('created_at')->first() )
                                         <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
                                         @else

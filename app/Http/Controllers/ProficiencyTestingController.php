@@ -7,6 +7,7 @@ use App\Models\Director;
 use Illuminate\Http\Request;
 use App\Models\ProficiencyTesting;
 use App\Models\ProficiencyTestingApplication;
+use App\Models\Receipt;
 use Exception;
 use App\Models\Specimen;
 use Illuminate\Database\QueryException;
@@ -92,6 +93,7 @@ class ProficiencyTestingController extends Controller
         foreach ($applications as $key => $value) {
             $score = new Scoring($value->score);
             $applications[$key]->scoring = $score->get_performance();
+            $applications[$key]->receipts = Receipt::where('proficiency_testing_application_id', $value->id)->where('status_id', '!=', 4)->first();
         }
         // dd($applications);
         return view('pt.applicantsList', compact('applications'));
@@ -107,8 +109,8 @@ class ProficiencyTestingController extends Controller
     }
     public function verifyPayment($id, $application_id)
     {
-        $application = ProficiencyTestingApplication::find($application_id);
-        $application->update(['verified_payment' => 1, 'verified_payment_at' => \Carbon\Carbon::now()]);
+        $receipt = Receipt::where('proficiency_testing_application_id', $application_id)->where('status_id', '!=', 4)->first();
+        $receipt->update(['status_id' => 1, 'updated_at' => \Carbon\Carbon::now()]);
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment verified successfully', 'classname' => 'alert-success']);
     }
 

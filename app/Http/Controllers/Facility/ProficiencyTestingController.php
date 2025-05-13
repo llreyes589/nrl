@@ -17,8 +17,9 @@ class ProficiencyTestingController extends Controller
     public function apply($id)
     {
         $pt = ProficiencyTesting::find($id);
-        $application = \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first();
+        $application = \request()->user()->ptApplications()->with('receipts', 'receipts.status_details')->where('proficiency_testing_id', $id)->first();
         $limit_reached = $pt->application_limit <= $pt->applications()->count();
+        // dd($application);
         return view('pt.apply', compact('pt', 'application', 'limit_reached'));
     }
     public function saveApplication($id)
@@ -45,22 +46,18 @@ class ProficiencyTestingController extends Controller
     public function saveReceipt($id)
     {
 
-        $validator = \Validator::make(\request()->all(), [
-            'receipt' => 'max:2000|mimes:jpeg,png,pdf',               
-        ]);
+        $validated = \request()->validate([
+                'receipt' => 'required|mimes:jpg,png,pdf',
+            ]);
 
-        if ($validator->fails()) {
-            return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Upload failed. Unknown file format uploaded. Must be jpg, png or pdf.', 'classname' => 'alert-danger']);
-
-        }
         if (\request()->file('receipt')) {
 
             $path = \request()->file('receipt')->store('receipts');
         } else {
             $path = '';
         }
-
-        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['receipt_path' => $path, 'receipt_uploaded_at' => \Carbon\Carbon::now()]);
+        // dd(\request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->receipts());
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->receipts()->create(['file_path' => $path]);
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Receipt successfully submitted', 'classname' => 'alert-success']);
     }
 

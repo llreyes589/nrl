@@ -56,4 +56,11 @@ class ProficiencyTestingApplication extends Model
     {
         return $this->hasOne('\App\Models\Certificate', 'proficiency_testing_application_id', 'id');
     }
+
+    public function receipt(){
+        return $this->hasOne('\App\Models\Receipt','proficiency_testing_application_id', 'id')->where('status_id', '!=', 4);
+    }
+    public function receipts(){
+        return $this->hasMany('\App\Models\Receipt','proficiency_testing_application_id', 'id')->orderBy('id','desc');
+    }
 }

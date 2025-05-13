@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             FacilityUsersSeeder::class,
             FacilityRoleReSeed::class,
             Encoder2Seeder::class,
+            StatusSeeder::class,
             // SettingsSeeder::class,
         ]);
     }

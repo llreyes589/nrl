@@ -65,4 +65,6 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Facility', 'user_id', 'id');
     }
+
+
 }
