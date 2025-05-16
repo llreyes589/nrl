@@ -204,10 +204,14 @@ if ($application)
                             <i class="fa fa-download fa-sm"></i> Download instructions
                         </a>
                         @endif
-
-                        <!-- upload receipt -->
-                        <button class="dropdown-item btn btn-info" id="btn-upload-receipt-modal" type="button" data-target="#upload-receipt-form"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
-
+                        @if(count($application->receipts) > 0)
+                            @if($application->receipts[0]->status_details->id == 4)
+                            <!-- upload receipt -->
+                            <button class="dropdown-item btn btn-info" id="btn-upload-receipt-modal" type="button" data-target="#upload-receipt-form"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
+                            @endif
+                        @else
+                            <button class="dropdown-item btn btn-info" id="btn-upload-receipt-modal" type="button" data-target="#upload-receipt-form"><i class="fa fa-upload fa-sm"></i> Upload Receipt</button>
+                        @endif
                         <!-- specimen -->
                         @if($application->specimens()->latest('created_at')->first())
                         @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
@@ -248,16 +252,18 @@ if ($application)
             <div class="card-body">
                 <p class="card-title">Receipts</p>
                 @if($application->receipts)
+                @foreach($application->receipts as $receipt)
                 <div class="d-flex justify-content-between">
-                    @foreach($application->receipts as $receipt)
                     <a href="/storage/{{$receipt->file_path}}" title="{{\Carbon\Carbon::parse($receipt->created_at)->toTimeString()}}" target="_blank" class="btn btn-success btn-sm">{{\Carbon\Carbon::parse($receipt->created_at)->format('M d, Y')}}</a>
                     <strong>{{ $receipt->status_details->status_name }}</strong>
-                    @endforeach
                 </div>
+                <hr>
+                @endforeach
 
                 @endif
                 @if($application->result_path)
-                <a href="/storage/{{$application->result_path}}" target="_blank" class="btn btn-primary btn-sm">Result</a>
+                <p class="card-title">Specimen Result</p>
+                <a href="/storage/{{$application->result_path}}" target="_blank" class="btn btn-primary btn-sm">View Result</a>
 
                 @endif
             </div>
@@ -357,14 +363,16 @@ if ($application)
                             @endif
 
                             @if(count($application->receipts) > 0)
+                            @foreach($application->receipts as $receipt)
                             <li class="text-info">
                                 <u>Receipt Uploaded</strong></u>
-                                <span class="float-right">{{\Carbon\Carbon::parse($application->receipt->created_at)->diffForHumans()}}</span>
-                                <p class="text-secondary m-0">Status: <strong>{{$application->receipt->status_details->status_name}}</strong>
+                                <span class="float-right">{{\Carbon\Carbon::parse($receipt->created_at)->diffForHumans()}}</span>
+                                <p class="text-secondary m-0">Status: <strong>{{$receipt->status_details->status_name}}</strong>
                                 </p>
 
-                                <p class="text-secondary">Receipt was uploaded on {{\Carbon\Carbon::parse($application->receipt->created_at)->toDayDateTimeString()}}</p>
+                                <p class="text-secondary">Receipt was uploaded on {{\Carbon\Carbon::parse($receipt->created_at)->toDayDateTimeString()}}</p>
                             </li>
+                            @endforeach
                             @endif
                             <li class="text-info">
                                 <u>Applied</u>

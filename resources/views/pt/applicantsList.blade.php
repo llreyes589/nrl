@@ -41,8 +41,8 @@ NRL - Proficiency Testing Applications List
                     <div class="col-md-10 col-sm-12">
                         <h3>Result submitted:</h3>
                         <div class="d-flex flex-column ">
+                            <iframe class="embed-responsive-item" allowfullscreen id="result_path"></iframe>
 
-                            <img class="img-thumbnail" id="result_path" src="" alt="">
                             <a href="" class="btn btn-info btn-sm " type="button" id="download-result-btn" title="Download Result" download><i class="fas fa-download"></i> </a>
                         </div>
                     </div>
@@ -174,6 +174,32 @@ NRL - Proficiency Testing Applications List
                  </div>
 
                 @endcan
+
+                <!-- Manage Receipt -->
+                <div class="card" id="view-receipt-frame" style="display:none;">
+                    <div class="card-body p-0">
+                        <div class="embed-responsive embed-responsive-16by9" >
+                            <p><i class="fa fa-spinner fa-spin" id="receipt-container-loader" ></i></p>
+                            <iframe class="embed-responsive-item" allowfullscreen id="receipt-container" style="display:none;"></iframe>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between">
+
+                            <form method="post" id="verify_receipt_form">
+                                @csrf
+                                @method('PUT')
+                                <button class="btn btn-sm btn-primary" disabled id="btn-verify-receipt-modal" type="submit" data-target="#verify-receipt-form" > Verify Receipt</button>
+                            </form>
+                            <form method="post" id="reject_receipt_form">
+                                @csrf
+                                @method('PUT')
+                                <button class="btn btn-sm btn-danger" disabled id="btn-reject-receipt-modal" type="submit" data-target="#reject-receipt-form" > Reject Receipt</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -247,14 +273,9 @@ NRL - Proficiency Testing Applications List
 
                                         @if($app->receipt )
                                         @if($app->receipt->status_id != 1)
-                                        <form action="{{route('proficiency-testing.applicants.verifyPayment', ['id' => $app->pt->id, 'application_id' => $app->id])}}" method="post">
-                                            @csrf
-                                            @method('PUT')
-
-                                            <button class="dropdown-item btn btn-primary" type="submit"><i class="fa fa-check fa-sm"></i> Verify payment</button>
-                                        </form>
-                                        @endif
-                                        <a href="/storage/{{$app->receipt->file_path }}" target="_blank" class="dropdown-item btn btn-success"><i class="fas fa-receipt fa-sm"></i> View Receipt</a>
+                                            
+                                            <button class="dropdown-item btn btn-info" type="submit" onclick="handleManageReceipt('{{$app->proficiency_testing_id}}', '{{$app->id}}', '{{ $app->receipt->file_path }}')"><i class="fa fa-receipt fa-sm"></i> Manage Receipt</button>
+                                        @endif                                        
                                         @if( $app->receipt->status_id == 1)
                                         @if(!$app->specimens()->latest('created_at')->first() )
                                         <button class="dropdown-item btn btn-info" type="submit" onclick='handleSendSpecimen("{{$app->proficiency_testing_id}}", "{{$app->id}}")'><i class="fa fa-paper-plane fa-sm"></i> Send Specimen</button>
@@ -349,11 +370,24 @@ NRL - Proficiency Testing Applications List
     const close_form_modal = $('#close_form_modal')
     const modal_title = $('#modal_title')
     const modal_dialog = $('#modal-dialog')
+
+    // cert
     const viewCertFrame = $('#view-cert-frame');
     const certContainer = $('#cert-container');
     const certContainerLoader = $('#cert-container-loader');
     const verify_certificate_form = $('#verify_certificate_form');
     const btn_verify_certificate_modal = $('#btn-verify-certificate-modal');
+    // verify receipt
+    const viewReceiptFrame = $('#view-receipt-frame');
+    const receiptContainer = $('#receipt-container');
+    const receiptContainerLoader = $('#receipt-container-loader');
+    const verify_receipt_form = $('#verify_receipt_form');
+    const btn_verify_receipt_modal = $('#btn-verify-receipt-modal');
+
+    // reject receipt
+    const reject_receipt_form = $('#reject_receipt_form');
+    const btn_reject_receipt_modal = $('#btn-reject-receipt-modal');
+
     let formShowed
     $('#pt_table').DataTable()
     const modal = $('#custom-modal');
@@ -425,6 +459,25 @@ NRL - Proficiency Testing Applications List
         certContainer.on('load', function(){
             certContainer.show()
             btn_verify_certificate_modal.prop("disabled", false)
+        })
+    }
+    const handleManageReceipt = function(pt_id, application_id, path){
+        console.log({path})
+        receiptContainer.hide()
+        modal.modal()
+        modal_dialog.addClass('modal-lg')
+        modal_title.text('Manage Receipt')
+        viewReceiptFrame.show()
+        formShowed = viewReceiptFrame
+        receiptContainer.attr('src', `/storage/${path}`)
+        
+        verify_receipt_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/verifyPayment`);
+        reject_receipt_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/rejectPayment`);
+        // /proficiency-testing/{id}/applicants/{application_id}/certificate/verify
+        receiptContainer.on('load', function(){
+            receiptContainer.show()
+            btn_verify_receipt_modal.prop("disabled", false)
+            btn_reject_receipt_modal.prop("disabled", false)
         })
     }
 

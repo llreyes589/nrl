@@ -113,6 +113,12 @@ class ProficiencyTestingController extends Controller
         $receipt->update(['status_id' => 1, 'updated_at' => \Carbon\Carbon::now()]);
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment verified successfully', 'classname' => 'alert-success']);
     }
+    public function rejectPayment($id, $application_id)
+    {
+        $receipt = Receipt::where('proficiency_testing_application_id', $application_id)->where('status_id', '!=', 4)->first();
+        $receipt->update(['status_id' => 4, 'updated_at' => \Carbon\Carbon::now()]);
+        return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment was rejected', 'classname' => 'alert-danger']);
+    }
 
     public function saveScore($id, $application_id)
     {

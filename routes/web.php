@@ -85,6 +85,7 @@ Route::group(['middleware' => ['role:admin|verifier|head']], function () {
         Route::put('/proficiency-testing/{id}/applicants/{application_id}/proceed_specimen', [App\Http\Controllers\ProficiencyTestingController::class, 'proceed_specimen'])->name('applicants.proceed_specimen');
 
         Route::put('/proficiency-testing/{id}/applicants/{application_id}/verifyPayment', [App\Http\Controllers\ProficiencyTestingController::class, 'verifyPayment'])->name('applicants.verifyPayment');
+        Route::put('/proficiency-testing/{id}/applicants/{application_id}/rejectPayment', [App\Http\Controllers\ProficiencyTestingController::class, 'rejectPayment'])->name('applicants.rejectPayment');
         Route::put('/proficiency-testing/{id}/applicants/{application_id}/saveScore', [App\Http\Controllers\ProficiencyTestingController::class, 'saveScore'])->name('saveScore');
         Route::get('/proficiency-testing/{id}/applicants/{application_id}/show', [App\Http\Controllers\ProficiencyTestingController::class, 'showApplication'])->name('applicants.showApplication');
     });
