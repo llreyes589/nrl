@@ -2,10 +2,6 @@
 
 @section('content')
 
-@if(!$pt)
-    @include('includes.modals.newPtModal', $pt)
-@endif
-
 <div class="container">
         <!-- Outer Row -->
         <div class="row justify-content-center">
@@ -21,12 +17,13 @@
                             <!-- Login Page -->
                             <div class="col-lg-6" id="login-page">
                                 <div class="p-3 d-flex justify-content-center">
+                                    @if($pt)
                                     <div class="alert alert-primary text-center" role="alert">
                                         <h5 class="m-0">Now Open!</h5>
                                         <p class="m-0"><strong>SDTL {{$pt->sdtl}} CYCLE {{$pt->cycle}}</strong></p>
                                         <p class="m-0"><strong>Remaining Slot: {{$pt->application_limit}}</strong></p>
                                     </div>
-
+                                    @endif
                                 </div>
                                 <div class="px-5 pb-5">
                                     <h3 class="text-center">National Reference Laboratory <br>East Avenue Medical Center (NRL-EAMC)</h3>
