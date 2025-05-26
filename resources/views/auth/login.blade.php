@@ -2,7 +2,7 @@
 
 @section('content')
 
-@if($pt)
+@if(!$pt)
     @include('includes.modals.newPtModal', $pt)
 @endif
 
@@ -11,8 +11,7 @@
         <div class="row justify-content-center">
 
             <div class="col-xl-10 col-lg-12 col-md-9">
-
-
+                
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0" >
                         <!-- Nested Row within Card Body -->
@@ -21,8 +20,15 @@
                             <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
                             <!-- Login Page -->
                             <div class="col-lg-6" id="login-page">
-                                <div class="p-5">
-                                    
+                                <div class="p-3 d-flex justify-content-center">
+                                    <div class="alert alert-primary text-center" role="alert">
+                                        <h5 class="m-0">Now Open!</h5>
+                                        <p class="m-0"><strong>SDTL {{$pt->sdtl}} CYCLE {{$pt->cycle}}</strong></p>
+                                        <p class="m-0"><strong>Remaining Slot: {{$pt->application_limit}}</strong></p>
+                                    </div>
+
+                                </div>
+                                <div class="px-5 pb-5">
                                     <h3 class="text-center">National Reference Laboratory <br>East Avenue Medical Center (NRL-EAMC)</h3>
                                     <hr>
                                     <form class="user" method="POST" action="{{ route('login') }}">
@@ -68,7 +74,7 @@
                                             </a>
                                             @endif
                                             <a class="btn btn-link" onclick="handleChangePage()">
-                                                {{ __('Add New DT') }}
+                                                {{ __('if you are a new DT facility') }}
                                             </a>
                                         </div>
 

@@ -14,8 +14,9 @@ NRL - Verify my certificate
 
 <div class="card {{!isset($cert_details->facility_verified_by) ? 'border-primary' : 'border-success'}}">
     <div class="card-header">
+        
         @if(!isset($cert_details->facility_verified_by))
-        <h5 class="text-primary">Verify Certificate to DTL Proficiency Certificate Verification</h5>
+        <h5 class="text-primary">Verify DTL Proficiency Certificate of {{ $cert_details->ptApplication->user->name }}</h5>
         @else
         <h5 class="text-success">This is a VALID Certificate until {{\Carbon\Carbon::createFromTimeStamp(strtotime($cert_details->ptApplication->pt->cert_validity))->toDayDateTimeString()}}
             @endif

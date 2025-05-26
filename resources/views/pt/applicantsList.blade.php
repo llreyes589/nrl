@@ -26,6 +26,7 @@ NRL - Proficiency Testing Applications List
 
 
 <!-- Modal -->
+
 <div id="custom-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog " role="document">
         <div class="modal-content">
@@ -38,10 +39,9 @@ NRL - Proficiency Testing Applications List
             <div class="modal-body">
                 <div class="row" id="score_form_container" style="display: none;">
 
-                    <div class="col-md-10 col-sm-12">
-                        <h3>Result submitted:</h3>
-                        <div class="d-flex flex-column ">
-                            <iframe class="embed-responsive-item" allowfullscreen id="result_path"></iframe>
+                    <div class="col-md-9 col-sm-12">
+                        <div class="d-flex flex-column">
+                            <iframe class="embed-responsive-item" height="350" allowfullscreen id="result_path"></iframe>
 
                             <a href="" class="btn btn-info btn-sm " type="button" id="download-result-btn" title="Download Result" download><i class="fas fa-download"></i> </a>
                         </div>
@@ -191,15 +191,38 @@ NRL - Proficiency Testing Applications List
                                 @method('PUT')
                                 <button class="btn btn-sm btn-primary" disabled id="btn-verify-receipt-modal" type="submit" data-target="#verify-receipt-form" > Verify Receipt</button>
                             </form>
-                            <form method="post" id="reject_receipt_form">
-                                @csrf
-                                @method('PUT')
-                                <button class="btn btn-sm btn-danger" disabled id="btn-reject-receipt-modal" type="submit" data-target="#reject-receipt-form" > Reject Receipt</button>
-                            </form>
+                            
+                            <button class="btn btn-sm btn-danger" disabled id="btn-reject-receipt-modal" onclick="handleRejectReceipt()" type="button" data-target="#reject-receipt-form" > Reject Receipt</button>
+
                         </div>
 
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="reject-receipt-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal_title">Confirm Receipt Reject</h3>
+                <button class="close" id="close_form_modal" onclick="closeRejectReceiptModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="reject_receipt_form">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group">
+                      <label for="reject_reason">Reason for rejection:</label>
+                      <textarea class="form-control" name="reject_reason" id="reject_reason" rows="5" required></textarea>
+                    </div>
+                    <button class="btn btn-sm btn-secondary" id="cancel-reject-receipt-modal" onclick="closeRejectReceiptModal()" type="button" > Cancel</button>
+                    <button class="btn btn-sm btn-danger" id="btn-reject-receipt-modal" type="submit" data-target="#reject-receipt-form" > Reject Receipt</button>
+                </form>
             </div>
         </div>
     </div>
@@ -369,7 +392,7 @@ NRL - Proficiency Testing Applications List
     const download_result_btn = $('#download-result-btn')
     const close_form_modal = $('#close_form_modal')
     const modal_title = $('#modal_title')
-    const modal_dialog = $('#modal-dialog')
+    const modal_dialog = $('.modal-dialog')
 
     // cert
     const viewCertFrame = $('#view-cert-frame');
@@ -389,8 +412,12 @@ NRL - Proficiency Testing Applications List
     const btn_reject_receipt_modal = $('#btn-reject-receipt-modal');
 
     let formShowed
-    $('#pt_table').DataTable()
+    $('#pt_table').DataTable({
+        order: [[5, 'desc']]
+
+    })
     const modal = $('#custom-modal');
+    const rejectReceiptModal = $('#reject-receipt-modal');
     let or_no = $('[name=edit_or_no]')
     let certificate_no = $('[name=edit_certificate_no]')
     let performance = $('#performance')
@@ -406,7 +433,9 @@ NRL - Proficiency Testing Applications List
 
     const handleAddScore = function(pt_id, id, app_result_path, score) {
         modal.modal()
-        modal_dialog.addClass('modal-xl')
+        modal_dialog.addClass('modal-lg')
+        modal_title.text('Result submitted')
+
         score_form_container.show()
         formShowed = score_form_container
         scoreInput.val(score)
@@ -449,7 +478,6 @@ NRL - Proficiency Testing Applications List
     const handlePreviewCertificate = function(pt_id, application_id, key){
         certContainer.hide()
         modal.modal()
-        modal_dialog.addClass('modal-lg')
         modal_title.text('Preview Certificate')
         viewCertFrame.show()
         formShowed = viewCertFrame
@@ -462,10 +490,9 @@ NRL - Proficiency Testing Applications List
         })
     }
     const handleManageReceipt = function(pt_id, application_id, path){
-        console.log({path})
         receiptContainer.hide()
         modal.modal()
-        modal_dialog.addClass('modal-lg')
+        modal_dialog.addClass('modal-md')
         modal_title.text('Manage Receipt')
         viewReceiptFrame.show()
         formShowed = viewReceiptFrame
@@ -479,6 +506,15 @@ NRL - Proficiency Testing Applications List
             btn_verify_receipt_modal.prop("disabled", false)
             btn_reject_receipt_modal.prop("disabled", false)
         })
+    }
+
+    const handleRejectReceipt = function(){
+        modal.modal('toggle')
+        rejectReceiptModal.modal()
+
+    }
+    const closeRejectReceiptModal = function(){
+        rejectReceiptModal.modal('toggle')
     }
 
     // btn_prepare_certificate_modal.click(function() {

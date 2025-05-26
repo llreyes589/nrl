@@ -18,7 +18,7 @@ class CertificateController extends Controller
     {
         $cert_details = Certificate::where('key', $key)->first();
         $request->merge(['facility_verified_at' => \Carbon\Carbon::now()]);
-        dd($cert_details);
+        // dd($cert_details);
         $cert_details->update($request->except('_token'));
         return redirect()->route('verifyCertificate', $key)->with('message', 'Certificate successfully verified.')->with('classname', 'alert-success');
     }

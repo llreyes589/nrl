@@ -369,6 +369,10 @@ if ($application)
                                 <span class="float-right">{{\Carbon\Carbon::parse($receipt->created_at)->diffForHumans()}}</span>
                                 <p class="text-secondary m-0">Status: <strong>{{$receipt->status_details->status_name}}</strong>
                                 </p>
+                                @if($receipt->reject_reason)
+                                <p class="text-secondary m-0">Reason: <strong class="form-control text-danger">{{$receipt->reject_reason}}</strong>
+                                </p>
+                                @endif
 
                                 <p class="text-secondary">Receipt was uploaded on {{\Carbon\Carbon::parse($receipt->created_at)->toDayDateTimeString()}}</p>
                             </li>
@@ -554,7 +558,7 @@ if ($application)
 
         let formShowed;
         btn_upload_receipt_modal.click(function(e) {
-            my_modal_title.text('Upload Receipt')
+            my_modal_title.text('Upload Receipt/Check')
             form_modal.modal({
                 backdrop: 'static',
                 keyboard: false
