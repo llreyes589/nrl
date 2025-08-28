@@ -205,7 +205,7 @@ class FacilityController extends Controller
             <table >
                 <tr>
                     <td style="width:30%">    
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/DOH_Logo.png" width="100"/>
+                        <img src="/images/DOH_Logo.png" width="100"/>
                     </td>
                     <td style="width:40%">  
                         <br>  
