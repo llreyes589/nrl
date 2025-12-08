@@ -15,10 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            PermissionsSeeder::class,
-            RegionsSeeder::class
-        ]);
+        // $this->call([
+        //     PermissionsSeeder::class,
+        //     RegionsSeeder::class
+        // ]);
+        $csv = $this->command->ask('Please enter the csv filename. Ex: dtl.csv !!');
+        $year = $this->command->ask('Please enter year. Ex: 2026');
+
+        $this->call(FacilitiesSeeder26::class, false, compact('csv', 'year'));
+
 
     }
 }

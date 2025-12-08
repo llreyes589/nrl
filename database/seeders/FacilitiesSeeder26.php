@@ -15,22 +15,25 @@ class FacilitiesSeeder26 extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run($csv, $year=null)
     {
+        $template = CertificateTemplate::where('year', $year)->first();
+        if(!$template){
 
-        $template = CertificateTemplate::create([
-            'certificate_theme' => 'CY 2026 PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING',
-            'certificate_given_at' => '2026-12-31',
-            'year' => '2026',
-            'updated_by' => 8,
-            'director_name' => 'ALFONSO G. NUÑEZ III, MD, FPCS, MMHoA',
-            'director_position' => 'Medical Center Chief II',
-            'director_designation' => 'East Avenue Medical Center',
-            'director_signature_path' => 'images/alfonso.png'
-        ]);
+            $template = CertificateTemplate::create([
+                'certificate_theme' => 'CY '.$year.' PROFICIENCY TESTING SCHEME for SCREENING DRUGS OF ABUSE TESTING',
+                'certificate_given_at' => $year.'-12-31',
+                'year' => $year,
+                'updated_by' => 8,
+                'director_name' => 'ALFONSO G. NUÑEZ III, MD, FPCS, MMHoA',
+                'director_position' => 'Medical Center Chief II',
+                'director_designation' => 'East Avenue Medical Center',
+                'director_signature_path' => 'images/alfonso.png'
+            ]);
+        }
         // Facility::truncate();
         // Certificate::truncate();
-        $csvFile = fopen(base_path("database/seeders/dtl26.csv"), "r");
+        $csvFile = fopen(base_path("database/seeders/".$csv), "r");
 
         $firstline = true;
         // Get current data from items table
