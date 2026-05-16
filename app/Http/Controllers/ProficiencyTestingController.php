@@ -10,6 +10,7 @@ use App\Models\ProficiencyTestingApplication;
 use App\Models\Receipt;
 use Exception;
 use App\Models\Specimen;
+use App\Notifications\AppActionAlert;
 use Illuminate\Database\QueryException;
 
 class ProficiencyTestingController extends Controller
@@ -109,14 +110,28 @@ class ProficiencyTestingController extends Controller
     }
     public function verifyPayment($id, $application_id)
     {
-        $receipt = Receipt::where('proficiency_testing_application_id', $application_id)->where('status_id', '!=', 4)->first();
+        $receipt = Receipt::with('userDetails')->where('proficiency_testing_application_id', $application_id)->where('status_id', '!=', 4)->first();
         $receipt->update(['status_id' => 1, 'updated_at' => \Carbon\Carbon::now()]);
+
+        $receipt->userDetails->notify(new AppActionAlert(
+            'Receipt Status Alert', 
+            'Uploaded receipt has been Verified.',
+            \route('proficiency-testing.facility.apply', $id)
+        ));            
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment verified successfully', 'classname' => 'alert-success']);
     }
     public function rejectPayment($id, $application_id)
     {
-        $receipt = Receipt::where('proficiency_testing_application_id', $application_id)->where('status_id', '!=', 4)->first();
+        $receipt = Receipt::with(['userDetails', 'applicationDetails'])->where('proficiency_testing_application_id', $application_id)->where('status_id', '!=', 4)->first();
+        // dd($receipt->userDetails);
         $receipt->update(['status_id' => 4, 'reject_reason' => \request()->reject_reason,  'updated_at' => \Carbon\Carbon::now()]);
+
+        $receipt->userDetails->notify(new AppActionAlert(
+            'Receipt Status Alert', 
+            'Uploaded receipt has been rejected.',
+            \route('proficiency-testing.facility.apply', $id)
+        ));         
+
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment was rejected', 'classname' => 'alert-danger']);
     }
 

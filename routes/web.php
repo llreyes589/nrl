@@ -3,6 +3,7 @@
 use App\Http\Controllers\PushSubscriptionController;
 use App\Models\User;
 use App\Notifications\AccountAlert;
+use App\Notifications\AppActionAlert;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('testmail', function(){
@@ -136,9 +137,10 @@ Route::post('/push-subscriptions', [PushSubscriptionController::class, 'store'])
 Route::get('/send-test-push', function () {
     $user = User::find(1); // Grab a user with an active subscription
     
-    $user->notify(new AccountAlert(
+    $user->notify(new AppActionAlert(
         'Security Alert', 
-        'A new login was detected on your account.'
+        'A new login was detected on your account.',
+        '/home'
     ));
     
     return 'Notification sent!';

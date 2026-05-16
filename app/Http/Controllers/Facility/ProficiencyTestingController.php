@@ -5,10 +5,21 @@ namespace App\Http\Controllers\Facility;
 use App\Http\Controllers\Controller;
 use App\Models\ProficiencyTesting;
 use App\Models\ProficiencyTestingApplication;
+use App\Models\User;
+use App\Notifications\AppActionAlert;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class ProficiencyTestingController extends Controller
 {
+
+    private $admin;
+    public function __construct()
+    {
+        // get admin
+        $this->admin = User::role('admin')->first();
+    }
+
     public function index()
     {
         $pts = ProficiencyTesting::all();
@@ -27,12 +38,13 @@ class ProficiencyTestingController extends Controller
         $pt = ProficiencyTesting::find($id);
         $limit_reached = $pt->application_limit <= $pt->applications()->count();
         if ($limit_reached) return 'Invalid Request. Application limit has been reached.';
+        $user = request()->user();
         // dd(\request()->user()->id);
 
         $test_method = [['immunoassay_brand' => \request()->test_method_used == 'itk' ? \request()->immunoassay_brand : null], ['instrument_type' => \request()->test_method_used == 'inst' ? \request()->instrument_type : null, 'instrument_brand' => \request()->test_method_used == 'inst' ?  \request()->instrument_brand : null,]];
         // dd(json_encode($test_method));
         ProficiencyTestingApplication::create([
-            'user_id' => \request()->user()->id,
+            'user_id' => $user->id,
             'proficiency_testing_id' => $id,
             'test_method_used' => json_encode($test_method),
             // 'cutoff_value' => \request()->cutoff_value,
@@ -40,6 +52,13 @@ class ProficiencyTestingController extends Controller
             'tetrahydrocannabinol' => \request()->tetrahydrocannabinol,
             'mode_of_payment' => \request()->mode_of_payment
         ]);
+
+        $this->admin->notify(new AppActionAlert(
+            'New PT Application Alert', 
+            $user->name.' applied for '.$pt->sdtl.' batch '.$pt->cycle.'.',
+            \route('proficiency-testing.applicants', $id)
+        ));           
+
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Application successfully sent', 'classname' => 'alert-success']);
     }
 
@@ -57,7 +76,14 @@ class ProficiencyTestingController extends Controller
             $path = '';
         }
         // dd(\request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->receipts());
-        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->receipts()->create(['file_path' => $path]);
+        \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->receipts()->create(['file_path' => $path]);    
+
+    
+        $this->admin->notify(new AppActionAlert(
+            'New Receipt Alert', 
+            'A new receipt was uploaded and need your action.',
+            \route('proficiency-testing.applicants', $id)
+        ));        
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Receipt successfully submitted', 'classname' => 'alert-success']);
     }
 
@@ -85,6 +111,13 @@ class ProficiencyTestingController extends Controller
         }
         // dd(\request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens);
         \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens()->latest('created_at')->first()->update(['unboxing_video_path' => $path, 'accepted_bottles' => \request()->accepted_bottles ? \request()->accepted_bottles : null, 'reject_description' => \request()->reject_description]);
+
+        $this->admin->notify(new AppActionAlert(
+            'Specimen Received Alert', 
+            \request()->user()->name.' received specimen',
+            \route('proficiency-testing.applicants', $id)
+        ));        
+
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Specimen successfully received', 'classname' => 'alert-success']);
     }
 
@@ -101,6 +134,7 @@ class ProficiencyTestingController extends Controller
         }
 
         \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['result_path' => $path, 'result_uploaded_at' => \Carbon\Carbon::now()]);
+        
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Result sent successfully ', 'classname' => 'alert-success']);
     }
 }

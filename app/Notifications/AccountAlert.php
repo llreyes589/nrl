@@ -31,6 +31,6 @@ class AccountAlert extends Notification
             ->icon('/images/notification-icon.png')
             ->body($this->message)
             ->action('View Details', 'view_account')
-            ->data(['id' => $notification->id, 'url' => '/dashboard']);
+            ->data(['id' => $notification->id, 'url' => '/home']);
     }
 }
