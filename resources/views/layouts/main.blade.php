@@ -23,6 +23,76 @@
 
     <link rel="stylesheet" href="{{asset('css/timeline.css')}}">
 
+<!-- 1. Ensure you have the CSRF Token Meta Tag in your <head> -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- 2. The Push Notification Setup Script -->
+    <script>
+        // Safely pass the VAPID key from Laravel config to JavaScript
+        const VAPID_PUBLIC_KEY = "{{ config('webpush.vapid.public_key') }}";
+
+        // Register Service Worker and initiate subscription flow
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registered successfully');
+                        // Automatically trigger subscription check once ready
+                        initiatePushSubscription();
+                    })
+                    .catch(error => console.error('Service Worker registration failed:', error));
+            });
+        }
+
+        async function initiatePushSubscription() {
+            try {
+                const registration = await navigator.serviceWorker.ready;
+                
+                // Prompt user for browser permission
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    console.warn('Push notification permission denied.');
+                    return;
+                }
+
+                // Convert VAPID key to required format for browser security
+                const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+
+                // Generate browser subscription tokens
+                const subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: applicationServerKey
+                });
+
+                // Post the subscription payload directly to your Laravel controller
+                await fetch('/push-subscriptions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify(subscription)
+                });
+
+                console.log('Successfully subscribed to Push Notifications.');
+            } catch (error) {
+                console.error('Failed to subscribe user:', error);
+            }
+        }
+
+        // Helper function required to format VAPID string keys for the browser
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+    </script>    
+
 </head>
 
 <body id="page-top">
