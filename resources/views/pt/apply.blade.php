@@ -106,6 +106,8 @@ NRL - Proficiency Testing Program Application
                                         @endif                                    
                                     </div>
                                 @endif
+                            @else
+                                <button class="btn btn-success" id="btn-view-certificate-modal" data-target="#view-cert-frame"><i class="fa fa-certificate fa-sm mr-1"></i> View Certificate</button>                            
                             @endrole
 
 
