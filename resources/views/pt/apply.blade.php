@@ -21,6 +21,15 @@ NRL - Proficiency Testing Program Application
     $test_method = $application ? json_decode($application->test_method_used, true) : null;
 @endphp
 
+<style>
+    .btn-purple { background-color: #5b3ca1; border-color: #5b3ca1; color: #fff; }
+    .timeline ul { padding-left: 0; }
+    .timeline li { position: relative; padding-left: 28px; margin-bottom: 16px; }
+    .timeline li:before { content: ""; position: absolute; left: 0; top: 6px; width: 12px; height: 12px; background: #5b3ca1; border-radius: 50%; }
+    .table-sm td, .table-sm th { vertical-align: middle; }
+    .card .form-control[readonly] { background-color: #f8f9fa; border: 1px solid #e9ecef; }
+</style>
+
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">PT Application <small class="text-muted">(SDTL-{{$pt->sdtl}} | Cycle-{{$pt->cycle}})</small></h1>
     <div>
@@ -34,135 +43,170 @@ NRL - Proficiency Testing Program Application
 
 <div class="card mb-4">
     <div class="card-body">
+        @if($application)
         <div class="d-flex align-items-start justify-content-between mb-3">
             <div>
                 <h4 class="mb-1">Application Overview</h4>
                 <p class="text-muted mb-0">Overview of the current PT application</p>
             </div>
             <div class="text-right">
-                @if($application)
-                    <span class="badge badge-success">Sent</span>
-                @endif
             </div>
         </div>
+        @endif
 
         <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label>Name</label>
-                                <input type="text" class="form-control" readonly value="SDTL-{{$pt->sdtl}}">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label>Year</label>
-                                <input type="text" class="form-control" readonly value="{{ $pt->year ?? date('Y') }}">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label>Cycle</label>
-                                <input type="text" class="form-control" readonly value="{{$pt->cycle}}">
-                            </div>
-                        </div>
+            <div class="col-md">
 
-                        <div class="mt-3 d-flex">
-                            @if($pt->instruction_file_path)
-                            <a href="/storage/{{$pt->instruction_file_path}}" class="btn btn-outline-secondary mr-2" download><i class="fa fa-download"></i> Download Instructions</a>
-                            @endif
-                            <button class="btn btn-primary" id="btn-upload-receipt-modal" data-target="#upload-receipt-form"><i class="fa fa-upload mr-1"></i> Upload Receipt</button>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5>Test Method Used</h5>
-                        @if(!$application)
-                            <div class="form-group">
-                                <select class="custom-select form-control" name="test_method_used" id="test_method_used">
-                                    <option value="itk">Immunoassay Test Kit</option>
-                                    <option value="inst">Instrumented</option>
-                                </select>
-                            </div>
-                            <div id="itk_fields" class="mb-2">
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Brand</span>
-                                    </div>
-                                    <input class="form-control" type="text" name="immunoassay_brand" placeholder="Enter brand here" required />
+                @if($application)
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" readonly value="SDTL-{{$pt->sdtl}}">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Year</label>
+                                    <input type="text" class="form-control" readonly value="{{ $pt->year ?? date('Y') }}">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Cycle</label>
+                                    <input type="text" class="form-control" readonly value="{{$pt->cycle}}">
                                 </div>
                             </div>
-                            <div id="inst_fields" style="display:none;">
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Type of Instrument</span>
+                            @role('Facility')
+                                @if($application)
+
+                                    <div class="mt-3 d-flex">
+                                        @if($pt->instruction_file_path)
+                                        <a href="/storage/{{$pt->instruction_file_path}}" class="btn btn-outline-secondary mr-2" download><i class="fa fa-download"></i> Download Instructions</a>
+                                        @endif
+                                        @if($application && $application->certificate && $application->certificate->approved_by)
+                                        <button class="btn btn-success" id="btn-view-certificate-modal" data-target="#view-cert-frame">View Certificate</button>
+                                        @endif                                    
+                                        @if(count($application->receipts) > 0)
+                                            @if($application->receipts[0]->status_details->id == 4)
+                                            <!-- upload receipt -->
+                                            <button class="btn btn-success" id="btn-upload-receipt-modal" data-target="#upload-receipt-form"><i class="fa fa-upload mr-1"></i> Upload Receipt</button>
+                                            @endif
+                                        @else
+                                            <button class="btn btn-success" id="btn-upload-receipt-modal" data-target="#upload-receipt-form"><i class="fa fa-upload mr-1"></i> Upload Receipt</button>
+                                        @endif  
+                                        
+                                        <!-- specimen -->
+                                        @if($application->specimens()->latest('created_at')->first())
+                                            @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
+                                                <button class="btn btn-warning" id="btn-receive-specimen-modal" type="button" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> View/Receive specimen</button>
+                                            @else
+
+                                                @if($application->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && !$application->result_path)
+                                                    <button class="btn btn-primary" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Submit result</button>
+                                                @endif
+                                            @endif
+                                        @endif                                    
                                     </div>
-                                    <input class="form-control" type="text" name="instrument_type" placeholder="Enter Type of Instrument here" />
+                                @endif
+                            @endrole
+
+
+                        </div>
+                    </div>
+                @endif
+                <form method="post" id='form' action="">
+                    @csrf
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    
+                                        <h5>Test Method Used</h5>
+                                        @if(!$application)
+                                            <div class="form-group">
+                                                <select class="custom-select form-control" name="test_method_used" id="test_method_used">
+                                                    <option value="itk">Immunoassay Test Kit</option>
+                                                    <option value="inst">Instrumented</option>
+                                                </select>
+                                            </div>
+                                            <div id="itk_fields" class="mb-2">
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Brand</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="immunoassay_brand" placeholder="Enter brand here" required />
+                                                </div>
+                                            </div>
+                                            <div id="inst_fields" style="display:none;">
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Type of Instrument</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="instrument_type" placeholder="Enter Type of Instrument here" />
+                                                </div>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Brand</span>
+                                                    </div>
+                                                    <input class="form-control" type="text" name="instrument_brand" placeholder="Enter brand here" />
+                                                </div>
+                                            </div>
+                                        @else
+                                            @if(!empty($test_method[0]['immunoassay_brand']))
+                                                <p class="lead">Immunoassay Test Kit</p>
+                                                <div class="form-control">{{$test_method[0]['immunoassay_brand']}}</div>
+                                            @else
+                                                <p class="lead">Instrumented</p>
+                                                <div class="form-control mb-2">{{$test_method[1]['instrument_type'] ?? ''}}</div>
+                                                <div class="form-control">{{$test_method[1]['instrument_brand'] ?? ''}}</div>
+                                            @endif
+                                        @endif
                                 </div>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Brand</span>
+
+                                <div class="col-md-6">
+                                    <h5>Cut Off Value for Method/s (ng/ml)</h5>
+                                    <div class="form-group">
+                                        <label>Methamphetamine (METH)</label>
+                                        @if($application)
+                                        <textarea class="form-control" rows="3" readonly>{{$application->methamphetamine}}</textarea>
+                                        @else
+                                        <textarea class="form-control" name="methamphetamine" rows="3" required></textarea>
+                                        @endif
                                     </div>
-                                    <input class="form-control" type="text" name="instrument_brand" placeholder="Enter brand here" />
+                                    <div class="form-group">
+                                        <label>Tetrahydrocannabinol (THC)</label>
+                                        @if($application)
+                                        <textarea class="form-control" rows="3" readonly>{{$application->tetrahydrocannabinol}}</textarea>
+                                        @else
+                                        <textarea class="form-control" name="tetrahydrocannabinol" rows="3" required></textarea>
+                                        @endif
+                                    </div>
+
+                                    <div class="alert alert-primary">
+                                        <strong>Total amount:</strong> P{{$pt->total_amount}}
+                                    </div>
+
+                                    @if(!$application)
+                                        <div class="form-group">
+                                            <label>Mode of Payment</label>
+                                            <select id="mode_of_payment" class="custom-select" name="mode_of_payment">
+                                                <option value="bt">Bank Transfer</option>
+                                                <option value="ccp">Cash/Check Padala</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-primary" id="submit" type="submit" @if($limit_reached) disabled @endif>Apply / Checkout</button>
+                                    @else
+                                        <h6>Mode of Payment</h6>
+                                        <p class="lead">@if($application->mode_of_payment === 'bt') Bank Transfer @else Cash/Check Padala @endif</p>
+                                    @endif
                                 </div>
                             </div>
-                        @else
-                            @if(!empty($test_method[0]['immunoassay_brand']))
-                                <p class="lead">Immunoassay Test Kit</p>
-                                <div class="form-control">{{$test_method[0]['immunoassay_brand']}}</div>
-                            @else
-                                <p class="lead">Instrumented</p>
-                                <div class="form-control mb-2">{{$test_method[1]['instrument_type'] ?? ''}}</div>
-                                <div class="form-control">{{$test_method[1]['instrument_brand'] ?? ''}}</div>
-                            @endif
-                        @endif
+                        </div>
                     </div>
-                </div>
+                </form>
 
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5>Cut Off Value for Method/s (ng/ml)</h5>
-                        <div class="form-group">
-                            <label>Methamphetamine (METH)</label>
-                            @if($application)
-                            <textarea class="form-control" rows="3" readonly>{{$application->methamphetamine}}</textarea>
-                            @else
-                            <textarea class="form-control" name="methamphetamine" rows="3" required></textarea>
-                            @endif
-                        </div>
-                        <div class="form-group">
-                            <label>Tetrahydrocannabinol (THC)</label>
-                            @if($application)
-                            <textarea class="form-control" rows="3" readonly>{{$application->tetrahydrocannabinol}}</textarea>
-                            @else
-                            <textarea class="form-control" name="tetrahydrocannabinol" rows="3" required></textarea>
-                            @endif
-                        </div>
-
-                        <div class="alert alert-primary">
-                            <strong>Total amount:</strong> P{{$pt->total_amount}}
-                        </div>
-
-                        @if(!$application)
-                            <div class="form-group">
-                                <label>Mode of Payment</label>
-                                <select id="mode_of_payment" class="custom-select" name="mode_of_payment">
-                                    <option value="bt">Bank Transfer</option>
-                                    <option value="ccp">Cash/Check Padala</option>
-                                </select>
-                            </div>
-                            <button class="btn btn-primary" id="submit" type="submit" @if($limit_reached) disabled @endif>Apply / Checkout</button>
-                        @else
-                            <h6>Mode of Payment</h6>
-                            <p class="lead">@if($application->mode_of_payment === 'bt') Bank Transfer @else Cash/Check Padala @endif</p>
-                        @endif
-
-                    </div>
-                </div>
 
             </div>
 
+            @if($application)
             <div class="col-md-4">
                 <h5>Application Timeline</h5>
                 <div class="card mb-3">
@@ -246,12 +290,9 @@ NRL - Proficiency Testing Program Application
                     </div>
                 </div>
 
-                @if($application && $application->certificate && $application->certificate->approved_by)
-                <div class="text-center">
-                    <button class="btn btn-success" id="btn-view-certificate-modal" data-target="#view-cert-frame">View Certificate</button>
-                </div>
-                @endif
+
             </div>
+            @endif
         </div>
 
     </div>
