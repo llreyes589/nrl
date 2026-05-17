@@ -79,15 +79,15 @@ NRL - Proficiency Testing Program Application
 
                                     <div class="mt-3 d-flex">
                                         @if($pt->instruction_file_path)
-                                        <a href="/storage/{{$pt->instruction_file_path}}" class="btn btn-outline-secondary mr-2" download><i class="fa fa-download"></i> Download Instructions</a>
+                                        <a href="/storage/{{$pt->instruction_file_path}}" class="btn btn-outline-secondary mr-2" download><i class="fa fa-download fa-sm mr-1"></i> Download Instructions</a>
                                         @endif
                                         @if($application && $application->certificate && $application->certificate->approved_by)
-                                        <button class="btn btn-success" id="btn-view-certificate-modal" data-target="#view-cert-frame">View Certificate</button>
+                                        <button class="btn btn-success" id="btn-view-certificate-modal" data-target="#view-cert-frame"><i class="fa fa-certificate fa-sm mr-1"></i> View Certificate</button>
                                         @endif                                    
                                         @if(count($application->receipts) > 0)
                                             @if($application->receipts[0]->status_details->id == 4)
                                             <!-- upload receipt -->
-                                            <button class="btn btn-success" id="btn-upload-receipt-modal" data-target="#upload-receipt-form"><i class="fa fa-upload mr-1"></i> Upload Receipt</button>
+                                            <button class="btn btn-success" id="btn-upload-receipt-modal" data-target="#upload-receipt-form"><i class="fa fa-upload mr-1 fa-sm"></i> Upload Receipt</button>
                                             @endif
                                         @else
                                             <button class="btn btn-success" id="btn-upload-receipt-modal" data-target="#upload-receipt-form"><i class="fa fa-upload mr-1"></i> Upload Receipt</button>
@@ -96,11 +96,11 @@ NRL - Proficiency Testing Program Application
                                         <!-- specimen -->
                                         @if($application->specimens()->latest('created_at')->first())
                                             @if(!$application->specimens()->latest('created_at')->first()->unboxing_video_path)
-                                                <button class="btn btn-warning" id="btn-receive-specimen-modal" type="button" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm"></i> View/Receive specimen</button>
+                                                <button class="btn btn-warning" id="btn-receive-specimen-modal" type="button" data-target="#receive-specimen-form"><i class="fab fa-get-pocket fa-sm mr-1"></i> View/Receive specimen</button>
                                             @else
 
                                                 @if($application->specimens()->latest('created_at')->first()->unboxing_video_path =='accepted' && !$application->result_path)
-                                                    <button class="btn btn-primary" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm"></i> Submit result</button>
+                                                    <button class="btn btn-primary" id="btn-send-result-modal" type="button" data-target="#send-result-form"><i class="fa fa-paper-plane fa-sm mr-1"></i> Submit result</button>
                                                 @endif
                                             @endif
                                         @endif                                    
@@ -213,48 +213,113 @@ NRL - Proficiency Testing Program Application
                     <div class="card-body">
                         <div class="timeline">
                             <ul class="list-unstyled mb-0">
-                                <li class="mb-3">
-                                    <strong>Applied</strong>
-                                    <div class="text-muted small">{{\Carbon\Carbon::parse($application->created_at ?? now())->toDayDateTimeString()}}</div>
-                                </li>
-                                @if($application && $application->result_path)
-                                <li class="mb-3">
-                                    <strong>Result Sent / for checking</strong>
-                                    <div class="text-muted small">{{\Carbon\Carbon::parse($application->scored_at ?? $application->updated_at ?? now())->diffForHumans()}}</div>
-                                </li>
-                                @endif
+                            @if($application->certificate)
+                            @if($application->certificate->approved_by)
+                            <li class="mb-3">
+                                <strong>Certificate Approved</strong>
+                                <p class="text-muted small">{{\Carbon\Carbon::parse($application->certificate->approved_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            @if($application->certificate->verified_by)
+                            <li class="mb-3">
+                                <strong>Certificate Verified</strong>
+                                <p class="text-muted small ">{{\Carbon\Carbon::parse($application->certificate->verified_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            <li class="mb-3">
+                                <strong>Certificate Created</strong>
+                                
+                                <p class="text-secondary small p-0 m-0">{{\Carbon\Carbon::parse($application->certificate->prepared_at)->toDayDateTimeString()}}</p>
+                                <p class="text-secondary small"><strong>Validity: {{$application->pt->cert_validity}}</strong></p>
+                            </li>
+                            @endif
+                            @if(gettype($application->score) == 'integer')
+                            <?php
+                            $score = new \App\Library\Scoring($application->score);
 
-                                @if($application && $application->certificate)
-                                    @if($application->certificate->prepared_at)
-                                    <li class="mb-3">
-                                        <strong>Certificate Created</strong>
-                                        <div class="text-muted small">{{\Carbon\Carbon::parse($application->certificate->prepared_at)->toDayDateTimeString()}}</div>
-                                    </li>
+                            ?>
+                            <li class="mb-3">
+                                <strong>Result Checked
+                                    <span class="
+                                    @if($application->score > 8)
+                                    text-warning
+                                    @else
+                                    text-primary
                                     @endif
-                                    @if($application->certificate->verified_by)
-                                    <li class="mb-3">
-                                        <strong>Certificate Verified</strong>
-                                        <div class="text-muted small">{{\Carbon\Carbon::parse($application->certificate->verified_at)->toDayDateTimeString()}}</div>
-                                    </li>
+                                    ">
+                                ({{$score->get_performance()[1]}})</span>
+                                </strong>
+                                
+                                <p class="text-muted small">{{\Carbon\Carbon::parse($application->scored_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            @if($application->result_path)
+                            <li class="mb-3">
+                                <strong>Result Sent / for checking</strong>
+                                
+                                <p class="text-muted small">{{\Carbon\Carbon::parse($application->result_uploaded_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endif
+                            @if(count($application->specimens) > 0)
+                            <?php
+                            $specimens = $application->specimens()->orderBy('created_at', 'desc')->get();
+                            $firstSpecimen = $application->specimens()->first();
+                            ?>
+                            @foreach($specimens as $specimen)
+                            @if($specimen->unboxing_video_path)
+                            <li class="mb-3">
+                                <strong>@if($specimen->id != $firstSpecimen->id) Resent @endif Specimen Received
+                                    @if($specimen->unboxing_video_path == 'accepted')
+                                    <span class="text-success">[Accepted]</span>
+                                    @else
+                                    <span class="text-danger">[Rejected]</span>
                                     @endif
-                                    @if($application->certificate->approved_by)
-                                    <li class="mb-3">
-                                        <strong>Certificate Approved</strong>
-                                        <div class="text-muted small">{{\Carbon\Carbon::parse($application->certificate->approved_at)->toDayDateTimeString()}}</div>
-                                    </li>
-                                    @endif
+                                </strong>
+                                
+                                <p class="text-muted small m-0">{{\Carbon\Carbon::parse($specimen->updated_at)->toDayDateTimeString()}}
+                                </p>
+                                @if($specimen->reject_description)
+                                <p class="m-0 p-0 text-muted small">Rejected Reason: <strong>{{$specimen->reject_description}}</strong></p>
                                 @endif
-
-                                @if(count($application->receipts ?? []) > 0)
-                                    @foreach($application->receipts as $receipt)
-                                    <li class="mb-3">
-                                        <strong>Receipt Uploaded</strong>
-                                        <div><a href="/storage/{{$receipt->file_path}}" target="_blank">{{\Carbon\Carbon::parse($receipt->created_at)->format('M d, Y')}}</a></div>
-                                        <div class="text-muted small">{{$receipt->status_details->status_name ?? ''}}</div>
-                                    </li>
-                                    @endforeach
+                                @if($specimen->proceed_at)
+                                <p class="m-0 p-0 text-muted small">Proceed Instruction: <strong>{{$specimen->proceed_text}}</strong></p>
                                 @endif
+                            </li>
+                            @endif
+                            <li class="mb-3">
+                                <strong>Specimen @if($specimen->id != $firstSpecimen->id) Resent @else Sent @endif</strong>
+                                
+                                <p class="text-muted small"> {{\Carbon\Carbon::parse($specimen->created_at)->toDayDateTimeString()}}</p>
+                            </li>
+                            @endforeach
 
+                            @endif
+                            @if($application->verified_payment_at)
+                            <li class="mb-3">
+                                <strong>Payment Verified</strong>
+                                <div class="text-muted small">{{\Carbon\Carbon::parse($application->verified_payment_at)->toDayDateTimeString()}}</div>
+                            </li>
+                            @endif
+
+                            @if(count($application->receipts) > 0)
+                            @foreach($application->receipts as $receipt)
+                             <li class="mb-3">
+                                <strong>Receipt Uploaded
+                                    @if($receipt->status_details->status_name === 'Verified')
+                                        <span class="text-success" title="Verified"><i class="fa fa-check-circle fa-sm"></i></span>
+                                    @else
+                                        <span class="text-danger" title="Rejected"><i class="fa fa-times-circle fa-sm"></i></span>
+                                    @endif
+                                </strong>
+                                <div class="text-muted small"> {{\Carbon\Carbon::parse($receipt->created_at)->toDayDateTimeString()}}</div>
+                            </li>
+                            @endforeach
+                            @endif
+                            <li class="mb-3">
+                                <strong>Applied</strong>
+                                <p class="text-muted small">{{\Carbon\Carbon::parse($application->created_at)->toDayDateTimeString()}}</p>
+
+                            </li>
                             </ul>
                         </div>
                     </div>
@@ -348,8 +413,14 @@ NRL - Proficiency Testing Program Application
             <div id="unboxing_video_path_container" style="display:none;">
                 <div class="form-group">
                     <label>Unboxing video (optional)</label>
-                    <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path" accept="video/*">
+                    <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path" accept="video/*,.jpg,.png">
                 </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <div class="col-md-6">
+                        <textarea id="description" class="form-control" name="reject_description" rows="3" required></textarea>
+                    </div>
+                </div>            
             </div>
 
             <div class="text-right">
