@@ -102,10 +102,15 @@ class ProficiencyTestingController extends Controller
 
     public function sendSpecimen($id, $application_id)
     {
+        $application = ProficiencyTestingApplication::with('user')->find($application_id);
 
-        $application = ProficiencyTestingApplication::find($application_id);
         $application->specimens()->create(['sent_by' => auth()->id(), 'courier' => \request()->courier, 'tracking_number' => \request()->tracking_number]);
         // $application->update(['specimen_sent' => 1]);
+        $application->user->notify(new AppActionAlert(
+            __('alerts.specimen.sent.title'), 
+            __('alerts.specimen.sent.message'), 
+            \route('proficiency-testing.facility.apply', $id)
+        ));                 
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Specimen sent successfully', 'classname' => 'alert-success']);
     }
     public function verifyPayment($id, $application_id)
@@ -114,8 +119,8 @@ class ProficiencyTestingController extends Controller
         $receipt->update(['status_id' => 1, 'updated_at' => \Carbon\Carbon::now()]);
 
         $receipt->userDetails->notify(new AppActionAlert(
-            'Receipt Status Alert', 
-            'Uploaded receipt has been Verified.',
+            __('alerts.receipt.verified.title'),
+            __('alerts.receipt.verified.message'),
             \route('proficiency-testing.facility.apply', $id)
         ));            
         return redirect(\route('proficiency-testing.applicants', $id))->with(['message' => 'Payment verified successfully', 'classname' => 'alert-success']);
@@ -127,8 +132,8 @@ class ProficiencyTestingController extends Controller
         $receipt->update(['status_id' => 4, 'reject_reason' => \request()->reject_reason,  'updated_at' => \Carbon\Carbon::now()]);
 
         $receipt->userDetails->notify(new AppActionAlert(
-            'Receipt Status Alert', 
-            'Uploaded receipt has been rejected.',
+            __('alerts.receipt.rejected.title'),
+            __('alerts.receipt.rejected.message'),
             \route('proficiency-testing.facility.apply', $id)
         ));         
 
@@ -137,12 +142,18 @@ class ProficiencyTestingController extends Controller
 
     public function saveScore($id, $application_id)
     {
-        $application = ProficiencyTestingApplication::find($application_id);
+        $application = ProficiencyTestingApplication::with('user')->find($application_id);
         $validated = \request()->validate([
             'score' => 'required | numeric | between: 0,20',
         ]);
 
         $application->update(['score' => \request()->score, 'scored_by' => \auth()->id(), 'scored_at' => \Carbon\Carbon::now()]);
+
+        $application->user->notify(new AppActionAlert(
+            __('alerts.score.saved.title'),
+            __('alerts.score.saved.message'),
+            \route('proficiency-testing.facility.apply', $id)
+        ));         
         return redirect(route('proficiency-testing.applicants', $id))->with(['message' => 'Score saved successfully ', 'classname' => 'alert-success']);
     }
     public function showApplication($id, $application_id)

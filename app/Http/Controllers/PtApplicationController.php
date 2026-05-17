@@ -7,12 +7,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use \App\Library\Scoring;
 use App\Models\Certificate;
+use App\Notifications\AppActionAlert;
 
 class PtApplicationController extends Controller
 {
     function create_certificate($id, $application_id)
     {
-        $application = ProficiencyTestingApplication::find($application_id);
+        $application = ProficiencyTestingApplication::with('user')->find($application_id);
         // dd($application->user->id);
         if ($application->score > 8)
             return redirect()->route('proficiency-testing.applicants', ['id' => $id, 'application_id' => $application_id])->with('message', 'Invalid action.')->with('classname', 'alert-danger');
@@ -33,6 +34,22 @@ class PtApplicationController extends Controller
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }
+
+        // user notification
+        $application->user->notify(new AppActionAlert(
+            __('alerts.certificate.created.title'),
+            __('alerts.certificate.created.message'),
+            \route('proficiency-testing.facility.apply', $id)
+        ));         
+
+        // verifier notif
+        $verifier = User::role('verifier')->first();
+        $verifier->notify(new AppActionAlert(
+            __('alerts.certificate.created.title'),
+            __('alerts.certificate.created.verifier.message', ['facility_name' => $application->user->name]),
+            \route('proficiency-testing.applicants', $id)
+        )); 
+
         return redirect()->route('proficiency-testing.applicants', ['id' => $id, 'application_id' => $application_id])->with('message', 'Certificate successfully created.')->with('classname', 'alert-success');
     }
     function update_certificate($id, $application_id, $cert_id)
@@ -48,7 +65,7 @@ class PtApplicationController extends Controller
 
     function verify_certificate($id, $application_id)
     {
-        $application = ProficiencyTestingApplication::find($application_id);
+        $application = ProficiencyTestingApplication::with('user')->find($application_id);
         if (!isset($application->certificate->prepared_by)) {
             return redirect()->route('proficiency-testing.applicants.showApplication', ['id' => $id, 'application_id' => $application_id])->with('message', 'Invalid action.')->with('classname', 'alert-danger');
         }
@@ -56,12 +73,27 @@ class PtApplicationController extends Controller
             'verified_by' => auth()->id(),
             'verified_at' => \Carbon\Carbon::now(),
         ]);
+
+        // user notification
+        $application->user->notify(new AppActionAlert(
+            __('alerts.certificate.verified.title'),
+            __('alerts.certificate.verified.message'),
+            \route('proficiency-testing.facility.apply', $id)
+        ));         
+
+        // head notif
+        $head = User::role('head')->first();
+        $head->notify(new AppActionAlert(
+            __('alerts.certificate.verified.title'),
+            __('alerts.certificate.verified.head.message', ['facility_name' => $application->user->name]),
+            \route('proficiency-testing.applicants', $id)
+        ));         
         return redirect()->route('proficiency-testing.applicants', ['id' => $id, 'application_id' => $application_id])->with('message', 'Certificate verified successfully.')->with('classname', 'alert-success');
     }
 
     function approve_certificate($id, $application_id)
     {
-        $application = ProficiencyTestingApplication::find($application_id);
+        $application = ProficiencyTestingApplication::with('user')->find($application_id);
 
         if (!isset($application->certificate->prepared_by)) {
             return redirect()->route('proficiency-testing.applicants', ['id' => $id, 'application_id' => $application_id])->with('message', 'Invalid action.')->with('classname', 'alert-danger');
@@ -70,6 +102,13 @@ class PtApplicationController extends Controller
             'approved_by' => auth()->id(),
             'approved_at' => \Carbon\Carbon::now(),
         ]);
+
+        // user notification
+        $application->user->notify(new AppActionAlert(
+            __('alerts.certificate.approved.title'),
+            __('alerts.certificate.approved.message'),
+            \route('proficiency-testing.facility.apply', $id)
+        ));        
         return redirect()->route('proficiency-testing.applicants', ['id' => $id, 'application_id' => $application_id])->with('message', 'Certificate approved successfully.')->with('classname', 'alert-success');
     }
 

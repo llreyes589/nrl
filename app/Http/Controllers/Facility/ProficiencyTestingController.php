@@ -54,8 +54,8 @@ class ProficiencyTestingController extends Controller
         ]);
 
         $this->admin->notify(new AppActionAlert(
-            'New PT Application Alert', 
-            $user->name.' applied for '.$pt->sdtl.' batch '.$pt->cycle.'.',
+            __('alerts.pt.application.title'),
+            __('alerts.pt.application.message', ["name" => $user->name, 'sdtl' => $pt->sdtl, 'cycle' => $pt->cycle]),
             \route('proficiency-testing.applicants', $id)
         ));           
 
@@ -80,8 +80,8 @@ class ProficiencyTestingController extends Controller
 
     
         $this->admin->notify(new AppActionAlert(
-            'New Receipt Alert', 
-            'A new receipt was uploaded and need your action.',
+            __('alerts.receipt.new.title'), 
+            __('alerts.receipt.new.message'), 
             \route('proficiency-testing.applicants', $id)
         ));        
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Receipt successfully submitted', 'classname' => 'alert-success']);
@@ -113,8 +113,8 @@ class ProficiencyTestingController extends Controller
         \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->first()->specimens()->latest('created_at')->first()->update(['unboxing_video_path' => $path, 'accepted_bottles' => \request()->accepted_bottles ? \request()->accepted_bottles : null, 'reject_description' => \request()->reject_description]);
 
         $this->admin->notify(new AppActionAlert(
-            'Specimen Received Alert', 
-            \request()->user()->name.' received specimen',
+            __('alerts.specimen.received.title'), 
+            __('alerts.specimen.received.message', ['name' => \request()->user()->name, 'status' => strtoupper(\request()->status)]), 
             \route('proficiency-testing.applicants', $id)
         ));        
 
@@ -134,6 +134,12 @@ class ProficiencyTestingController extends Controller
         }
 
         \request()->user()->ptApplications()->where('proficiency_testing_id', $id)->update(['result_path' => $path, 'result_uploaded_at' => \Carbon\Carbon::now()]);
+
+        $this->admin->notify(new AppActionAlert(
+            __('alerts.result.sent.title'),
+            __('alerts.result.sent.message', ['name' => \request()->user()->name]),
+            \route('proficiency-testing.applicants', $id)
+        ));          
         
         return redirect(route('proficiency-testing.facility.apply', $id))->with(['message' => 'Result sent successfully ', 'classname' => 'alert-success']);
     }
