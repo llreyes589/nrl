@@ -374,17 +374,35 @@ NRL - Proficiency Testing Program Application
         <button type="button" class="close" id="close-form-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body" id="modal-body">
-        <!-- upload-receipt-form -->
+        <!-- upload-receipt-form (redesigned with preview) -->
         <form method="POST" action="{{route('proficiency-testing.facility.saveReceipt', $pt->id)}}" enctype="multipart/form-data" id="upload-receipt-form" style="display:none;">
             @csrf
             @method("PUT")
-            <div class="form-group">
-                <label for="receipt">Receipt</label>
-                <input id="receipt" type="file" class="form-control-file" name="receipt" accept=".jpg,.jpeg,.png,.pdf" required>
-                <small class="form-text text-muted">Files accepted: jpg, png and pdf</small>
-            </div>
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="receipt">Receipt</label>
+                        <input id="receipt" type="file" class="form-control-file" name="receipt" accept=".jpg,.jpeg,.png,.pdf" required>
+                        <small class="form-text text-muted">Files accepted: jpg, png and pdf. Max 10MB.</small>
+                    </div>
+
+                    <div id="receipt-meta" class="mb-3 text-muted small" style="display:none;">
+                        <div><strong>Selected file:</strong> <span id="receipt-filename"></span></div>
+                        <div><strong>Size:</strong> <span id="receipt-filesize"></span></div>
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary" id="submit-receipt-btn">Submit</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Preview</label>
+                    <div class="border p-2 d-flex align-items-center justify-content-center" style="min-height:200px;">
+                        <img id="receipt-preview-img" class="img-fluid d-none" alt="Receipt preview" />
+                        <iframe id="receipt-preview-pdf" class="w-100 d-none" style="min-height:200px;border:0;"></iframe>
+                        <div id="receipt-preview-none" class="text-muted small">No file selected</div>
+                    </div>
+                </div>
             </div>
         </form>
 
@@ -466,6 +484,7 @@ $(function(){
     const close_form_modal = $('#close-form-modal');
     const my_modal_title = $('#my-modal-title');
     let formShowed = null;
+    let receiptPdfUrl = null;
 
     // Show modal and the selected form
     $('#btn-upload-receipt-modal, #btn-receive-specimen-modal, #btn-send-result-modal, #btn-view-certificate-modal').on('click', function(e){
@@ -478,11 +497,20 @@ $(function(){
         // hide others & show target
         $('#upload-receipt-form, #receive-specimen-form, #send-result-form, #view-cert-frame').hide();
         formShowed.show();
+        if (target === '#upload-receipt-form') {
+            resetReceiptPreview();
+        }
     });
 
     // Close modal
     close_form_modal.on('click', function(){
         form_modal.modal('hide');
+        $('#upload-receipt-form, #receive-specimen-form, #send-result-form, #view-cert-frame').hide();
+    });
+
+    // When modal hidden, cleanup previews
+    form_modal.on('hidden.bs.modal', function(){
+        resetReceiptPreview();
         $('#upload-receipt-form, #receive-specimen-form, #send-result-form, #view-cert-frame').hide();
     });
 
@@ -528,6 +556,71 @@ $(function(){
             $('#inst_fields').show();
         }
     });
+
+    // Receipt preview helpers
+    function bytesToSize(bytes) {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 Byte';
+        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    }
+
+    const receiptInput = $('#receipt');
+    const receiptPreviewImg = $('#receipt-preview-img');
+    const receiptPreviewPdf = $('#receipt-preview-pdf');
+    const receiptPreviewNone = $('#receipt-preview-none');
+    const receiptFilename = $('#receipt-filename');
+    const receiptFilesize = $('#receipt-filesize');
+    const receiptMeta = $('#receipt-meta');
+
+    function resetReceiptPreview(){
+        if (receiptInput.length) {
+            receiptInput.val('');
+        }
+        if (receiptPreviewImg.length) {
+            receiptPreviewImg.attr('src', '').addClass('d-none').hide();
+        }
+        if (receiptPreviewPdf.length) {
+            receiptPreviewPdf.attr('src', '').addClass('d-none').hide();
+        }
+        if (receiptPreviewNone.length) {
+            receiptPreviewNone.show();
+        }
+        if (receiptFilename.length) receiptFilename.text('');
+        if (receiptFilesize.length) receiptFilesize.text('');
+        if (receiptMeta.length) receiptMeta.hide();
+        if (receiptPdfUrl) {
+            URL.revokeObjectURL(receiptPdfUrl);
+            receiptPdfUrl = null;
+        }
+    }
+
+    receiptInput.on('change', function(e){
+        const file = this.files && this.files[0];
+        if (!file) { resetReceiptPreview(); return; }
+        if (receiptPreviewNone.length) receiptPreviewNone.hide();
+        if (receiptFilename.length) receiptFilename.text(file.name);
+        if (receiptFilesize.length) receiptFilesize.text(bytesToSize(file.size));
+        if (receiptMeta.length) receiptMeta.show();
+
+        if (file.type && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(ev){
+                receiptPreviewImg.attr('src', ev.target.result).removeClass('d-none').show();
+                receiptPreviewPdf.attr('src', '').addClass('d-none').hide();
+            }
+            reader.readAsDataURL(file);
+        } else if (file.type === 'application/pdf' || file.name.match(/\.pdf$/i)) {
+            if (receiptPdfUrl) URL.revokeObjectURL(receiptPdfUrl);
+            receiptPdfUrl = URL.createObjectURL(file);
+            receiptPreviewPdf.attr('src', receiptPdfUrl).removeClass('d-none').show();
+            receiptPreviewImg.attr('src', '').addClass('d-none').hide();
+        } else {
+            alert('Unsupported file type. Please select an image or PDF.');
+            resetReceiptPreview();
+        }
+    });
+
 });
 </script>
 @endsection
