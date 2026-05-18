@@ -28,7 +28,7 @@ NRL - Proficiency Testing Applications List
 <!-- Modal -->
 
 <div id="custom-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog " role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modal_title"></h3>
@@ -38,30 +38,49 @@ NRL - Proficiency Testing Applications List
             </div>
             <div class="modal-body">
                 <div class="row" id="score_form_container" style="display: none;">
-
-                    <div class="col-md-9 col-sm-12">
-                        <div class="d-flex flex-column">
-                            <iframe class="embed-responsive-item" height="350" allowfullscreen id="result_path"></iframe>
-
-                            <a href="" class="btn btn-info btn-sm " type="button" id="download-result-btn" title="Download Result" download><i class="fas fa-download"></i> </a>
+                    <div class="col-lg-8 col-md-7 col-sm-12 mb-3">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <strong class="mb-0">Submitted Result</strong>
+                                <div>
+                                    <a href="" id="download-result-btn" class="btn btn-outline-secondary btn-sm mr-1" title="Download Result" download><i class="fas fa-download"></i></a>
+                                    <a href="" id="open-result-btn" class="btn btn-outline-primary btn-sm" target="_blank" title="Open in new tab"><i class="fas fa-external-link-alt"></i></a>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex align-items-center justify-content-center p-0" style="min-height:360px;">
+                                <div class="w-100 embed-responsive embed-responsive-4by3 text-center position-relative">
+                                    <div id="result-loader" class="py-4">
+                                        <i class="fa fa-spinner fa-spin fa-2x text-muted"></i>
+                                    </div>
+                                    <img id="result-preview-img" class="img-fluid d-none" alt="Result preview" style="max-height:360px; object-fit:contain;" />
+                                    <iframe id="result_path" class="embed-responsive-item d-none" allowfullscreen style="border:0;" src=""></iframe>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted small">
+                                <span id="result-file-meta">Preview the submitted result. Use the buttons to download or open full view.</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-md col-sm-12 mt-3">
-                        <form method="post" action="" id="add_score_form">
-                            @csrf
-                            @method('PUT')
-                            <div class="form-group">
-                                <input id="my-input" class="form-control @error('score') is-invalid @enderror" type="text" name="score" required placeholder="Enter number of wrong answer/s (0-20)" />
-                                @error('score')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
+                    <div class="col-lg-4 col-md-5 col-sm-12">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Add / Edit Score</h5>
+                                <p class="text-muted small">Enter the number of wrong answers (0-20). Scores help determine performance classification.</p>
+                                <form method="post" action="" id="add_score_form">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="form-group">
+                                        <label for="score-input" class="sr-only">Score</label>
+                                        <input id="score-input" name="score" type="number" min="0" max="20" class="form-control form-control-lg @error('score') is-invalid @enderror" placeholder="Wrong answers (0-20)" required />
+                                        @error('score')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <button class="btn btn-success btn-block btn-lg" id="save-score">Save Score</button>
+                                </form>
                             </div>
-                            <button class="btn btn-primary" id="save-score">Save</button>
-
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <div id="specimen_form_container" style="display: none;">
@@ -175,27 +194,34 @@ NRL - Proficiency Testing Applications List
 
                 @endcan
 
-                <!-- Manage Receipt -->
+                <!-- Manage Receipt (redesigned) -->
                 <div class="card" id="view-receipt-frame" style="display:none;">
-                    <div class="card-body p-0">
-                        <div class="embed-responsive embed-responsive-16by9" >
-                            <p><i class="fa fa-spinner fa-spin" id="receipt-container-loader" ></i></p>
-                            <iframe class="embed-responsive-item" allowfullscreen id="receipt-container" style="display:none;"></iframe>
+                    <div class="card-body">
+                        <div class="row no-gutters">
+                            <div class="col-md-7 d-flex align-items-center justify-content-center border-right" style="min-height:260px;">
+                                <div id="receipt-preview-container" class="w-100 text-center">
+                                    <div id="receipt-loader" class="py-4">
+                                        <i class="fa fa-spinner fa-spin fa-2x text-muted"></i>
+                                    </div>
+                                    <img id="receipt-preview-img" src="" alt="Receipt preview" class="img-fluid d-none" style="max-height:400px; object-fit:contain;">
+                                    <iframe id="receipt-preview-iframe" src="" class="w-100 d-none" style="min-height:300px;border:0;"></iframe>
+                                    <div id="receipt-preview-fallback" class="text-muted small mt-2 d-none">Cannot preview this file. Use download to open it.</div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 p-3">
+                                <p class="mb-2"><strong>Status:</strong> <span id="receipt-status" class="badge badge-secondary">Pending</span></p>
+
+                                <div class="mt-3">
+                                    <form method="post" id="verify_receipt_form" class="d-inline-block w-100 mb-2">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-success btn-block" disabled id="btn-verify-receipt-modal" type="submit"> Verify Receipt</button>
+                                    </form>
+
+                                    <button class="btn btn-danger btn-block" disabled id="btn-reject-receipt-modal" onclick="handleRejectReceipt()" type="button"> Reject Receipt</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-between">
-
-                            <form method="post" id="verify_receipt_form">
-                                @csrf
-                                @method('PUT')
-                                <button class="btn btn-sm btn-primary" disabled id="btn-verify-receipt-modal" type="submit" data-target="#verify-receipt-form" > Verify Receipt</button>
-                            </form>
-                            
-                            <button class="btn btn-sm btn-danger" disabled id="btn-reject-receipt-modal" onclick="handleRejectReceipt()" type="button" data-target="#reject-receipt-form" > Reject Receipt</button>
-
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -389,7 +415,10 @@ NRL - Proficiency Testing Applications List
     const score_form_container = $('#score_form_container')
     const specimen_form_container = $('#specimen_form_container')
     const result_path = $('#result_path')
+    const resultPreviewImg = $('#result-preview-img')
+    const resultLoader = $('#result-loader')
     const download_result_btn = $('#download-result-btn')
+    const open_result_btn = $('#open-result-btn')
     const close_form_modal = $('#close_form_modal')
     const modal_title = $('#modal_title')
     const modal_dialog = $('.modal-dialog')
@@ -400,10 +429,17 @@ NRL - Proficiency Testing Applications List
     const certContainerLoader = $('#cert-container-loader');
     const verify_certificate_form = $('#verify_certificate_form');
     const btn_verify_certificate_modal = $('#btn-verify-certificate-modal');
-    // verify receipt
+    // verify receipt (redesigned preview elements)
     const viewReceiptFrame = $('#view-receipt-frame');
-    const receiptContainer = $('#receipt-container');
-    const receiptContainerLoader = $('#receipt-container-loader');
+    const receiptPreviewImg = $('#receipt-preview-img');
+    const receiptPreviewIframe = $('#receipt-preview-iframe');
+    const receiptLoader = $('#receipt-loader');
+    const receiptPreviewFallback = $('#receipt-preview-fallback');
+    const receiptFilenameEl = $('#receipt-filename');
+    const receiptUploadedAt = $('#receipt-uploaded-at');
+    const receiptStatusEl = $('#receipt-status');
+    const receiptDownloadLink = $('#receipt-download-link');
+    const receiptOpenLink = $('#receipt-open-link');
     const verify_receipt_form = $('#verify_receipt_form');
     const btn_verify_receipt_modal = $('#btn-verify-receipt-modal');
 
@@ -441,8 +477,41 @@ NRL - Proficiency Testing Applications List
         scoreInput.val(score)
         add_score_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${id}/saveScore`);
         save_score_btn.text(score ? 'Update' : 'Save')
-        download_result_btn.attr('href', `/storage/${app_result_path}`)
-        result_path.attr('src', `/storage/${app_result_path}`)
+
+        // prepare preview and buttons
+        const url = `/storage/${app_result_path}`;
+        download_result_btn.attr('href', url)
+        open_result_btn.attr('href', url)
+
+        // reset preview
+        resultPreviewImg.addClass('d-none').attr('src', '');
+        result_path.addClass('d-none').attr('src', '');
+        resultLoader.show();
+
+        // determine file type by extension
+        const filename = app_result_path.split('/').pop() || '';
+        const ext = (filename.split('.').pop() || '').toLowerCase();
+        const imageExts = ['jpg','jpeg','png','gif','webp','bmp'];
+
+        if (imageExts.indexOf(ext) !== -1) {
+            // show image preview
+            resultPreviewImg.one('load', function(){
+                resultLoader.hide();
+                resultPreviewImg.removeClass('d-none').show();
+            }).attr('src', url);
+        } else if (ext === 'pdf') {
+            // show pdf in iframe
+            result_path.one('load', function(){
+                resultLoader.hide();
+                result_path.removeClass('d-none').show();
+            }).attr('src', url);
+        } else {
+            // fallback: try iframe
+            result_path.one('load', function(){
+                resultLoader.hide();
+                result_path.removeClass('d-none').show();
+            }).attr('src', url);
+        }
     }
     const handleSendSpecimen = function(pt_id, id) {
         modal.modal()
@@ -490,22 +559,53 @@ NRL - Proficiency Testing Applications List
         })
     }
     const handleManageReceipt = function(pt_id, application_id, path){
-        receiptContainer.hide()
-        modal.modal()
-        modal_dialog.addClass('modal-md')
-        modal_title.text('Manage Receipt')
-        viewReceiptFrame.show()
-        formShowed = viewReceiptFrame
-        receiptContainer.attr('src', `/storage/${path}`)
-        
+        // Reset preview
+        receiptPreviewImg.addClass('d-none').attr('src', '');
+        receiptPreviewIframe.addClass('d-none').attr('src', '');
+        receiptPreviewFallback.addClass('d-none');
+        receiptLoader.show();
+        receiptFilenameEl.text('');
+        receiptUploadedAt.text('');
+        receiptStatusEl.removeClass('badge-success badge-danger badge-warning badge-secondary').addClass('badge-secondary').text('Pending');
+        receiptDownloadLink.attr('href', `/storage/${path}`);
+        receiptOpenLink.attr('href', `/storage/${path}`);
+
+        modal.modal();
+        modal_dialog.removeClass('modal-sm modal-lg').addClass('modal-md');
+        modal_title.text('Manage Receipt');
+        viewReceiptFrame.show();
+        formShowed = viewReceiptFrame;
+
         verify_receipt_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/verifyPayment`);
         reject_receipt_form.attr('action', `/proficiency-testing/${pt_id}/applicants/${application_id}/rejectPayment`);
-        // /proficiency-testing/{id}/applicants/{application_id}/certificate/verify
-        receiptContainer.on('load', function(){
-            receiptContainer.show()
-            btn_verify_receipt_modal.prop("disabled", false)
-            btn_reject_receipt_modal.prop("disabled", false)
-        })
+
+        // Show filename
+        const filename = path.split('/').pop();
+        receiptFilenameEl.text(filename);
+
+        const ext = (filename.split('.').pop() || '').toLowerCase();
+        const imageExts = ['jpg','jpeg','png','gif','webp','bmp'];
+        if (imageExts.indexOf(ext) !== -1) {
+            receiptPreviewImg.one('load', function(){
+                receiptLoader.hide();
+                receiptPreviewImg.removeClass('d-none').show();
+                btn_verify_receipt_modal.prop('disabled', false);
+                btn_reject_receipt_modal.prop('disabled', false);
+            }).attr('src', `/storage/${path}`);
+        } else if (ext === 'pdf') {
+            receiptPreviewIframe.one('load', function(){
+                receiptLoader.hide();
+                receiptPreviewIframe.removeClass('d-none').show();
+                btn_verify_receipt_modal.prop('disabled', false);
+                btn_reject_receipt_modal.prop('disabled', false);
+            }).attr('src', `/storage/${path}`);
+        } else {
+            // cannot preview
+            receiptLoader.hide();
+            receiptPreviewFallback.removeClass('d-none');
+            btn_verify_receipt_modal.prop('disabled', false);
+            btn_reject_receipt_modal.prop('disabled', false);
+        }
     }
 
     const handleRejectReceipt = function(){

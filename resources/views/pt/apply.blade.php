@@ -419,26 +419,56 @@ NRL - Proficiency Testing Program Application
                 <label>Tracking Number</label>
                 <div class="form-control">{{$application->specimens()->latest('created_at')->first()->tracking_number}}</div>
             </div>
-            <div class="form-group form-check">
-                <input type="radio" class="form-check-input" id="accept" name="status" value="accept" required>
+            <div class="form-check form-check-inline">
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="status"
+                    id="accept"
+                    value="accept"
+                    required
+                    {{ old('status') == 'accept' ? 'checked' : '' }}
+                />
                 <label class="form-check-label" for="accept">Accept</label>
-                <input type="radio" class="form-check-input ml-3" id="reject" name="status" value="reject" required>
+            </div>
+            <div class="form-check form-check-inline">
+                <input
+                    class="form-check-input"
+                    type="radio"
+                    name="status"
+                    id="reject"
+                    value="reject"
+                    required
+                    {{ old('status') == 'reject' ? 'checked' : '' }}
+                />
                 <label class="form-check-label" for="reject">Reject</label>
             </div>
+            @error('status')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
             <div id="accepted_bottles_container" style="display:none;" class="form-group">
                 <label>Accepted bottles (optional)</label>
-                <input id="accepted_bottles" class="form-control" type="number" name="accepted_bottles" min="0" max="20">
+                <input id="accepted_bottles" class="form-control" type="number" name="accepted_bottles" min="0" max="20" value="{{ old('accepted_bottles', $application->specimens()->latest('created_at')->first()->accepted_bottles ?? '') }}">
+                @error('accepted_bottles')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
             </div>
 
             <div id="unboxing_video_path_container" style="display:none;">
                 <div class="form-group">
-                    <label>Unboxing video (optional)</label>
+                    <label>Unboxing video</label>
                     <input id="unboxing_video_path" type="file" class="form-control-file" name="unboxing_video_path" accept="video/*,.jpg,.png">
+                    @error('unboxing_video_path')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
                     <div class="col-md-6">
-                        <textarea id="description" class="form-control" name="reject_description" rows="3" required></textarea>
+                        <textarea id="description" class="form-control" name="reject_description" rows="3">{{ old('reject_description') }}</textarea>
+                        @error('reject_description')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>            
             </div>
@@ -449,17 +479,35 @@ NRL - Proficiency Testing Program Application
         </form>
         @endif
 
-        <!-- send-result-form -->
+        <!-- send-result-form (redesigned with preview) -->
         <form method="POST" action="{{route('proficiency-testing.facility.saveResult', $pt->id)}}" id="send-result-form" style="display:none;" enctype="multipart/form-data">
             @csrf
             @method("PUT")
-            <div class="form-group">
-                <label for="result">Result</label>
-                <input id="result" type="file" class="form-control-file" name="result" required>
-                <small class="form-text text-muted">Take picture of test result.</small>
-            </div>
-            <div class="text-right">
-                <button type="submit" class="btn btn-primary">Send</button>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="result">Result</label>
+                        <input id="result" type="file" class="form-control-file" name="result" accept=".jpg,.jpeg,.png,.pdf" required>
+                        <small class="form-text text-muted">Take picture of test result (image or PDF). Max 10MB.</small>
+                    </div>
+
+                    <div id="result-meta" class="mb-3 text-muted small" style="display:none;">
+                        <div><strong>Selected file:</strong> <span id="result-filename"></span></div>
+                        <div><strong>Size:</strong> <span id="result-filesize"></span></div>
+                    </div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Preview</label>
+                    <div class="border p-2 d-flex align-items-center justify-content-center" style="min-height:200px;">
+                        <img id="result-preview-img" class="img-fluid d-none" alt="Result preview" />
+                        <iframe id="result-preview-pdf" class="w-100 d-none" style="min-height:200px;border:0;"></iframe>
+                        <div id="result-preview-none" class="text-muted small">No file selected</div>
+                    </div>
+                </div>
             </div>
         </form>
 
@@ -500,6 +548,9 @@ $(function(){
         if (target === '#upload-receipt-form') {
             resetReceiptPreview();
         }
+        if (target === '#send-result-form') {
+            resetResultPreview();
+        }
     });
 
     // Close modal
@@ -511,6 +562,7 @@ $(function(){
     // When modal hidden, cleanup previews
     form_modal.on('hidden.bs.modal', function(){
         resetReceiptPreview();
+        resetResultPreview();
         $('#upload-receipt-form, #receive-specimen-form, #send-result-form, #view-cert-frame').hide();
     });
 
@@ -618,6 +670,64 @@ $(function(){
         } else {
             alert('Unsupported file type. Please select an image or PDF.');
             resetReceiptPreview();
+        }
+    });
+
+    // Result preview helpers
+    let resultPdfUrl = null;
+    const resultInput = $('#result');
+    const resultPreviewImg = $('#result-preview-img');
+    const resultPreviewPdf = $('#result-preview-pdf');
+    const resultPreviewNone = $('#result-preview-none');
+    const resultFilename = $('#result-filename');
+    const resultFilesize = $('#result-filesize');
+    const resultMeta = $('#result-meta');
+
+    function resetResultPreview(){
+        if (resultInput.length) {
+            resultInput.val('');
+        }
+        if (resultPreviewImg.length) {
+            resultPreviewImg.attr('src', '').addClass('d-none').hide();
+        }
+        if (resultPreviewPdf.length) {
+            resultPreviewPdf.attr('src', '').addClass('d-none').hide();
+        }
+        if (resultPreviewNone.length) {
+            resultPreviewNone.show();
+        }
+        if (resultFilename.length) resultFilename.text('');
+        if (resultFilesize.length) resultFilesize.text('');
+        if (resultMeta.length) resultMeta.hide();
+        if (resultPdfUrl) {
+            URL.revokeObjectURL(resultPdfUrl);
+            resultPdfUrl = null;
+        }
+    }
+
+    resultInput.on('change', function(e){
+        const file = this.files && this.files[0];
+        if (!file) { resetResultPreview(); return; }
+        if (resultPreviewNone.length) resultPreviewNone.hide();
+        if (resultFilename.length) resultFilename.text(file.name);
+        if (resultFilesize.length) resultFilesize.text(bytesToSize(file.size));
+        if (resultMeta.length) resultMeta.show();
+
+        if (file.type && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(ev){
+                resultPreviewImg.attr('src', ev.target.result).removeClass('d-none').show();
+                resultPreviewPdf.attr('src', '').addClass('d-none').hide();
+            }
+            reader.readAsDataURL(file);
+        } else if (file.type === 'application/pdf' || file.name.match(/\.pdf$/i)) {
+            if (resultPdfUrl) URL.revokeObjectURL(resultPdfUrl);
+            resultPdfUrl = URL.createObjectURL(file);
+            resultPreviewPdf.attr('src', resultPdfUrl).removeClass('d-none').show();
+            resultPreviewImg.attr('src', '').addClass('d-none').hide();
+        } else {
+            alert('Unsupported file type. Please select an image or PDF.');
+            resetResultPreview();
         }
     });
 
