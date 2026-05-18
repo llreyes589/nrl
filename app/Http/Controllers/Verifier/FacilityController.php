@@ -208,7 +208,7 @@ class FacilityController extends Controller
             <table >
                 <tr>
                     <td style="width:30%">    
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/DOH_Logo.png" width="100"/>
+                        <img src="https://www.freelogovectors.net/wp-content/uploads/2022/02/doh_logo_department_of_health-freelogovectors.net_.png" width="100"/>
                     </td>
                     <td style="width:40%">  
                         <br>  
