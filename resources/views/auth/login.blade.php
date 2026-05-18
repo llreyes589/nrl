@@ -21,7 +21,7 @@
                                     <div class="alert alert-primary text-center" role="alert">
                                         <h5 class="m-0">Now Open!</h5>
                                         <p class="m-0"><strong>SDTL {{$pt->sdtl}} CYCLE {{$pt->cycle}}</strong></p>
-                                        <p class="m-0"><strong>Remaining Slot: {{$pt->application_limit}}</strong></p>
+                                        <p class="m-0"><strong>Remaining Slot: {{$pt->remaining_slot}}</strong></p>
                                     </div>
                                     @endif
                                 </div>

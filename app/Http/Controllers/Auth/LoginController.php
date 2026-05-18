@@ -64,6 +64,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         $pt = ProficiencyTesting::orderBy('id','desc')->first();
+        $pt['remaining_slot'] = $pt->application_limit - count($pt->applications);
         return view('auth.login', compact('pt'));
     }
 }
