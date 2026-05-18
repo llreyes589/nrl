@@ -35,7 +35,7 @@ NRL - Proficiency Testing Program
                         <th>Limit</th>
                         <th>Remaining Slot</th>
                         <th>Date Added</th>
-                        <th>Manage</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,8 +90,11 @@ NRL - Proficiency Testing Program
 
                             <!-- facility role -->
                             @role('Facility')
+                            @if($pt->applications()->where('user_id', auth()->user()->id)->exists())
                             <a href="{{route('proficiency-testing.facility.apply', $pt->id)}}" class="btn btn-success btn-sm"><i class="fa fa-search fa-sm"></i> View</a>
-
+                            @else
+                            <a href="{{route('proficiency-testing.facility.apply', $pt->id)}}" class="btn btn-success btn-sm"><i class="fa fa-user-plus fa-sm"></i> Register</a>
+                            @endif
                             @endrole
 
                             <!-- <button class="btn btn-danger" type="button">Delete</button> -->
