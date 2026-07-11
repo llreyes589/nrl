@@ -28,7 +28,7 @@ NRL - Proficiency Testing Program
                 <thead class="thead-light">
                     <tr>
                         <th>SDTL</th>
-                        <th>Cycle</th>
+                        <th>Batch</th>
                         @role('Facility')
                         <th>Status</th>
                         @endrole

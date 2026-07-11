@@ -42,8 +42,8 @@ NRL - Create Proficiency Testing Program
                         @enderror
                     </div>
                     <div class="form-group mt-2">
-                        <label for="cycle">Cycle</label>
-                        <input id="cycle" class="form-control @error('cycle') is-invalid @enderror" type="text" value="{{  isset($pt->id) ? $pt->cycle : old('cycle') }}" name="cycle" placeholder="Enter Cycle">
+                        <label for="cycle">Batch</label>
+                        <input id="cycle" class="form-control @error('cycle') is-invalid @enderror" type="text" value="{{  isset($pt->id) ? $pt->cycle : old('cycle') }}" name="cycle" placeholder="Enter Batch">
                         @error('cycle')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

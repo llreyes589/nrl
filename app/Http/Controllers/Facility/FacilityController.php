@@ -16,7 +16,6 @@ class FacilityController extends Controller
     public function profileUpdate()
     {
         $user = auth()->user();
-
         if (\request()->file('certificate_file')) {
 
             $analyst_certificate_file = \request()->file('certificate_file')->store('analyst_certificate_files');

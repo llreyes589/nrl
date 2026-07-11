@@ -7,7 +7,7 @@ NRL - Proficiency Testing Program Application
 @section('content')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"> @role('admin'){{$application->user->name}} <br>@endrole PT Application <u>(SDTL-{{$pt->sdtl}} | Cycle-{{$pt->cycle}})</u></h1>
+    <h1 class="h3 mb-0 text-gray-800"> @role('admin'){{$application->user->name}} <br>@endrole PT Application <u>(SDTL-{{$pt->sdtl}} | Batch-{{$pt->cycle}})</u></h1>
     @role('Facility')
     <a href="{{route('proficiency-testing.facility.index')}}" class="btn btn-danger">Cancel</a>
     @else
@@ -187,7 +187,7 @@ if ($application)
                     <input type="text" class="form-control" readonly value="{{$pt->sdtl}}" />
                 </div>
                 <div class="form-group">
-                    <label for="cycle">Cycle</label>
+                    <label for="cycle">Batch</label>
                     <input type="text" class="form-control" readonly value="{{$pt->cycle}}" />
                 </div>
                 <hr />

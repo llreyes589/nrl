@@ -31,7 +31,7 @@ NRL - Proficiency Testing Program Application
 </style>
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">PT Application <small class="text-muted">(SDTL-{{$pt->sdtl}} | Cycle-{{$pt->cycle}})</small></h1>
+    <h1 class="h3 mb-0 text-gray-800">PT Application <small class="text-muted">(SDTL-{{$pt->sdtl}} | Batch-{{$pt->cycle}})</small></h1>
     <div>
         @role('Facility')
             <a href="{{route('proficiency-testing.facility.index')}}" class="btn btn-danger">Cancel</a>
@@ -70,7 +70,7 @@ NRL - Proficiency Testing Program Application
                                     <input type="text" class="form-control" readonly value="{{ $pt->year ?? date('Y') }}">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>Cycle</label>
+                                    <label>Batch</label>
                                     <input type="text" class="form-control" readonly value="{{$pt->cycle}}">
                                 </div>
                             </div>

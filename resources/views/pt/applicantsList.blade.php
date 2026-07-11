@@ -264,7 +264,7 @@ NRL - Proficiency Testing Applications List
                     <tr>
                         <th>Facility</th>
                         <th>SDTL</th>
-                        <th>Cycle</th>
+                        <th>Batch</th>
                         <th>Accepted Bottles</th>
                         <th>Rejected Specimen</th>
                         <th>Date Added</th>

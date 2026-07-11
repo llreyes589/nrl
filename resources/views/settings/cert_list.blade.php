@@ -35,7 +35,7 @@ NRL - Facilities
             <table class="table table-light" id="certificates_list">
                 <thead>
                     <tr>
-                        <th>SDTL - Cycle</th>
+                        <th>SDTL - Batch</th>
                         <th>Date Added</th>
                         <th>Action</th>
                     </tr>

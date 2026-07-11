@@ -33,7 +33,7 @@ NRL - Facilities
     <div class="tab-pane container active" id="certificate">
         <div class="row">
             <div class="col-md-5 col-sm-12">
-                <h3>SDTL: {{$settings->pt->sdtl}} - Cycle: {{$settings->pt->cycle}}</h3>
+                <h3>SDTL: {{$settings->pt->sdtl}} - Batch: {{$settings->pt->cycle}}</h3>
                 <hr>
                 <form method="post" action="{{route('settings.storeCertSettings', $settings->id)}}">
                     @csrf
